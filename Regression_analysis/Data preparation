@@ -1,0 +1,379 @@
+
+### Add in the table the values from scope & bias & land use % cover
+
+## First add the land use % cover per campus
+
+library(dplyr)
+
+### fix the land use and campus area structure
+campus_total_area <- landuse_rearranged_all %>%
+  dplyr::select(campus, total_area) %>%
+  distinct()
+
+library(tidyr)
+
+landuse_wide <- landuse_rearranged_all %>%
+  dplyr::select(campus, landuse_values, perc_area) %>%
+  pivot_wider(
+    names_from = landuse_values,
+    values_from = perc_area,
+    values_fill = 0
+  )
+
+
+## responses
+
+## scope
+
+#buildings
+
+scope_buil_2023_24_25 <- scope_buil_2023_24_25 %>%
+  rename(`X2024` = "2024") 
+
+rq2_responses <- bind_rows(scope_buil_2023_24_25,scope_buil_a2_med) %>%
+  rename(buildings_scope_2024 = X2024) %>% dplyr::select(campus,buildings_scope_2024)
+
+
+# total observations
+Total_observations_24 <- Total_observations_23_24_25  %>% dplyr::select(campus,total_observations_24)
+
+rq2_responses  <- left_join(rq2_responses,Total_observations_24,by = "campus")
+
+
+#roads
+
+scope_ropa_2023_24_25 <- scope_ropa_analysis1 %>%
+  rename(`X2024` = "2024") 
+
+ropa_scope_bind <- bind_rows(scope_ropa_2023_24_25,scope_ropa_a2_med) %>%
+  rename(scope_roadspaths_2024 = X2024) %>% dplyr::select(campus,scope_roadspaths_2024)
+
+rq2_responses  <- left_join(rq2_responses,ropa_scope_bind,by = "campus")
+
+#landuse 
+landuse_scope_bind <- bind_rows(Observations_all_clip_lugrouped_analysis1_wide,Observations_2024_clip_lu2_grouped_wide) %>% dplyr::select(campus,Agriculture_2024,Freshwater_2024,Natural_in_Built_2024,built_areas_2024,other_2024,Terrestrial_Natural_2024)
+
+rq2_responses  <- left_join(rq2_responses,landuse_scope_bind,by = "campus")
+
+#observer
+
+
+Observer_all_a1_wide <- Observer_all_a1_wide %>%
+  rename(`observer_2024` = "X2024") 
+
+observer_scope_bind <- bind_rows(Observer_all_a1_wide,observer_tot_2024_sum_analysis2) %>%
+  dplyr::select(campus,observer_2024)
+
+rq2_responses  <- left_join(rq2_responses,observer_scope_bind,by = "campus")
+
+
+## taxonomic
+
+taxon_scope_bind <- bind_rows(Observations_all_clip_filtered_group_a1_wide,Observations_2024_clip_filtered_group_a2_wide) %>% dplyr::select(campus,Algae_weeds_unicellular_2024,Arthropods_other_2024,Bees_wasps_ants_2024,Beetles_2024,Birds_2024,Bugs_cicadas_aphids_2024,Butterflies_2024,Dragonflies_2024,Flies_mosquitoes_2024,Grasshoppers_crickets_2024,Insects_other_2024,Mammals_2024,Mollusks_2024,Mosses_lichens_2024,Moths_micros_2024,Mushrooms_2024,Plants_2024,Reptiles_amphibians_2024,Fish_2024,Other_invertebrates_2024)  %>% rename_with(~ paste0(.x, "_scope"),-campus)
+
+taxon_scope_bind[is.na(taxon_scope_bind)] <- 0
+
+rq2_responses  <- left_join(rq2_responses,taxon_scope_bind,by = "campus")
+
+#### bias
+# nni
+bias_a1_nni <- bias_a1_nni %>% rename(nni_bias_2024 = X2024) %>%
+  dplyr::select(campus,nni_bias_2024)
+
+bias_a2_nni <- bias_a2_nni %>% rename(campus = dataset)
+
+nni_bind <- bind_rows(bias_a1_nni,bias_a2_nni)
+
+
+
+## rename 
+nni_bind <- nni_bind %>%
+ mutate(
+    campus = dplyr::recode(
+      campus,
+      "UvA" = "Amsterdam_Science_Park",
+      "Leiden_Bioscience" = "Leiden_Bioscience_Park",
+      "HAN_Arnhem" = "HAN_arnhem",
+      "WUR" = "WUR_main_campus",
+      "TU_Delft" = "Delft_TU_Campus" ,
+      "Twente" = "UT_campus",
+      "Groningen_Zernike_campus" = "Groningen_Zernike",
+      "Velp_Van_Hall_Larenstein" = "Velp_Landgoed_Larenstein"
+      )
+  )
+
+rq2_responses  <- left_join(rq2_responses,nni_bind,by = "campus")
+
+
+# nbi
+bias_a2_nbi <- bias_a2_nbi %>% rename(campus = dataset)
+
+nbi_bind <- bind_rows(bias_a1_nbi,bias_a2_nbi) %>% 
+  rename(nbi_bias_2024 = X2024) %>%
+  dplyr::select(campus,nbi_bias_2024)
+
+
+## rename 
+nbi_bind <- nbi_bind %>%
+ mutate(
+    campus = dplyr::recode(
+      campus,
+      "UvA" = "Amsterdam_Science_Park",
+      "Leiden_Bioscience" = "Leiden_Bioscience_Park",
+      "HAN_Arnhem" = "HAN_arnhem",
+      "WUR" = "WUR_main_campus",
+      "TU_Delft" = "Delft_TU_Campus" ,
+      "Twente" = "UT_campus",
+      "Groningen_Zernike_campus" = "Groningen_Zernike",
+      "Velp_Van_Hall_Larenstein" = "Velp_Landgoed_Larenstein"
+      )
+  )
+
+rq2_responses  <- left_join(rq2_responses,nbi_bind,by = "campus")
+
+# nri
+bias_a2_nri <- bias_a2_nri %>% rename(campus = dataset)
+
+nri_bind <- bind_rows(bias_a1_nri,bias_a2_nri) %>% 
+  rename(nri_bias_2024 = X2024) %>%
+  dplyr::select(campus,nri_bias_2024)
+
+
+## rename (fix earlier in the code?)
+nri_bind <- nri_bind %>%
+ mutate(
+    campus = dplyr::recode(
+      campus,
+      "UvA" = "Amsterdam_Science_Park",
+      "Leiden_Bioscience" = "Leiden_Bioscience_Park",
+      "HAN_Arnhem" = "HAN_arnhem",
+      "WUR" = "WUR_main_campus",
+      "TU_Delft" = "Delft_TU_Campus" ,
+      "Twente" = "UT_campus",
+      "Groningen_Zernike_campus" = "Groningen_Zernike",
+      "Velp_Van_Hall_Larenstein" = "Velp_Landgoed_Larenstein"
+      )
+  )
+
+rq2_responses  <- left_join(rq2_responses,nri_bind,by = "campus")
+
+
+## land use
+
+landuse_bind <- bind_rows(bias_a1_landuse,bias_a2_landuse) %>% 
+  rename(landuse_bias_2024 = X2024) %>%
+  dplyr::select(campus,landuse_bias_2024)
+
+## rename 
+landuse_bind <- landuse_bind %>%
+ mutate(
+    campus = dplyr::recode(
+      campus,
+      "UvA" = "Amsterdam_Science_Park",
+      "Leiden_Bioscience" = "Leiden_Bioscience_Park",
+      "HAN_Arnhem" = "HAN_arnhem",
+      "WUR" = "WUR_main_campus",
+      "TU_Delft" = "Delft_TU_Campus" ,
+      "Twente" = "UT_campus",
+      "Groningen_Zernike_campus" = "Groningen_Zernike",
+      "Velp_Van_Hall_Larenstein" = "Velp_Landgoed_Larenstein"
+      )
+  )
+
+rq2_responses  <- left_join(rq2_responses,landuse_bind,by = "campus")
+
+
+
+#observer
+
+observer_bias_bind <- bind_rows(bias_a1_observer,bias_a2_observer) %>% 
+  rename(observer_bias_2024 = X2024) %>%
+  dplyr::select(campus,observer_bias_2024)
+
+## rename 
+observer_bias_bind <- observer_bias_bind %>%
+ mutate(
+    campus = dplyr::recode(
+      campus,
+      "UvA" = "Amsterdam_Science_Park",
+      "Leiden_Bioscience" = "Leiden_Bioscience_Park",
+      "HAN_Arnhem" = "HAN_arnhem",
+      "WUR" = "WUR_main_campus",
+      "TU_Delft" = "Delft_TU_Campus" ,
+      "Twente" = "UT_campus",
+      "Groningen_Zernike_campus" = "Groningen_Zernike",
+      "Velp_Van_Hall_Larenstein" = "Velp_Landgoed_Larenstein"
+      )
+  )
+
+rq2_responses  <- left_join(rq2_responses,observer_bias_bind,by = "campus")
+
+
+## taxonomic
+
+taxon_bias_bind <- bind_rows(tax_bias_results_a1,tax_bias_results_a2) %>% dplyr::select(campus,arthropods_other_2024,bees_wasps_ants_2024,beetles_2024,birds_2024,bugs_cicadas_aphids_2024,butterflies_2024,dragonflies_2024,flies_mosquitoes_2024,grasshoppers_crickets_2024,insects_other_2024,mammals_2024,mollusks_2024,mosses_lichens_2024,moths_micros_2024,mushrooms_2024,plants_2024,reptiles_amphibians_2024,fish_2024,invertebrates_other_2024)  %>% rename_with(~ paste0(.x, "_bias"),-campus)
+
+taxon_bias_bind[is.na(taxon_bias_bind)] <- 0
+
+rq2_responses  <- left_join(rq2_responses,taxon_bias_bind,by = "campus")
+
+
+## add predictors
+rq2_predictors <- campus_total_area %>%
+  left_join(landuse_wide, by = "campus")
+
+
+## For all the values please look on the supplementary xlsx file explainng where the values were derived from + the SI . All values are for the year 2023-2024 (or 2024 depending on the source of information)
+
+
+## all programs used for the analysis are presented in the SI
+
+## variables for estimating proxies
+
+delft_bsc_msc_prog <- 16 + 37
+delft_env_bsc_msc_prog <- 1 + 1
+delft_bsc_msc_students <- 13568 + 12318
+
+gro_bsc_msc_prog <- 51+93
+gro_env_bsc_msc_prog <- 1+2
+gro_bsc_msc_students <- 22424+10503
+
+ut_bsc_msc_prog <- 19+36
+ut_env_bsc_msc_prog <- 0+3
+ut_bsc_msc_students <-12147 ## total number across UTwente
+
+wur_bsc_msc_prog <- 20+43
+wur_env_bsc_msc_prog <- 8+10 
+wur_bsc_msc_students <-5773+7284 
+
+## across all faculties/departments
+uva_bsc_msc_prog <- (12+21) + (1+0)
+uva_env_bsc_msc_prog <- (2+2) + (0+0)
+uva_bsc_msc_students <-(4156+3172)+(752+0)
+
+## across all faculties/departments: the location of each faculty/department (in which campus it belongs was identified through online search in the official university websites)
+
+leiden_university_students<-33839 ## all students not specified between bsc/msc
+leiden_university_bsc_msc_prog <- 48+83
+
+leidbios_bsc_msc_prog <- (1+2) + (3+7)+(9+14)
+leidbios_env_bsc_msc_prog <- (0+0) + (0+0) + (1+1)
+
+leidbin_bsc_msc_prog <- (24+27) + (4+16)
+leidbin_env_bsc_msc_prog <- (0+0) + (0+0)
+
+
+## We dont have the numbers. Therefore we estimate as a proxy to the number of programs
+
+leidbios_bsc_msc_students <- (leiden_university_students*leidbios_bsc_msc_prog/leiden_university_bsc_msc_prog)
+leidbin_bsc_msc_students <- (leiden_university_students*leidbin_bsc_msc_prog/leiden_university_bsc_msc_prog)
+
+
+## across all faculties/departments
+han_students<-31262+1462  ## bsc + msc only
+hanarn_bsc_msc_prog <- 47+11
+hanarn_env_bsc_msc_prog <- 0+0 ## there is a section in natural science but none met my criteria
+
+hannij_bsc_msc_prog <- 71+24
+hannij_env_bsc_msc_prog <- 0+0
+
+
+## We dont have the numbers. Therefore we estimate as a proxy to the number of programs
+
+hanarn_bsc_msc_students <- (han_students*hanarn_bsc_msc_prog/(hanarn_bsc_msc_prog+hannij_bsc_msc_prog))
+
+### Nijmegen campus
+hannij_bsc_msc_students <- (han_students*hannij_bsc_msc_prog/(hanarn_bsc_msc_prog+hannij_bsc_msc_prog))
+
+ru_bsc_msc_prog <- 38+60
+ru_env_bsc_msc_prog <- 2+2
+ru_bsc_msc_students <-14481+8652
+
+nij_bsc_msc_prog <- hannij_bsc_msc_prog+ru_bsc_msc_prog
+nij_env_bsc_msc_prog <- hannij_env_bsc_msc_prog+ru_env_bsc_msc_prog
+nij_bsc_msc_students <- hannij_bsc_msc_students+ru_bsc_msc_students
+
+#### larenstein van hall
+
+## across all faculties/departments
+vanhall_all_students<-4539+18 ## not available for master students. therefore i add in addition the total newly registered master students as complementary
+
+leeu_bsc_msc_prog <- 10+1
+leeu_env_bsc_msc_prog <- 6+1
+
+vel_bsc_msc_prog <- 8+4
+vel_env_bsc_msc_prog <- 5+2
+
+## We dont have the numbers. Therefore we estimate as the total number of bachelor + msc students in all van hall larenstein multiplied by the total number of bachelor and master degrees in the campus and divided by the total bachelor and master degrees. 
+
+leeu_bsc_msc_students <- (vanhall_all_students*leeu_bsc_msc_prog/(leeu_bsc_msc_prog+vel_bsc_msc_prog))
+vel_bsc_msc_students <- (vanhall_all_students*vel_bsc_msc_prog/(leeu_bsc_msc_prog+vel_bsc_msc_prog))
+
+## usp: values are combined for uu and hu. for uu we only focus on departments within the usp (identified through the university website)
+
+usp_bsc_msc_prog <- 4+16+9+22+7+20+2+1+0+16+6+7
+usp_env_bsc_msc_prog <- 1+6+0+0+0+0+0+0+0+0+0+0
+usp_bsc_msc_students <- 3856+8002+6668+1541+4157+29020 ### values were provided only combined not separately for bsc/msc
+
+predictors_programs_students <- tibble(
+  campus = c("Delft_TU_Campus","Groningen_Zernike","UT_campus","WUR_main_campus","Amsterdam_Science_Park","Leiden_Bioscience_Park","Leiden_Binnenstad","HAN_arnhem","Nijmegen_campus","Leeuwarden_Van_Hall_Larenstein","Velp_Landgoed_Larenstein","USP"),
+  
+  Total_BSc_MSc_programs_2024 = c(delft_bsc_msc_prog,gro_bsc_msc_prog,ut_bsc_msc_prog,wur_bsc_msc_prog,uva_bsc_msc_prog,leidbios_bsc_msc_prog,leidbin_bsc_msc_prog,hanarn_bsc_msc_prog,nij_bsc_msc_prog,leeu_bsc_msc_prog,vel_bsc_msc_prog,usp_bsc_msc_prog),
+  
+  Total_Env_BSc_MSc_programs_2024 = c(delft_env_bsc_msc_prog,gro_env_bsc_msc_prog,ut_env_bsc_msc_prog,wur_env_bsc_msc_prog,uva_env_bsc_msc_prog,leidbios_env_bsc_msc_prog,leidbin_env_bsc_msc_prog,hanarn_env_bsc_msc_prog,nij_env_bsc_msc_prog,leeu_env_bsc_msc_prog,vel_env_bsc_msc_prog,usp_env_bsc_msc_prog),
+  
+  Total_BSc_MSc_students_2024 = c(delft_bsc_msc_students,gro_bsc_msc_students,ut_bsc_msc_students,wur_bsc_msc_students,uva_bsc_msc_students,leidbios_bsc_msc_students,leidbin_bsc_msc_students,hanarn_bsc_msc_students,nij_bsc_msc_students,leeu_bsc_msc_students,vel_bsc_msc_students,usp_bsc_msc_students))
+  
+## because some of the campuses are estimated through proxies, we result in demical values for number of students. we acknowledge this limitation  in the analysis but continue the analysis by rounding to 0 decimals
+
+predictors_programs_students$Total_BSc_MSc_students_2024 <- round(predictors_programs_students$Total_BSc_MSc_students_2024,0)
+                                       
+### join with the                                       
+
+rq2_predictors <- rq2_predictors %>%
+  left_join(predictors_programs_students, by = "campus")
+
+
+# neighborhood data preprocessing and join with the rq2 predictors
+
+## note: these data have the number of inwoners per neighborhood. we do an intersection of each campus with the neighborhoods the numbers we get represent the surrounding neighborhood NOT the total number of inhabitants per campus. So if campuses overlap multiple neighborhoods they may have more inhabitants (and thus more potential participants in the citizen science)
+
+## Read neighborhood data WITH inhabitant numbers! (without spatial info)
+
+kwb <- read.csv("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/01/Analysis/RQ2/CBS_data/kwb_2025.csv", sep = ";")
+
+## Read neighborhood data with spatial info -- R selects automatically the first layer. Since the first is the neighborhoods (buurt) i am happy to keep it as it as and not define which layer to use
+
+wijkenbuurten<-st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/01/Analysis/RQ2/CBS_data/wijkenbuurten_2025_v1.gpkg")  
+
+# rename the 10 digit neighborhood column in wijkenbuurten to match the colmn in kwb dataset
+names(wijkenbuurten)[names(wijkenbuurten) == "buurtcode"] <- "gwb_code_10"
+  
+# join the two datasets
+wijkenbuurten_kwb <- left_join(wijkenbuurten, kwb, by = "gwb_code_10")
+
+## spatially join the joined dataset with the campus boundaries through an intersection. this gives all the neighborhoods and their corresponding numbers we need for each campus
+wijkenbuurten_kwb_campus <- st_join(campus_boundaries_merged_filtered,wijkenbuurten_kwb,join = st_intersects)
+
+# filter the most interesting columns for our analysis
+wijkenbuurten_kwb_campus_filter <- wijkenbuurten_kwb_campus[,c("campus","gwb_code_10","buurtnaam","gemeentenaam","aantal_inwoners","bev_dich" )]
+
+wijkenbuurten_kwb_campus_filter <- st_drop_geometry(wijkenbuurten_kwb_campus_filter)
+
+write.csv(wijkenbuurten_kwb_campus_filter,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/01/Analysis/RQ2/CBS_data/kwb_wijkenbuurten_campus1.csv")
+
+## estimate the total inhabitants for the neighborhoods for which each campus belongs to 
+wijkenbuurten_kwb_campus_filter_group <- wijkenbuurten_kwb_campus_filter %>%
+  group_by(campus) %>%
+  summarize(inhabitants = sum(aantal_inwoners))
+
+### join
+rq2_predictors <- rq2_predictors %>%
+  left_join(wijkenbuurten_kwb_campus_filter_group, by = "campus")
+
+### join with the responses
+rq2_predictors_response <- rq2_predictors %>%
+  left_join(rq2_responses, by = "campus")
+
+
+write.csv(rq2_predictors_response,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/RQ2_input_dataset.csv")
