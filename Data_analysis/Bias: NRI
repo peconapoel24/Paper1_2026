@@ -1,0 +1,87 @@
+
+# 2024 ~ 2023
+## greater
+nri_2423_greater <- wilcox.test(bias_a1_nri$X2024, bias_a1_nri$X2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+nri_2423_less <- wilcox.test(bias_a1_nri$X2024, bias_a1_nri$X2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+nri_2423_twosided <- wilcox.test(bias_a1_nri$X2024, bias_a1_nri$X2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+## greater
+nri_2523_greater <- wilcox.test(bias_a1_nri$X2025, bias_a1_nri$X2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+nri_2523_less <- wilcox.test(bias_a1_nri$X2025, bias_a1_nri$X2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+nri_2523_twosided <- wilcox.test(bias_a1_nri$X2025, bias_a1_nri$X2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+## greater
+nri_2524_greater <- wilcox.test(bias_a1_nri$X2025, bias_a1_nri$X2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+nri_2524_less <- wilcox.test(bias_a1_nri$X2025, bias_a1_nri$X2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+nri_2524_twosided <- wilcox.test(bias_a1_nri$X2025, bias_a1_nri$X2024, paired = T, na.rm = drop)
+
+results_bias_nri <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(nri_2423_greater$statistic,
+                nri_2423_less$statistic,
+                nri_2423_twosided$statistic,nri_2523_greater$statistic,
+                nri_2523_less$statistic,
+                nri_2523_twosided$statistic,nri_2524_greater$statistic,
+                nri_2524_less$statistic,
+                nri_2524_twosided$statistic),
+
+  p.value = c(nri_2423_greater$p.value,
+              nri_2423_less$p.value,
+              nri_2423_twosided$p.value,nri_2523_greater$p.value,
+              nri_2523_less$p.value,
+              nri_2523_twosided$p.value,nri_2524_greater$p.value,
+              nri_2524_less$p.value,
+              nri_2524_twosided$p.value),
+
+  alternative = c(nri_2423_greater$alternative,nri_2423_less$alternative,nri_2423_twosided$alternative,nri_2523_greater$alternative,nri_2523_less$alternative,nri_2523_twosided$alternative,nri_2524_greater$alternative,nri_2524_less$alternative,nri_2524_twosided$alternative),
+
+  method = c(nri_2423_greater$method, nri_2423_less$method, nri_2423_twosided$method,nri_2523_greater$method, nri_2523_less$method, nri_2523_twosided$method,nri_2524_greater$method, nri_2524_less$method, nri_2524_twosided$method)
+)
+
+write.csv(results_bias_nri,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_nri.csv")
+
+
+######### t-test: Comparing how different are the estimated spatial cluster values to 1 (random data) . p >0.05 --> not different from 1, p<0.05 --> different from 1`
+nri_a1_23 <- t.test(bias_a1_nri$X2023, mu = 1)
+nri_a1_24 <-t.test(bias_a1_nri$X2024, mu = 1)
+nri_a1_25 <-t.test(bias_a1_nri$X2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_nri <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(nri_a1_23$estimate,
+           nri_a1_24$estimate,
+           nri_a1_25$estimate),
+  t = c(nri_a1_23$statistic,
+        nri_a1_24$statistic,
+        nri_a1_25$statistic),
+  p_value = c(nri_a1_23$p.value,
+              nri_a1_24$p.value,
+              nri_a1_25$p.value),
+  conf_low = c(nri_a1_23$conf.int[1],
+               nri_a1_24$conf.int[1],
+               nri_a1_25$conf.int[1]),
+  conf_high = c(nri_a1_23$conf.int[2],
+                nri_a1_24$conf.int[2],
+                nri_a1_25$conf.int[2])
+)
+
+write.csv(results_ttest_nri,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Ttest_bias_ni.csv")
