@@ -1,0 +1,1066 @@
+
+### First test the complete model for each year
+
+rq2_predictors_response$natural_urban_green_area <- rq2_predictors_response$Natural_in_Built + rq2_predictors_response$Freshwater + rq2_predictors_response$Terrestrial_Natural
+
+### Scope ###
+
+#observations scope
+observations_scope <- lm(total_observations_24 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(observations_scope)
+
+# drop highest vif
+observations_scope <- lm(total_observations_24 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(observations_scope)
+
+observations_scope <- broom::tidy(observations_scope, conf.int = TRUE)
+
+observations_scope <- observations_scope %>%
+  mutate(dataset = "Total Observations")
+
+#### Buildings scope
+
+buildings_scope <- lm(buildings_scope_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(buildings_scope)
+
+# drop highest vif
+buildings_scope <- lm(buildings_scope_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(buildings_scope)
+
+##
+buildings_scope <- broom::tidy(buildings_scope,conf.int = TRUE)
+
+buildings_scope <- buildings_scope %>%
+  mutate(dataset = "Distance to nearest building")
+
+coef_table_scope <- bind_rows(observations_scope,buildings_scope)
+
+#### Buildings bias
+
+## absolute deviation from an expected threshold of 1
+
+rq2_predictors_response$absolute_deviation_nbi <- (abs(1-rq2_predictors_response$nbi_bias_2024))
+
+
+buildings_bias <- lm(absolute_deviation_nbi ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(buildings_bias)
+
+# drop highest vif
+buildings_bias <- lm(absolute_deviation_nbi ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(buildings_bias)
+
+##
+buildings_bias <- broom::tidy(buildings_bias,conf.int = TRUE)
+
+buildings_bias <- buildings_bias %>%
+  mutate(dataset = "Nearest Building Index")
+
+##### Road or path
+
+## scope
+ropa_scope <- lm(scope_roadspaths_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(ropa_scope)
+
+# drop highest vif
+ropa_scope <- lm(scope_roadspaths_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(ropa_scope)
+
+ropa_scope <- broom::tidy(ropa_scope,conf.int = TRUE)
+
+ropa_scope <- ropa_scope %>%
+  mutate(dataset = "Distance to nearest road/path")
+
+coef_table_scope <- bind_rows(coef_table_scope,ropa_scope)
+
+## bias
+
+## absolute deviation from an expected threshold of 1
+
+rq2_predictors_response$absolute_deviation_nri <- (abs(1-rq2_predictors_response$nri_bias_2024))
+
+
+ropa_bias <- lm(absolute_deviation_nri ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(ropa_bias)
+
+# drop highest vif
+ropa_bias <- lm(absolute_deviation_nri ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(ropa_bias)
+
+ropa_bias <- broom::tidy(ropa_bias,conf.int = TRUE)
+
+ropa_bias <- ropa_bias %>%
+  mutate(dataset = "Nearest Road/path Index")
+
+coef_table_bias <- bind_rows(buildings_bias,ropa_bias)
+
+## nni
+
+
+## absolute deviation from an expected threshold of 1
+
+rq2_predictors_response$absolute_deviation_nni <- (abs(1-rq2_predictors_response$nni_bias_2024))
+
+nni_bias <- lm(absolute_deviation_nni ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(nni_bias)
+
+# drop highest vif
+nni_bias <- lm(absolute_deviation_nni ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(nni_bias)
+
+nni_bias <- broom::tidy(nni_bias,conf.int = TRUE)
+
+nni_bias <- nni_bias %>%
+  mutate(dataset = "Nearest Neighbor Index")
+
+coef_table_bias <- bind_rows(coef_table_bias,nni_bias)
+
+
+## land use 
+
+#agriculture
+agri_scope <- lm(Agriculture_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(agri_scope)
+
+# drop highest vif
+agri_scope <- lm(Agriculture_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(agri_scope)
+
+agri_scope <- broom::tidy(agri_scope,conf.int = TRUE)
+
+agri_scope <- agri_scope %>%
+  mutate(dataset = "Land use:agriculture")
+
+coef_table_scope <- bind_rows(coef_table_scope,agri_scope)
+
+
+#Freshwater
+fresh_scope <- lm(Freshwater_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(fresh_scope)
+
+# drop highest vif
+fresh_scope <- lm(Freshwater_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(fresh_scope)
+
+fresh_scope <- broom::tidy(fresh_scope,conf.int = TRUE)
+
+fresh_scope <- fresh_scope %>%
+  mutate(dataset = "Land use:freshwater")
+
+coef_table_scope <- bind_rows(coef_table_scope,fresh_scope)
+
+
+#Natural_in_Built
+natbuil_scope <- lm(Natural_in_Built_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(natbuil_scope)
+
+# drop highest vif
+natbuil_scope <- lm(Natural_in_Built_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(natbuil_scope)
+
+natbuil_scope <- broom::tidy(natbuil_scope,conf.int = TRUE)
+
+natbuil_scope <- natbuil_scope %>%
+  mutate(dataset = "Land use:natural in built")
+
+coef_table_scope <- bind_rows(coef_table_scope,natbuil_scope)
+
+#Terrestrial natural
+ternat_scope <- lm(Terrestrial_Natural_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(ternat_scope)
+
+# drop highest vif
+ternat_scope <- lm(Terrestrial_Natural_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(ternat_scope)
+
+ternat_scope <- broom::tidy(ternat_scope,conf.int = TRUE)
+
+ternat_scope <- ternat_scope %>%
+  mutate(dataset = "Land use:terrestrial natural")
+
+coef_table_scope <- bind_rows(coef_table_scope,natbuil_scope)
+
+#Built
+buil_scope <- lm(built_areas_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(buil_scope)
+
+# drop highest vif
+buil_scope <- lm(built_areas_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(buil_scope)
+
+buil_scope <- broom::tidy(buil_scope,conf.int = TRUE)
+
+buil_scope <- buil_scope %>%
+  mutate(dataset = "Land use:built areas")
+
+coef_table_scope <- bind_rows(coef_table_scope,buil_scope)
+
+
+## land use bias
+
+landuse_bias <- betareg(landuse_bias_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(landuse_bias)
+
+# drop highest vif
+landuse_bias <- betareg(landuse_bias_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(landuse_bias)
+
+landuse_bias <- broom::tidy(landuse_bias,conf.int = TRUE)
+
+landuse_bias <- landuse_bias %>%
+  mutate(dataset = "Land use")
+
+coef_table_bias <- bind_rows(coef_table_bias,landuse_bias)
+
+
+## observer
+
+# scope
+observer_scope <- lm(observer_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(observer_scope)
+
+# drop highest vif
+observer_scope <- lm(observer_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(observer_scope)
+
+observer_scope <- broom::tidy(observer_scope,conf.int = TRUE)
+
+observer_scope <- observer_scope %>%
+  mutate(dataset = "Observer")
+
+coef_table_scope <- bind_rows(coef_table_scope,observer_scope)
+
+#bias
+observer_bias <- betareg(observer_bias_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(observer_bias)
+
+# drop highest vif
+observer_bias <- betareg(observer_bias_2024 ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(observer_bias)
+
+observer_bias <- broom::tidy(observer_bias,conf.int = TRUE)
+
+observer_bias <- observer_bias %>%
+  mutate(dataset = "Observer")
+
+coef_table_bias <- bind_rows(coef_table_bias,observer_bias)
+
+### Taxonomic
+
+## Algae_weeds_unicellular - Exclude this because of several data entries with 0 numerical values
+# 
+# ## scope
+# Algae_weeds_unicellular_scope <- lm(Algae_weeds_unicellular_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+# 
+# vif(Algae_weeds_unicellular_scope)
+# 
+# # drop highest vif
+# Algae_weeds_unicellular_scope <- lm(Algae_weeds_unicellular_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+# 
+# vif(Algae_weeds_unicellular_scope)
+# 
+# Algae_weeds_unicellular_scope <- broom::tidy(Algae_weeds_unicellular_scope, conf.int = TRUE)
+# 
+# Algae_weeds_unicellular_scope <- Algae_weeds_unicellular_scope %>%
+#   mutate(dataset = "Algae,weeds,and unicellular")
+# 
+# coef_table_scope <- bind_rows(coef_table_scope,Algae_weeds_unicellular_scope)
+
+## Arthropods other 
+Arthropods_other_scope <- lm(Arthropods_other_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Arthropods_other_scope)
+
+# drop highest vif
+Arthropods_other_scope <- lm(Arthropods_other_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Arthropods_other_scope)
+
+Arthropods_other_scope <- broom::tidy(Arthropods_other_scope,conf.int = TRUE)
+
+Arthropods_other_scope <- Arthropods_other_scope %>%
+  mutate(dataset = "Arthropods (other)")
+
+coef_table_scope <- bind_rows(coef_table_scope,Arthropods_other_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_arthropods_other_bias <- (abs(1-rq2_predictors_response$arthropods_other_2024_bias))
+
+
+Arthropods_other_bias <- lm(absolute_deviation_arthropods_other_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Arthropods_other_bias)
+
+# drop highest vif
+Arthropods_other_bias <- lm(absolute_deviation_arthropods_other_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Arthropods_other_bias)
+
+Arthropods_other_bias <- broom::tidy(Arthropods_other_bias,conf.int = TRUE)
+
+Arthropods_other_bias <- Arthropods_other_bias %>%
+  mutate(dataset = "Arthropods (other)")
+
+coef_table_bias <- bind_rows(coef_table_bias,Arthropods_other_bias)
+
+
+### Bees_wasps_ants
+
+#scope
+
+Bees_wasps_ants_scope <- lm(Bees_wasps_ants_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Bees_wasps_ants_scope)
+
+# drop highest vif
+Bees_wasps_ants_scope <- lm(Bees_wasps_ants_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Bees_wasps_ants_scope)
+
+Bees_wasps_ants_scope <- broom::tidy(Bees_wasps_ants_scope, conf.int = TRUE)
+
+Bees_wasps_ants_scope <- Bees_wasps_ants_scope %>%
+  mutate(dataset = "Bees,wasps,and ants")
+
+coef_table_scope <- bind_rows(coef_table_scope,Bees_wasps_ants_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Bees_wasps_ants_bias <- (abs(1-rq2_predictors_response$bees_wasps_ants_2024_bias))
+
+
+Bees_wasps_ants_bias <- lm(absolute_deviation_Bees_wasps_ants_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Bees_wasps_ants_bias)
+
+# drop highest vif
+Bees_wasps_ants_bias <- lm(absolute_deviation_Bees_wasps_ants_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Bees_wasps_ants_bias)
+
+Bees_wasps_ants_bias <- broom::tidy(Bees_wasps_ants_bias, conf.int = TRUE)
+
+Bees_wasps_ants_bias <- Bees_wasps_ants_bias %>%
+  mutate(dataset = "Bees,wasps,and ants")
+
+coef_table_bias <- bind_rows(coef_table_bias,Bees_wasps_ants_bias)
+
+### Beetles
+#scope
+
+Beetles_scope <- lm(Beetles_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Beetles_scope)
+
+# drop highest vif
+Beetles_scope <- lm(Beetles_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Beetles_scope)
+
+Beetles_scope <- broom::tidy(Beetles_scope,conf.int = TRUE)
+
+Beetles_scope <- Beetles_scope %>%
+  mutate(dataset = "Beetles")
+
+coef_table_scope <- bind_rows(coef_table_scope,Beetles_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Beetles_bias <- (abs(1-rq2_predictors_response$beetles_2024_bias))
+
+
+Beetles_bias <- lm(absolute_deviation_Beetles_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Beetles_bias)
+
+# drop highest vif
+Beetles_bias <- lm(absolute_deviation_Beetles_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Beetles_bias)
+
+Beetles_bias <- broom::tidy(Beetles_bias, conf.int=TRUE)
+
+Beetles_bias <- Beetles_bias %>%
+  mutate(dataset = "Beetles")
+
+coef_table_bias <- bind_rows(coef_table_bias,Beetles_bias)
+
+
+### Birds
+
+#scope
+
+Birds_scope <- lm(Birds_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Birds_scope)
+
+# drop highest vif
+Birds_scope <- lm(Birds_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Birds_scope)
+
+Birds_scope <- broom::tidy(Birds_scope, conf.int = TRUE)
+
+Birds_scope <- Birds_scope %>%
+  mutate(dataset = "Birds")
+
+coef_table_scope <- bind_rows(coef_table_scope,Birds_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Bird_bias <- (abs(1-rq2_predictors_response$birds_2024_bias))
+
+
+Birds_bias <- lm(absolute_deviation_Bird_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Birds_bias)
+
+# drop highest vif
+Birds_bias <- lm(absolute_deviation_Bird_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Birds_bias)
+
+Birds_bias <- broom::tidy(Birds_bias, conf.int=TRUE)
+
+Birds_bias <- Birds_bias %>%
+  mutate(dataset = "Birds")
+
+coef_table_bias <- bind_rows(coef_table_bias,Birds_bias)
+
+### Butterflies
+#scope
+
+Butterflies_scope <- lm(Butterflies_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Butterflies_scope)
+
+# drop highest vif
+Butterflies_scope <- lm(Butterflies_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Butterflies_scope)
+
+Butterflies_scope <- broom::tidy(Butterflies_scope, conf.int = TRUE)
+
+Butterflies_scope <- Butterflies_scope %>%
+  mutate(dataset = "Butterflies")
+
+coef_table_scope <- bind_rows(coef_table_scope,Butterflies_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Butterflies_bias <- (abs(1-rq2_predictors_response$butterflies_2024_bias))
+
+Butterflies_bias <- lm(absolute_deviation_Butterflies_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Butterflies_bias)
+
+# drop highest vif
+Butterflies_bias <- lm(absolute_deviation_Butterflies_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Butterflies_bias)
+
+Butterflies_bias <- broom::tidy(Butterflies_bias, conf.int = TRUE)
+
+Butterflies_bias <- Butterflies_bias %>%
+  mutate(dataset = "Butterflies")
+
+coef_table_bias <- bind_rows(coef_table_bias,Butterflies_bias)
+
+
+### Bugs cicadas aphids
+
+#scope
+
+Bugs_cicadas_aphids_scope <- lm(Bugs_cicadas_aphids_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Bugs_cicadas_aphids_scope)
+
+# drop highest vif
+Bugs_cicadas_aphids_scope <- lm(Bugs_cicadas_aphids_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Bugs_cicadas_aphids_scope)
+
+Bugs_cicadas_aphids_scope <- broom::tidy(Bugs_cicadas_aphids_scope, conf.int=TRUE)
+
+Bugs_cicadas_aphids_scope <- Bugs_cicadas_aphids_scope %>%
+  mutate(dataset = "Bugs,cicadas,and aphids")
+
+coef_table_scope <- bind_rows(coef_table_scope,Bugs_cicadas_aphids_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Bugs_cicadas_aphids_bias <- (abs(1-rq2_predictors_response$bugs_cicadas_aphids_2024_bias))
+
+Bugs_cicadas_aphids_bias <- lm(absolute_deviation_Bugs_cicadas_aphids_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Bugs_cicadas_aphids_bias)
+
+# drop highest vif
+Bugs_cicadas_aphids_bias <- lm(absolute_deviation_Bugs_cicadas_aphids_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Bugs_cicadas_aphids_bias)
+
+Bugs_cicadas_aphids_bias <- broom::tidy(Bugs_cicadas_aphids_bias, conf.int = TRUE)
+
+Bugs_cicadas_aphids_bias <- Bugs_cicadas_aphids_bias %>%
+  mutate(dataset = "Bugs,cicadas,and aphids")
+
+coef_table_bias <- bind_rows(coef_table_bias,Bugs_cicadas_aphids_bias)
+
+
+
+## Dragonflies 
+
+#scope
+
+Dragonflies_scope <- lm(Dragonflies_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Dragonflies_scope)
+
+# drop highest vif
+Dragonflies_scope <- lm(Dragonflies_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Dragonflies_scope)
+
+Dragonflies_scope <- broom::tidy(Dragonflies_scope, conf.int = TRUE)
+
+Dragonflies_scope <- Dragonflies_scope %>%
+  mutate(dataset = "Dragonflies")
+
+coef_table_scope <- bind_rows(coef_table_scope,Dragonflies_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Dragonflies_bias <- (abs(1-rq2_predictors_response$dragonflies_2024_bias))
+
+Dragonflies_bias <- lm(absolute_deviation_Dragonflies_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Dragonflies_bias)
+
+# drop highest vif
+Dragonflies_bias <- lm(absolute_deviation_Dragonflies_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Dragonflies_bias)
+
+Dragonflies_bias <- broom::tidy(Dragonflies_bias, conf.int=TRUE)
+
+Dragonflies_bias <- Dragonflies_bias %>%
+  mutate(dataset = "Dragonflies")
+
+coef_table_bias <- bind_rows(coef_table_bias,Dragonflies_bias)
+
+### Flies and mosquitoes
+
+#scope
+
+Flies_mosquitoes_scope <- lm(Flies_mosquitoes_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Flies_mosquitoes_scope)
+
+# drop highest vif
+Flies_mosquitoes_scope <- lm(Flies_mosquitoes_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Flies_mosquitoes_scope)
+
+Flies_mosquitoes_scope <- broom::tidy(Flies_mosquitoes_scope, conf.int=TRUE)
+
+Flies_mosquitoes_scope <- Flies_mosquitoes_scope %>%
+  mutate(dataset = "Flies and mosquitoes")
+
+coef_table_scope <- bind_rows(coef_table_scope,Flies_mosquitoes_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Flies_moquitoes_bias <- (abs(1-rq2_predictors_response$flies_mosquitoes_2024_bias))
+
+Flies_moquitoes_bias <- lm(absolute_deviation_Flies_moquitoes_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Flies_moquitoes_bias)
+
+# drop highest vif
+Flies_moquitoes_bias <- lm(absolute_deviation_Flies_moquitoes_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Flies_moquitoes_bias)
+
+Flies_moquitoes_bias <- broom::tidy(Flies_moquitoes_bias, conf.int = TRUE)
+
+Flies_moquitoes_bias <- Flies_moquitoes_bias %>%
+  mutate(dataset = "Flies and mosquitoes")
+
+coef_table_bias <- bind_rows(coef_table_bias,Flies_moquitoes_bias)
+
+### Grasshoppers and crickets
+
+#scope
+
+Grasshoppers_crickets_scope <- lm(Grasshoppers_crickets_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Grasshoppers_crickets_scope)
+
+# drop highest vif
+Grasshoppers_crickets_scope <- lm(Grasshoppers_crickets_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Grasshoppers_crickets_scope)
+
+Grasshoppers_crickets_scope <- broom::tidy(Grasshoppers_crickets_scope,conf.int=TRUE)
+
+Grasshoppers_crickets_scope <- Grasshoppers_crickets_scope %>%
+  mutate(dataset = "Grasshoppers and crickets")
+
+coef_table_scope <- bind_rows(coef_table_scope,Grasshoppers_crickets_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Grasshoppers_crickets_bias <- (abs(1-rq2_predictors_response$grasshoppers_crickets_2024_bias))
+
+Grasshoppers_crickets_bias <- lm(absolute_deviation_Grasshoppers_crickets_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Grasshoppers_crickets_bias)
+
+# drop highest vif
+Grasshoppers_crickets_bias <- lm(absolute_deviation_Grasshoppers_crickets_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Grasshoppers_crickets_bias)
+
+Grasshoppers_crickets_bias <- broom::tidy(Grasshoppers_crickets_bias,conf.int = TRUE)
+
+Grasshoppers_crickets_bias <- Grasshoppers_crickets_bias %>%
+  mutate(dataset = "Grasshoppers and crickets")
+
+coef_table_bias <- bind_rows(coef_table_bias,Grasshoppers_crickets_bias)
+
+
+##### Insects (other)
+#scope
+
+Insects_other_scope <- lm(Insects_other_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Insects_other_scope)
+
+# drop highest vif
+Insects_other_scope <- lm(Insects_other_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Insects_other_scope)
+
+Insects_other_scope <- broom::tidy(Insects_other_scope, conf.int=TRUE)
+
+Insects_other_scope <- Insects_other_scope %>%
+  mutate(dataset = "Insects (other)")
+
+coef_table_scope <- bind_rows(coef_table_scope,Insects_other_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Insects_other_bias <- (abs(1-rq2_predictors_response$insects_other_2024_bias))
+
+Insects_other_bias <- lm(absolute_deviation_Insects_other_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Insects_other_bias)
+
+# drop highest vif
+Insects_other_bias <- lm(absolute_deviation_Insects_other_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Insects_other_bias)
+
+Insects_other_bias <- broom::tidy(Insects_other_bias, conf.int=TRUE)
+
+Insects_other_bias <- Insects_other_bias %>%
+  mutate(dataset = "Insects (other)")
+
+coef_table_bias <- bind_rows(coef_table_bias,Insects_other_bias)
+
+
+##### Mammals
+#scope
+
+Mammals_scope <- lm(Mammals_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mammals_scope)
+
+# drop highest vif
+Mammals_scope <- lm(Mammals_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Mammals_scope)
+
+Mammals_scope <- broom::tidy(Mammals_scope, conf.int=TRUE)
+
+Mammals_scope <- Mammals_scope %>%
+  mutate(dataset = "Mammals")
+
+coef_table_scope <- bind_rows(coef_table_scope,Mammals_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Mammals_bias <- (abs(1-rq2_predictors_response$mammals_2024_bias))
+
+Mammals_bias <- lm(absolute_deviation_Mammals_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mammals_bias)
+
+# drop highest vif
+Mammals_bias <- lm(absolute_deviation_Mammals_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Mammals_bias)
+
+Mammals_bias <- broom::tidy(Mammals_bias, conf.int=TRUE)
+
+Mammals_bias <- Mammals_bias %>%
+  mutate(dataset = "Mammals")
+
+coef_table_bias <- bind_rows(coef_table_bias,Mammals_bias)
+
+### Mollusks
+
+#scope
+
+Mollusks_scope <- lm(Mollusks_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mollusks_scope)
+
+# drop  vif
+Mollusks_scope <- lm(Mollusks_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Mollusks_scope)
+
+Mollusks_scope <- broom::tidy(Mollusks_scope, conf.int=TRUE)
+
+Mollusks_scope <- Mollusks_scope %>%
+  mutate(dataset = "Mollusks")
+
+coef_table_scope <- bind_rows(coef_table_scope,Mollusks_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Mollusks_bias <- (abs(1-rq2_predictors_response$mollusks_2024_bias))
+
+Mollusks_bias <- lm(absolute_deviation_Mollusks_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mollusks_bias)
+
+# drop highest vif
+Mollusks_bias <- lm(absolute_deviation_Mollusks_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Mollusks_bias)
+
+Mollusks_bias <- broom::tidy(Mollusks_bias, conf.int=TRUE)
+
+Mollusks_bias <- Mollusks_bias %>%
+  mutate(dataset = "Mollusks")
+
+coef_table_bias <- bind_rows(coef_table_bias,Mollusks_bias)
+
+### Mosses and lichens
+
+#scope
+
+Mosses_lichens_scope <- lm(Mosses_lichens_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mosses_lichens_scope)
+
+# drop  vif
+Mosses_lichens_scope <- lm(Mosses_lichens_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Mosses_lichens_scope)
+
+Mosses_lichens_scope <- broom::tidy(Mosses_lichens_scope,conf.int = TRUE)
+
+Mosses_lichens_scope <- Mosses_lichens_scope %>%
+  mutate(dataset = "Mosses and lichens")
+
+coef_table_scope <- bind_rows(coef_table_scope,Mosses_lichens_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Mosses_lichens_bias <- (abs(1-rq2_predictors_response$mosses_lichens_2024_bias))
+
+Mosses_lichens_bias <- lm(absolute_deviation_Mosses_lichens_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mosses_lichens_bias)
+
+# drop highest vif
+Mosses_lichens_bias <- lm(absolute_deviation_Mosses_lichens_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Mosses_lichens_bias)
+
+Mosses_lichens_bias <- broom::tidy(Mosses_lichens_bias,conf.int=TRUE)
+
+Mosses_lichens_bias <- Mosses_lichens_bias %>%
+  mutate(dataset = "Mosses and lichens")
+
+coef_table_bias <- bind_rows(coef_table_bias,Mosses_lichens_bias)
+
+# Moths and micro's
+
+#scope
+
+Moths_micros_scope <- lm(Moths_micros_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Moths_micros_scope)
+
+# drop  vif
+Moths_micros_scope <- lm(Moths_micros_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Moths_micros_scope)
+
+Moths_micros_scope <- broom::tidy(Moths_micros_scope,conf.int=TRUE)
+
+Moths_micros_scope <- Moths_micros_scope %>%
+  mutate(dataset = "Moths and micros")
+
+coef_table_scope <- bind_rows(coef_table_scope,Moths_micros_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Moths_micros_bias <- (abs(1-rq2_predictors_response$moths_micros_2024_bias))
+
+moths_micros_bias <- lm(absolute_deviation_Moths_micros_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(moths_micros_bias)
+
+# drop highest vif
+moths_micros_bias <- lm(absolute_deviation_Moths_micros_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(moths_micros_bias)
+
+moths_micros_bias <- broom::tidy(moths_micros_bias, conf.int=TRUE)
+
+moths_micros_bias <- moths_micros_bias %>%
+  mutate(dataset = "Moths and micros")
+
+coef_table_bias <- bind_rows(coef_table_bias,moths_micros_bias)
+
+
+# Mushrooms
+
+#scope
+
+Mushrooms_scope <- lm(Mushrooms_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mushrooms_scope)
+
+# drop  vif
+Muhsrooms_scope <- lm(Mushrooms_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Muhsrooms_scope)
+
+Muhsrooms_scope <- broom::tidy(Muhsrooms_scope, conf.int=TRUE)
+
+Muhsrooms_scope <- Muhsrooms_scope %>%
+  mutate(dataset = "Muhsrooms")
+
+coef_table <- bind_rows(coef_table,Muhsrooms_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Mushrooms_bias <- (abs(1-rq2_predictors_response$mushrooms_2024_bias))
+
+Mushrooms_bias <- lm(absolute_deviation_Mushrooms_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Mushrooms_bias)
+
+# drop highest vif
+Mushrooms_bias <- lm(absolute_deviation_Mushrooms_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Mushrooms_bias)
+
+Mushrooms_bias <- broom::tidy(Mushrooms_bias,conf.int=TRUE)
+
+Mushrooms_bias <- Mushrooms_bias %>%
+  mutate(dataset = "Mushrooms")
+
+coef_table_bias <- bind_rows(coef_table_bias,Mushrooms_bias)
+
+
+# Plants
+
+#scope
+
+Plants_scope <- lm(Plants_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Plants_scope)
+
+# drop  vif
+Plants_scope <- lm(Plants_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Plants_scope)
+
+Plants_scope <- broom::tidy(Plants_scope, conf.int=TRUE)
+
+Plants_scope <- Plants_scope %>%
+  mutate(dataset = "Plants")
+
+coef_table_scope <- bind_rows(coef_table_scope,Plants_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Plants_bias <- (abs(1-rq2_predictors_response$plants_2024_bias))
+
+Plants_bias <- lm(absolute_deviation_Plants_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Plants_bias)
+
+# drop highest vif
+Plants_bias <- lm(absolute_deviation_Plants_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Plants_bias)
+
+Plants_bias <- broom::tidy(Plants_bias, conf.int=TRUE)
+
+Plants_bias <- Plants_bias %>%
+  mutate(dataset = "Plants")
+
+coef_table_bias <- bind_rows(coef_table_bias,Plants_bias)
+
+## Reptiles and amphibians
+
+#scope
+
+Reptiles_amphibians_scope <- lm(Reptiles_amphibians_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Reptiles_amphibians_scope)
+
+# drop  vif
+Reptiles_amphibians_scope <- lm(Reptiles_amphibians_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Reptiles_amphibians_scope)
+
+Reptiles_amphibians_scope <- broom::tidy(Reptiles_amphibians_scope, conf.int=TRUE)
+
+Reptiles_amphibians_scope <- Reptiles_amphibians_scope %>%
+  mutate(dataset = "Reptiles and amphibians")
+
+coef_table_scope <- bind_rows(coef_table_scope,Reptiles_amphibians_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Reptiles_amphibians_bias <- (abs(1-rq2_predictors_response$reptiles_amphibians_2024_bias))
+
+Reptiles_amphibians_bias <- lm(absolute_deviation_Reptiles_amphibians_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Reptiles_amphibians_bias)
+
+# drop highest vif
+Reptiles_amphibians_bias <- lm(absolute_deviation_Reptiles_amphibians_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Reptiles_amphibians_bias)
+
+Reptiles_amphibians_bias <- broom::tidy(Reptiles_amphibians_bias, conf.int=TRUE)
+
+Reptiles_amphibians_bias <- Reptiles_amphibians_bias %>%
+  mutate(dataset = "Reptiles and amphibians")
+
+coef_table_bias <- bind_rows(coef_table_bias,Reptiles_amphibians_bias)
+
+## Fish
+
+#scope
+
+Fish_scope <- lm(Fish_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Fish_scope)
+
+# drop  vif
+Fish_scope <- lm(Fish_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Fish_scope)
+
+Fish_scope <- broom::tidy(Fish_scope, conf.int=TRUE)
+
+Fish_scope <- Fish_scope %>%
+  mutate(dataset = "Fish")
+
+coef_table_scope <- bind_rows(coef_table_scope,Fish_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Fish_bias <- (abs(1-rq2_predictors_response$fish_2024_bias))
+
+Fish_bias <- lm(absolute_deviation_Fish_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Fish_bias)
+
+# drop highest vif
+Fish_bias <- lm(absolute_deviation_Fish_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Fish_bias)
+
+Fish_bias <- broom::tidy(Fish_bias, conf.int=TRUE)
+
+Fish_bias <- Fish_bias %>%
+  mutate(dataset = "Fish")
+
+coef_table_bias <- bind_rows(coef_table_bias,Fish_bias)
+
+## Invertebrates (other)
+
+#scope
+
+Other_invertebrates_scope <- lm(Other_invertebrates_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Other_invertebrates_scope)
+
+# drop  vif
+Other_invertebrates_scope <- lm(Other_invertebrates_2024_scope ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Other_invertebrates_scope)
+
+Other_invertebrates_scope <- broom::tidy(Other_invertebrates_scope,conf.int=TRUE)
+
+Other_invertebrates_scope <- Other_invertebrates_scope %>%
+  mutate(dataset = "Invertebrates (other)")
+
+coef_table_scope <- bind_rows(coef_table_scope,Other_invertebrates_scope)
+
+
+## bias
+rq2_predictors_response$absolute_deviation_Other_invertebrates_bias <- (abs(1-rq2_predictors_response$invertebrates_other_2024_bias))
+
+Other_invertebrates_bias <- lm(absolute_deviation_Other_invertebrates_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants+Total_BSc_MSc_students_2024,  rq2_predictors_response)
+
+vif(Other_invertebrates_bias)
+
+# drop highest vif
+Other_invertebrates_bias <- lm(absolute_deviation_Other_invertebrates_bias ~ total_area + natural_urban_green_area + Total_BSc_MSc_programs_2024 + Total_Env_BSc_MSc_programs_2024 +  inhabitants,  rq2_predictors_response)
+
+vif(Other_invertebrates_bias)
+
+Other_invertebrates_bias <- broom::tidy(Other_invertebrates_bias, conf.int=TRUE)
+
+Other_invertebrates_bias <- Other_invertebrates_bias %>%
+  mutate(dataset = "Invertebrates (other)")
+
+coef_table_scope <- bind_rows(coef_table_scope,Other_invertebrates_scope)
+
+write.csv(coef_table_scope,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/RQ2_output_scope_dataset.csv")
+
+coef_table_bias <- bind_rows(coef_table_bias,Other_invertebrates_bias)
+
+write.csv(coef_table_bias,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/RQ2_output_bias_dataset.csv")
