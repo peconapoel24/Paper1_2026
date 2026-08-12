@@ -1,0 +1,87 @@
+###### Analysis 1: Campuses with opportunistic observations in 2023 and a Bioblitz in 24,25
+
+##### Statistics: # observations
+
+#2023
+observer_tot_2023_analysis1 <- Observations_2023_clip_filtered_analysis1 %>%
+  group_by(campus,user.name) %>%
+  summarise(total_observations = n())
+
+## take both the median and the mean to see if there is a difference in the added value
+observer_tot_2023_sum_analysis1 <- observer_tot_2023_analysis1 %>%
+  group_by(campus) %>%
+  summarise(median = median(total_observations), mean = mean(total_observations))
+
+observer_tot_2023_sum_analysis1 <- st_drop_geometry(observer_tot_2023_sum_analysis1)
+
+write.csv(observer_tot_2023_sum_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/03/Analysis/RQ1/Observer/Analysis1/Observer23_bias_summary_analysis1.csv")
+
+#2024
+observer_tot_2024_analysis1 <- Observations_2024_clip_filtered_analysis1 %>%
+  group_by(campus,user.name) %>%
+  summarise(total_observations = n())
+
+observer_tot_2024_sum_analysis1 <- observer_tot_2024_analysis1 %>%
+  group_by(campus) %>%
+  summarise(median = median(total_observations), mean = mean(total_observations))
+
+observer_tot_2024_sum_analysis1 <- st_drop_geometry(observer_tot_2024_sum_analysis1)
+
+write.csv(observer_tot_2024_sum_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/03/Analysis/RQ1/Observer/Analysis1/Observer24_bias_summary_analysis1.csv")
+
+#2025
+observer_tot_2025_analysis1 <- Observations_2025_clip_filtered_analysis1 %>%
+  group_by(campus,user.name) %>%
+  summarise(total_observations = n())
+
+observer_tot_2025_sum_analysis1 <- observer_tot_2025_analysis1 %>%
+  group_by(campus) %>%
+  summarise(median = median(total_observations), mean = mean(total_observations))
+
+observer_tot_2025_sum_analysis1 <- st_drop_geometry(observer_tot_2025_sum_analysis1)
+
+write.csv(observer_tot_2025_sum_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/03/Analysis/RQ1/Observer/Analysis1/Observer25_bias_summary_analysis1.csv")
+
+
+Observer_all_a1 <- bind_rows(
+observer_tot_2023_sum_analysis1 %>% mutate(year = "X2023"),
+  observer_tot_2024_sum_analysis1 %>% mutate(year = "X2024"),
+  observer_tot_2025_sum_analysis1 %>% mutate(year = "X2025")
+)
+
+## for statistical analysis
+Observer_all_a1_wide <- Observer_all_a1 %>%
+  tidyr::pivot_wider(
+    id_cols = campus,
+    names_from = year,
+    values_from = median,
+    values_fill = 0
+  )
+
+## for box plot
+Observer_all_a1_plot <- bind_rows(
+observer_tot_2023_sum_analysis1 %>% mutate(year = "2023"),
+observer_tot_2024_sum_analysis1 %>% mutate(year = "2024"),
+observer_tot_2025_sum_analysis1 %>% mutate(year = "2025"))
+
+write.csv(Observer_all_a1_plot,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/03/Analysis/RQ1/Observer/Analysis1/Observer_scope_a1.csv")
+
+write.xlsx(Observer_all_a1_plot,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/03/Analysis/RQ1/Observer/Analysis1/Observer_scope_a1.xlsx")
+
+
+## rq2
+
+#2024
+observer_tot_2024_analysis2 <- Observations_2024_clip_filtered_analysis2 %>%
+  group_by(campus,user.name) %>%
+  summarise(total_observations = n())
+
+observer_tot_2024_sum_analysis2 <- observer_tot_2024_analysis2 %>%
+  group_by(campus) %>%
+  summarise(observer_2024 = median(total_observations), mean = mean(total_observations))
+
+observer_tot_2024_sum_analysis2 <- st_drop_geometry(observer_tot_2024_sum_analysis2)
+
+write.csv(observer_tot_2024_sum_analysis2,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/03/Analysis/RQ1/Observer/Analysis1/Observer24_scope_summary_analysis2.csv")
+
+write.xlsx(observer_tot_2024_sum_analysis2,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/1.Weekly_meetings/2026/03/Analysis/RQ1/Observer/Analysis1/Observer24_scope_summary_analysis2.xlsx")
