@@ -1,0 +1,1644 @@
+
+
+######## ------  Algae_weeds_unicellular ------ ########
+
+## excluded 0 values !
+
+
+######## ------ Bees_wasps_ants ------ ########
+
+# 2024 ~ 2023
+## greater
+bias_bwa_2423_greater <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2025, tax_bias_results_a1$bees_wasps_ants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bwa_2423_less <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2024, tax_bias_results_a1$bees_wasps_ants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bwa_2423_twosided <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2024, tax_bias_results_a1$bees_wasps_ants_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+## greater
+bias_bwa_2523_greater <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2025, tax_bias_results_a1$bees_wasps_ants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bwa_2523_less <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2025, tax_bias_results_a1$bees_wasps_ants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bwa_2523_twosided <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2025, tax_bias_results_a1$bees_wasps_ants_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+## greater
+bias_bwa_2524_greater <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2025, tax_bias_results_a1$bees_wasps_ants_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bwa_2524_less <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2025, tax_bias_results_a1$bees_wasps_ants_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bwa_2524_twosided <- wilcox.test(tax_bias_results_a1$bees_wasps_ants_2025, tax_bias_results_a1$bees_wasps_ants_2024, paired = T, na.rm = drop)
+
+
+results_bwa_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_bwa_2423_greater$statistic,
+                bias_bwa_2423_less$statistic,
+                bias_bwa_2423_twosided$statistic,bias_bwa_2523_greater$statistic,
+                bias_bwa_2523_less$statistic,
+                bias_bwa_2523_twosided$statistic,bias_bwa_2524_greater$statistic,
+                bias_bwa_2524_less$statistic,
+                bias_bwa_2524_twosided$statistic),
+
+  p.value = c(bias_bwa_2423_greater$p.value,
+              bias_bwa_2423_less$p.value,
+              bias_bwa_2423_twosided$p.value,bias_bwa_2523_greater$p.value,
+              bias_bwa_2523_less$p.value,
+              bias_bwa_2523_twosided$p.value,bias_bwa_2524_greater$p.value,
+              bias_bwa_2524_less$p.value,
+              bias_bwa_2524_twosided$p.value),
+
+  alternative = c(bias_bwa_2423_greater$alternative,bias_bwa_2423_less$alternative,bias_bwa_2423_twosided$alternative,bias_bwa_2523_greater$alternative,bias_bwa_2523_less$alternative,bias_bwa_2523_twosided$alternative,bias_bwa_2524_greater$alternative,bias_bwa_2524_less$alternative,bias_bwa_2524_twosided$alternative),
+
+  method = c(bias_bwa_2423_greater$method, bias_bwa_2423_less$method, bias_bwa_2423_twosided$method,bias_bwa_2523_greater$method, bias_bwa_2523_less$method, bias_bwa_2523_twosided$method,bias_bwa_2524_greater$method, bias_bwa_2524_less$method, bias_bwa_2524_twosided$method)
+)
+
+
+######## ------ Butterflies ------ ########
+
+# 2024 ~ 2023
+## greater
+bias_butt_2423_greater <- wilcox.test(tax_bias_results_a1$butterflies_2024, tax_bias_results_a1$butterflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_butt_2423_less <- wilcox.test(tax_bias_results_a1$butterflies_2024, tax_bias_results_a1$butterflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_butt_2423_twosided <- wilcox.test(tax_bias_results_a1$butterflies_2024, tax_bias_results_a1$butterflies_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+## greater
+bias_butt_2523_greater <- wilcox.test(tax_bias_results_a1$butterflies_2025, tax_bias_results_a1$butterflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_butt_2523_less <- wilcox.test(tax_bias_results_a1$butterflies_2025, tax_bias_results_a1$butterflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_butt_2523_twosided <- wilcox.test(tax_bias_results_a1$butterflies_2025, tax_bias_results_a1$butterflies_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+## greater
+bias_butt_2524_greater <- wilcox.test(tax_bias_results_a1$butterflies_2025, tax_bias_results_a1$butterflies_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_butt_2524_less <- wilcox.test(tax_bias_results_a1$butterflies_2025, tax_bias_results_a1$butterflies_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_butt_2524_twosided <- wilcox.test(tax_bias_results_a1$butterflies_2025, tax_bias_results_a1$butterflies_2024, paired = T, na.rm = drop)
+
+#merged
+results_butt_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_butt_2423_greater$statistic,
+                bias_butt_2423_less$statistic,
+                bias_butt_2423_twosided$statistic,bias_butt_2523_greater$statistic,
+                bias_butt_2523_less$statistic,
+                bias_butt_2523_twosided$statistic,bias_butt_2524_greater$statistic,
+                bias_butt_2524_less$statistic,
+                bias_butt_2524_twosided$statistic),
+
+  p.value = c(bias_butt_2423_greater$p.value,
+              bias_butt_2423_less$p.value,
+              bias_butt_2423_twosided$p.value,bias_butt_2523_greater$p.value,
+              bias_butt_2523_less$p.value,
+              bias_butt_2523_twosided$p.value,bias_butt_2524_greater$p.value,
+              bias_butt_2524_less$p.value,
+              bias_butt_2524_twosided$p.value),
+
+  alternative = c(bias_butt_2423_greater$alternative,bias_butt_2423_less$alternative,bias_butt_2423_twosided$alternative,bias_butt_2523_greater$alternative,bias_butt_2523_less$alternative,bias_butt_2523_twosided$alternative,bias_butt_2524_greater$alternative,bias_butt_2524_less$alternative,bias_butt_2524_twosided$alternative),
+
+  method = c(bias_butt_2423_greater$method, bias_butt_2423_less$method, bias_butt_2423_twosided$method,bias_butt_2523_greater$method, bias_butt_2523_less$method, bias_butt_2523_twosided$method,bias_butt_2524_greater$method, bias_butt_2524_less$method, bias_butt_2524_twosided$method)
+)
+
+
+######## ------ Arthropods other ------ ########
+
+# 2024 ~ 2023
+## greater
+
+bias_arthoth_2423_greater <- wilcox.test(tax_bias_results_a1$arthropods_other_2024, tax_bias_results_a1$arthropods_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_arthoth_2423_less <- wilcox.test(tax_bias_results_a1$arthropods_other_2024, tax_bias_results_a1$arthropods_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_arthoth_2423_twosided <- wilcox.test(tax_bias_results_a1$arthropods_other_2024, tax_bias_results_a1$arthropods_other_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+#greater
+bias_arthoth_2523_greater <- wilcox.test(tax_bias_results_a1$arthropods_other_2025, tax_bias_results_a1$arthropods_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_arthoth_2523_less <- wilcox.test(tax_bias_results_a1$arthropods_other_2025, tax_bias_results_a1$arthropods_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_arthoth_2523_twosided <- wilcox.test(tax_bias_results_a1$arthropods_other_2025, tax_bias_results_a1$arthropods_other_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+#greater
+bias_arthoth_2524_greater <- wilcox.test(tax_bias_results_a1$arthropods_other_2025, tax_bias_results_a1$arthropods_other_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_arthoth_2524_less <- wilcox.test(tax_bias_results_a1$arthropods_other_2025, tax_bias_results_a1$arthropods_other_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_arthoth_2524_twosided <- wilcox.test(tax_bias_results_a1$arthropods_other_2025, tax_bias_results_a1$arthropods_other_2024, paired = T, na.rm = drop)
+
+
+
+#merged
+results_arthoth_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_arthoth_2423_greater$statistic,
+                bias_arthoth_2423_less$statistic,
+                bias_arthoth_2423_twosided$statistic,bias_arthoth_2523_greater$statistic,
+                bias_arthoth_2523_less$statistic,
+                bias_arthoth_2523_twosided$statistic,bias_arthoth_2524_greater$statistic,
+                bias_arthoth_2524_less$statistic,
+                bias_arthoth_2524_twosided$statistic),
+
+  p.value = c(bias_arthoth_2423_greater$p.value,
+              bias_arthoth_2423_less$p.value,
+              bias_arthoth_2423_twosided$p.value,bias_arthoth_2523_greater$p.value,
+              bias_arthoth_2523_less$p.value,
+              bias_arthoth_2523_twosided$p.value,bias_arthoth_2524_greater$p.value,
+              bias_arthoth_2524_less$p.value,
+              bias_arthoth_2524_twosided$p.value),
+
+  alternative = c(bias_arthoth_2423_greater$alternative,bias_arthoth_2423_less$alternative,bias_arthoth_2423_twosided$alternative,bias_arthoth_2523_greater$alternative,bias_arthoth_2523_less$alternative,bias_arthoth_2523_twosided$alternative,bias_arthoth_2524_greater$alternative,bias_arthoth_2524_less$alternative,bias_arthoth_2524_twosided$alternative),
+
+  method = c(bias_arthoth_2423_greater$method, bias_arthoth_2423_less$method, bias_arthoth_2423_twosided$method,bias_arthoth_2523_greater$method, bias_arthoth_2523_less$method, bias_arthoth_2523_twosided$method,bias_arthoth_2524_greater$method, bias_arthoth_2524_less$method, bias_arthoth_2524_twosided$method)
+)
+
+
+######## ------ Insects other ------ ########
+
+bias_insoth_2423_greater <- wilcox.test(tax_bias_results_a1$insects_other_2024, tax_bias_results_a1$insects_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_insoth_2423_less <- wilcox.test(tax_bias_results_a1$insects_other_2024, tax_bias_results_a1$insects_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_insoth_2423_twosided <- wilcox.test(tax_bias_results_a1$insects_other_2024, tax_bias_results_a1$insects_other_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+bias_insoth_2523_greater <- wilcox.test(tax_bias_results_a1$insects_other_2025, tax_bias_results_a1$insects_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_insoth_2523_less <- wilcox.test(tax_bias_results_a1$insects_other_2025, tax_bias_results_a1$insects_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_insoth_2523_twosided <- wilcox.test(tax_bias_results_a1$insects_other_2025, tax_bias_results_a1$insects_other_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+#greater
+bias_insoth_2524_greater <- wilcox.test(tax_bias_results_a1$insects_other_2025, tax_bias_results_a1$insects_other_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_insoth_2524_less <- wilcox.test(tax_bias_results_a1$insects_other_2025, tax_bias_results_a1$insects_other_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_insoth_2524_twosided <- wilcox.test(tax_bias_results_a1$insects_other_2025, tax_bias_results_a1$insects_other_2024, paired = T, na.rm = drop)
+
+
+
+#merged
+results_insoth_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_insoth_2423_greater$statistic,
+                bias_insoth_2423_less$statistic,
+                bias_insoth_2423_twosided$statistic,bias_insoth_2523_greater$statistic,
+                bias_insoth_2523_less$statistic,
+                bias_insoth_2523_twosided$statistic,bias_insoth_2524_greater$statistic,
+                bias_insoth_2524_less$statistic,
+                bias_insoth_2524_twosided$statistic),
+
+  p.value = c(bias_insoth_2423_greater$p.value,
+              bias_insoth_2423_less$p.value,
+              bias_insoth_2423_twosided$p.value,bias_insoth_2523_greater$p.value,
+              bias_insoth_2523_less$p.value,
+              bias_insoth_2523_twosided$p.value,bias_insoth_2524_greater$p.value,
+              bias_insoth_2524_less$p.value,
+              bias_insoth_2524_twosided$p.value),
+
+  alternative = c(bias_insoth_2423_greater$alternative,bias_insoth_2423_less$alternative,bias_insoth_2423_twosided$alternative,bias_insoth_2523_greater$alternative,bias_insoth_2523_less$alternative,bias_insoth_2523_twosided$alternative,bias_insoth_2524_greater$alternative,bias_insoth_2524_less$alternative,bias_insoth_2524_twosided$alternative),
+
+  method = c(bias_insoth_2423_greater$method, bias_insoth_2423_less$method, bias_insoth_2423_twosided$method,bias_insoth_2523_greater$method, bias_insoth_2523_less$method, bias_insoth_2523_twosided$method,bias_insoth_2524_greater$method, bias_insoth_2524_less$method, bias_insoth_2524_twosided$method)
+)
+
+
+######## ------ Beetles ------ ########
+
+bias_beet_2423_greater <- wilcox.test(tax_bias_results_a1$beetles_2024, tax_bias_results_a1$beetles_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_beet_2423_less <- wilcox.test(tax_bias_results_a1$beetles_2024, tax_bias_results_a1$beetles_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_beet_2423_twosided <- wilcox.test(tax_bias_results_a1$beetles_2024, tax_bias_results_a1$beetles_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+bias_beet_2523_greater <- wilcox.test(tax_bias_results_a1$beetles_2025, tax_bias_results_a1$beetles_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_beet_2523_less <- wilcox.test(tax_bias_results_a1$beetles_2025, tax_bias_results_a1$beetles_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_beet_2523_twosided <- wilcox.test(tax_bias_results_a1$beetles_2025, tax_bias_results_a1$beetles_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+#greater
+bias_beet_2524_greater <- wilcox.test(tax_bias_results_a1$beetles_2025, tax_bias_results_a1$beetles_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_beet_2524_less <- wilcox.test(tax_bias_results_a1$beetles_2025, tax_bias_results_a1$beetles_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_beet_2524_twosided <- wilcox.test(tax_bias_results_a1$beetles_2025, tax_bias_results_a1$beetles_2024, paired = T, na.rm = drop)
+
+#merged
+results_beet_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_beet_2423_greater$statistic,
+                bias_beet_2423_less$statistic,
+                bias_beet_2423_twosided$statistic,bias_beet_2523_greater$statistic,
+                bias_beet_2523_less$statistic,
+                bias_beet_2523_twosided$statistic,bias_beet_2524_greater$statistic,
+                bias_beet_2524_less$statistic,
+                bias_beet_2524_twosided$statistic),
+
+  p.value = c(bias_beet_2423_greater$p.value,
+              bias_beet_2423_less$p.value,
+              bias_beet_2423_twosided$p.value,bias_beet_2523_greater$p.value,
+              bias_beet_2523_less$p.value,
+              bias_beet_2523_twosided$p.value,bias_beet_2524_greater$p.value,
+              bias_beet_2524_less$p.value,
+              bias_beet_2524_twosided$p.value),
+
+  alternative = c(bias_beet_2423_greater$alternative,bias_beet_2423_less$alternative,bias_beet_2423_twosided$alternative,bias_beet_2523_greater$alternative,bias_beet_2523_less$alternative,bias_beet_2523_twosided$alternative,bias_beet_2524_greater$alternative,bias_beet_2524_less$alternative,bias_beet_2524_twosided$alternative),
+
+  method = c(bias_beet_2423_greater$method, bias_beet_2423_less$method, bias_beet_2423_twosided$method,bias_beet_2523_greater$method, bias_beet_2523_less$method, bias_beet_2523_twosided$method,bias_beet_2524_greater$method, bias_beet_2524_less$method, bias_beet_2524_twosided$method)
+)
+
+
+######## ------ Dragonflies ------ ########
+
+bias_drag_2423_greater <- wilcox.test(tax_bias_results_a1$dragonflies_2024, tax_bias_results_a1$dragonflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_drag_2423_less <- wilcox.test(tax_bias_results_a1$dragonflies_2024, tax_bias_results_a1$dragonflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_drag_2423_twosided <- wilcox.test(tax_bias_results_a1$dragonflies_2025, tax_bias_results_a1$dragonflies_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+bias_drag_2523_greater <- wilcox.test(tax_bias_results_a1$dragonflies_2025, tax_bias_results_a1$dragonflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_drag_2523_less <- wilcox.test(tax_bias_results_a1$dragonflies_2025, tax_bias_results_a1$dragonflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_drag_2523_twosided <- wilcox.test(tax_bias_results_a1$dragonflies_2025, tax_bias_results_a1$dragonflies_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+bias_drag_2524_greater <- wilcox.test(tax_bias_results_a1$dragonflies_2025, tax_bias_results_a1$dragonflies_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_drag_2524_less <- wilcox.test(tax_bias_results_a1$dragonflies_2025, tax_bias_results_a1$dragonflies_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_drag_2524_twosided <- wilcox.test(tax_bias_results_a1$dragonflies_2025, tax_bias_results_a1$dragonflies_2024, paired = T, na.rm = drop)
+
+#merged
+results_drag_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_drag_2423_greater$statistic,
+                bias_drag_2423_less$statistic,
+                bias_drag_2423_twosided$statistic,bias_drag_2523_greater$statistic,
+                bias_drag_2523_less$statistic,
+                bias_drag_2523_twosided$statistic,bias_drag_2524_greater$statistic,
+                bias_drag_2524_less$statistic,
+                bias_drag_2524_twosided$statistic),
+
+  p.value = c(bias_drag_2423_greater$p.value,
+              bias_drag_2423_less$p.value,
+              bias_drag_2423_twosided$p.value,bias_drag_2523_greater$p.value,
+              bias_drag_2523_less$p.value,
+              bias_drag_2523_twosided$p.value,bias_drag_2524_greater$p.value,
+              bias_drag_2524_less$p.value,
+              bias_drag_2524_twosided$p.value),
+
+  alternative = c(bias_drag_2423_greater$alternative,bias_drag_2423_less$alternative,bias_drag_2423_twosided$alternative,bias_drag_2523_greater$alternative,bias_drag_2523_less$alternative,bias_drag_2523_twosided$alternative,bias_drag_2524_greater$alternative,bias_drag_2524_less$alternative,bias_drag_2524_twosided$alternative),
+
+  method = c(bias_drag_2423_greater$method, bias_drag_2423_less$method, bias_drag_2423_twosided$method,bias_drag_2523_greater$method, bias_drag_2523_less$method, bias_drag_2523_twosided$method,bias_drag_2524_greater$method, bias_drag_2524_less$method, bias_drag_2524_twosided$method)
+)
+
+
+######## ------ Mosses_lichens ------ ########
+
+# 2024 ~ 2023
+## greater
+
+bias_mos_2423_greater <- wilcox.test(tax_bias_results_a1$mosses_lichens_2024, tax_bias_results_a1$mosses_lichens_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mos_2423_less <- wilcox.test(tax_bias_results_a1$mosses_lichens_2024, tax_bias_results_a1$mosses_lichens_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mos_2423_twosided <- wilcox.test(tax_bias_results_a1$mosses_lichens_2024, tax_bias_results_a1$mosses_lichens_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+bias_mos_2523_greater <- wilcox.test(tax_bias_results_a1$mosses_lichens_2025, tax_bias_results_a1$mosses_lichens_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mos_2523_less <- wilcox.test(tax_bias_results_a1$mosses_lichens_2025, tax_bias_results_a1$mosses_lichens_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mos_2523_twosided <- wilcox.test(tax_bias_results_a1$mosses_lichens_2025, tax_bias_results_a1$mosses_lichens_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+bias_mos_2524_greater <- wilcox.test(tax_bias_results_a1$mosses_lichens_2025, tax_bias_results_a1$mosses_lichens_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mos_2524_less <- wilcox.test(tax_bias_results_a1$mosses_lichens_2025, tax_bias_results_a1$mosses_lichens_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mos_2524_twosided <- wilcox.test(tax_bias_results_a1$mosses_lichens_2025, tax_bias_results_a1$mosses_lichens_2024, paired = T, na.rm = drop)
+
+#merged
+results_mos_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_mos_2423_greater$statistic,
+                bias_mos_2423_less$statistic,
+                bias_mos_2423_twosided$statistic,bias_mos_2523_greater$statistic,
+                bias_mos_2523_less$statistic,
+                bias_mos_2523_twosided$statistic,bias_mos_2524_greater$statistic,
+                bias_mos_2524_less$statistic,
+                bias_mos_2524_twosided$statistic),
+
+  p.value = c(bias_mos_2423_greater$p.value,
+              bias_mos_2423_less$p.value,
+              bias_mos_2423_twosided$p.value,bias_mos_2523_greater$p.value,
+              bias_mos_2523_less$p.value,
+              bias_mos_2523_twosided$p.value,bias_mos_2524_greater$p.value,
+              bias_mos_2524_less$p.value,
+              bias_mos_2524_twosided$p.value),
+
+  alternative = c(bias_mos_2423_greater$alternative,bias_mos_2423_less$alternative,bias_mos_2423_twosided$alternative,bias_mos_2523_greater$alternative,bias_mos_2523_less$alternative,bias_mos_2523_twosided$alternative,bias_mos_2524_greater$alternative,bias_mos_2524_less$alternative,bias_mos_2524_twosided$alternative),
+
+  method = c(bias_mos_2423_greater$method, bias_mos_2423_less$method, bias_mos_2423_twosided$method,bias_mos_2523_greater$method, bias_mos_2523_less$method, bias_mos_2523_twosided$method,bias_mos_2524_greater$method, bias_mos_2524_less$method, bias_mos_2524_twosided$method)
+)
+
+
+######## ------ Moths_micros ------ ########
+
+bias_moth_2423_greater <- wilcox.test(tax_bias_results_a1$moths_micros_2024, tax_bias_results_a1$moths_micros_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_moth_2423_less <- wilcox.test(tax_bias_results_a1$moths_micros_2024, tax_bias_results_a1$moths_micros_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_moth_2423_twosided <- wilcox.test(tax_bias_results_a1$moths_micros_2024, tax_bias_results_a1$moths_micros_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+bias_moth_2523_greater <- wilcox.test(tax_bias_results_a1$moths_micros_2025, tax_bias_results_a1$moths_micros_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_moth_2523_less <- wilcox.test(tax_bias_results_a1$moths_micros_2025, tax_bias_results_a1$moths_micros_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_moth_2523_twosided <- wilcox.test(tax_bias_results_a1$moths_micros_2025, tax_bias_results_a1$moths_micros_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+bias_moth_2524_greater <- wilcox.test(tax_bias_results_a1$moths_micros_2025, tax_bias_results_a1$moths_micros_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_moth_2524_less <- wilcox.test(tax_bias_results_a1$moths_micros_2025, tax_bias_results_a1$moths_micros_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_moth_2524_twosided <- wilcox.test(tax_bias_results_a1$moths_micros_2025, tax_bias_results_a1$moths_micros_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_moth_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_moth_2423_greater$statistic,
+                bias_moth_2423_less$statistic,
+                bias_moth_2423_twosided$statistic,bias_moth_2523_greater$statistic,
+                bias_moth_2523_less$statistic,
+                bias_moth_2523_twosided$statistic,bias_moth_2524_greater$statistic,
+                bias_moth_2524_less$statistic,
+                bias_moth_2524_twosided$statistic),
+
+  p.value = c(bias_moth_2423_greater$p.value,
+              bias_moth_2423_less$p.value,
+              bias_moth_2423_twosided$p.value,bias_moth_2523_greater$p.value,
+              bias_moth_2523_less$p.value,
+              bias_moth_2523_twosided$p.value,bias_moth_2524_greater$p.value,
+              bias_moth_2524_less$p.value,
+              bias_moth_2524_twosided$p.value),
+
+  alternative = c(bias_moth_2423_greater$alternative,bias_moth_2423_less$alternative,bias_moth_2423_twosided$alternative,bias_moth_2523_greater$alternative,bias_moth_2523_less$alternative,bias_moth_2523_twosided$alternative,bias_moth_2524_greater$alternative,bias_moth_2524_less$alternative,bias_moth_2524_twosided$alternative),
+
+  method = c(bias_moth_2423_greater$method, bias_moth_2423_less$method, bias_moth_2423_twosided$method,bias_moth_2523_greater$method, bias_moth_2523_less$method, bias_moth_2523_twosided$method,bias_moth_2524_greater$method, bias_moth_2524_less$method, bias_moth_2524_twosided$method)
+)
+
+
+######## ------ Other_Invertebrates ------ ########
+
+### 2023 observations = 0 -- add a column with 0 or remove it completely because of insufficient data to compare
+
+bias_invoth_2423_greater <- wilcox.test(tax_bias_results_a1$invertebrates_other_2024, tax_bias_results_a1$invertebrates_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_invoth_2423_less <- wilcox.test(tax_bias_results_a1$invertebrates_other_2024, tax_bias_results_a1$invertebrates_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_invoth_2423_twosided <- wilcox.test(tax_bias_results_a1$invertebrates_other_2024, tax_bias_results_a1$invertebrates_other_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+bias_invoth_2523_greater <- wilcox.test(tax_bias_results_a1$invertebrates_other_2025, tax_bias_results_a1$invertebrates_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_invoth_2523_less <- wilcox.test(tax_bias_results_a1$invertebrates_other_2025, tax_bias_results_a1$invertebrates_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_invoth_2523_twosided <- wilcox.test(tax_bias_results_a1$invertebrates_other_2025, tax_bias_results_a1$invertebrates_other_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+bias_invoth_2524_greater <- wilcox.test(tax_bias_results_a1$invertebrates_other_2025, tax_bias_results_a1$invertebrates_other_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_invoth_2524_less <- wilcox.test(tax_bias_results_a1$invertebrates_other_2025, tax_bias_results_a1$invertebrates_other_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_invoth_2524_twosided <- wilcox.test(tax_bias_results_a1$invertebrates_other_2025, tax_bias_results_a1$invertebrates_other_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_invoth_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_invoth_2423_greater$statistic,
+                bias_invoth_2423_less$statistic,
+                bias_invoth_2423_twosided$statistic,bias_invoth_2523_greater$statistic,
+                bias_invoth_2523_less$statistic,
+                bias_invoth_2523_twosided$statistic,bias_invoth_2524_greater$statistic,
+                bias_invoth_2524_less$statistic,
+                bias_invoth_2524_twosided$statistic),
+
+  p.value = c(bias_invoth_2423_greater$p.value,
+              bias_invoth_2423_less$p.value,
+              bias_invoth_2423_twosided$p.value,bias_invoth_2523_greater$p.value,
+              bias_invoth_2523_less$p.value,
+              bias_invoth_2523_twosided$p.value,bias_invoth_2524_greater$p.value,
+              bias_invoth_2524_less$p.value,
+              bias_invoth_2524_twosided$p.value),
+
+  alternative = c(bias_invoth_2423_greater$alternative,bias_invoth_2423_less$alternative,bias_invoth_2423_twosided$alternative,bias_invoth_2523_greater$alternative,bias_invoth_2523_less$alternative,bias_invoth_2523_twosided$alternative,bias_invoth_2524_greater$alternative,bias_invoth_2524_less$alternative,bias_invoth_2524_twosided$alternative),
+
+  method = c(bias_invoth_2423_greater$method, bias_invoth_2423_less$method, bias_invoth_2423_twosided$method,bias_invoth_2523_greater$method, bias_invoth_2523_less$method, bias_invoth_2523_twosided$method,bias_invoth_2524_greater$method, bias_invoth_2524_less$method, bias_invoth_2524_twosided$method)
+)
+
+######## ------ Mushrooms ------ ########
+# 24~23
+# greater
+bias_mush_2423_greater <- wilcox.test(tax_bias_results_a1$mushrooms_2024, tax_bias_results_a1$mushrooms_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mush_2423_less <- wilcox.test(tax_bias_results_a1$mushrooms_2024, tax_bias_results_a1$mushrooms_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mush_2423_twosided <- wilcox.test(tax_bias_results_a1$mushrooms_2024, tax_bias_results_a1$mushrooms_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_mush_2523_greater <- wilcox.test(tax_bias_results_a1$mushrooms_2025, tax_bias_results_a1$mushrooms_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mush_2523_less <- wilcox.test(tax_bias_results_a1$mushrooms_2025, tax_bias_results_a1$mushrooms_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mush_2523_twosided <- wilcox.test(tax_bias_results_a1$mushrooms_2025, tax_bias_results_a1$mushrooms_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+bias_mush_2524_greater <- wilcox.test(tax_bias_results_a1$mushrooms_2025, tax_bias_results_a1$mushrooms_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mush_2524_less <- wilcox.test(tax_bias_results_a1$mushrooms_2025, tax_bias_results_a1$mushrooms_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mush_2524_twosided <- wilcox.test(tax_bias_results_a1$mushrooms_2025, tax_bias_results_a1$mushrooms_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_mush_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_mush_2423_greater$statistic,
+                bias_mush_2423_less$statistic,
+                bias_mush_2423_twosided$statistic,bias_mush_2523_greater$statistic,
+                bias_mush_2523_less$statistic,
+                bias_mush_2523_twosided$statistic,bias_mush_2524_greater$statistic,
+                bias_mush_2524_less$statistic,
+                bias_mush_2524_twosided$statistic),
+
+  p.value = c(bias_mush_2423_greater$p.value,
+              bias_mush_2423_less$p.value,
+              bias_mush_2423_twosided$p.value,bias_mush_2523_greater$p.value,
+              bias_mush_2523_less$p.value,
+              bias_mush_2523_twosided$p.value,bias_mush_2524_greater$p.value,
+              bias_mush_2524_less$p.value,
+              bias_mush_2524_twosided$p.value),
+
+  alternative = c(bias_mush_2423_greater$alternative,bias_mush_2423_less$alternative,bias_mush_2423_twosided$alternative,bias_mush_2523_greater$alternative,bias_mush_2523_less$alternative,bias_mush_2523_twosided$alternative,bias_mush_2524_greater$alternative,bias_mush_2524_less$alternative,bias_mush_2524_twosided$alternative),
+
+  method = c(bias_mush_2423_greater$method, bias_mush_2423_less$method, bias_mush_2423_twosided$method,bias_mush_2523_greater$method, bias_mush_2523_less$method, bias_mush_2523_twosided$method,bias_mush_2524_greater$method, bias_mush_2524_less$method, bias_mush_2524_twosided$method)
+)
+
+######## ------ Plants ------ ########
+
+# 24~23
+# greater
+bias_pla_2423_greater <- wilcox.test(tax_bias_results_a1$plants_2024, tax_bias_results_a1$plants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_pla_2423_less <- wilcox.test(tax_bias_results_a1$plants_2024, tax_bias_results_a1$plants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_pla_2423_twosided <- wilcox.test(tax_bias_results_a1$plants_2024, tax_bias_results_a1$plants_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_pla_2523_greater <- wilcox.test(tax_bias_results_a1$plants_2025, tax_bias_results_a1$plants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_pla_2523_less <- wilcox.test(tax_bias_results_a1$plants_2025, tax_bias_results_a1$plants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_pla_2523_twosided <- wilcox.test(tax_bias_results_a1$plants_2025, tax_bias_results_a1$plants_2023, paired = T, na.rm = drop)
+
+
+
+## 2025 ~ 2024
+
+bias_pla_2524_greater <- wilcox.test(tax_bias_results_a1$plants_2025, tax_bias_results_a1$plants_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_pla_2524_less <- wilcox.test(tax_bias_results_a1$plants_2025, tax_bias_results_a1$plants_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_pla_2524_twosided <- wilcox.test(tax_bias_results_a1$plants_2025, tax_bias_results_a1$plants_2024, paired = T, na.rm = drop)
+
+#merged
+results_pla_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_pla_2423_greater$statistic,
+                bias_pla_2423_less$statistic,
+                bias_pla_2423_twosided$statistic,bias_pla_2523_greater$statistic,
+                bias_pla_2523_less$statistic,
+                bias_pla_2523_twosided$statistic,bias_pla_2524_greater$statistic,
+                bias_pla_2524_less$statistic,
+                bias_pla_2524_twosided$statistic),
+
+  p.value = c(bias_pla_2423_greater$p.value,
+              bias_pla_2423_less$p.value,
+              bias_pla_2423_twosided$p.value,bias_pla_2523_greater$p.value,
+              bias_pla_2523_less$p.value,
+              bias_pla_2523_twosided$p.value,bias_pla_2524_greater$p.value,
+              bias_pla_2524_less$p.value,
+              bias_pla_2524_twosided$p.value),
+
+  alternative = c(bias_pla_2423_greater$alternative,bias_pla_2423_less$alternative,bias_pla_2423_twosided$alternative,bias_pla_2523_greater$alternative,bias_pla_2523_less$alternative,bias_pla_2523_twosided$alternative,bias_pla_2524_greater$alternative,bias_pla_2524_less$alternative,bias_pla_2524_twosided$alternative),
+
+  method = c(bias_pla_2423_greater$method, bias_pla_2423_less$method, bias_pla_2423_twosided$method,bias_pla_2523_greater$method, bias_pla_2523_less$method, bias_pla_2523_twosided$method,bias_pla_2524_greater$method, bias_pla_2524_less$method, bias_pla_2524_twosided$method)
+)
+
+######## ------ Reptiles_amphibians ------ ########
+
+# 24~23
+# greater
+bias_rep_2423_greater <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2024, tax_bias_results_a1$reptiles_amphibians_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_rep_2423_less <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2024, tax_bias_results_a1$reptiles_amphibians_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_rep_2423_twosided <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2024, tax_bias_results_a1$reptiles_amphibians_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_rep_2523_greater <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2025, tax_bias_results_a1$reptiles_amphibians_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_rep_2523_less <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2025, tax_bias_results_a1$reptiles_amphibians_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_rep_2523_twosided <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2025, tax_bias_results_a1$reptiles_amphibians_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+bias_rep_2524_greater <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2025, tax_bias_results_a1$reptiles_amphibians_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_rep_2524_less <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2025, tax_bias_results_a1$reptiles_amphibians_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_rep_2524_twosided <- wilcox.test(tax_bias_results_a1$reptiles_amphibians_2025, tax_bias_results_a1$reptiles_amphibians_2024, paired = T, na.rm = drop)
+
+
+
+#merged
+results_rep_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_rep_2423_greater$statistic,
+                bias_rep_2423_less$statistic,
+                bias_rep_2423_twosided$statistic,bias_rep_2523_greater$statistic,
+                bias_rep_2523_less$statistic,
+                bias_rep_2523_twosided$statistic,bias_rep_2524_greater$statistic,
+                bias_rep_2524_less$statistic,
+                bias_rep_2524_twosided$statistic),
+
+  p.value = c(bias_rep_2423_greater$p.value,
+              bias_rep_2423_less$p.value,
+              bias_rep_2423_twosided$p.value,bias_rep_2523_greater$p.value,
+              bias_rep_2523_less$p.value,
+              bias_rep_2523_twosided$p.value,bias_rep_2524_greater$p.value,
+              bias_rep_2524_less$p.value,
+              bias_rep_2524_twosided$p.value),
+
+  alternative = c(bias_rep_2423_greater$alternative,bias_rep_2423_less$alternative,bias_rep_2423_twosided$alternative,bias_rep_2523_greater$alternative,bias_rep_2523_less$alternative,bias_rep_2523_twosided$alternative,bias_rep_2524_greater$alternative,bias_rep_2524_less$alternative,bias_rep_2524_twosided$alternative),
+
+  method = c(bias_rep_2423_greater$method, bias_rep_2423_less$method, bias_rep_2423_twosided$method,bias_rep_2523_greater$method, bias_rep_2523_less$method, bias_rep_2523_twosided$method,bias_rep_2524_greater$method, bias_rep_2524_less$method, bias_rep_2524_twosided$method)
+)
+
+
+######## ------ Grasshoppers_crickets ------ ########
+
+bias_gra_2423_greater <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2024, tax_bias_results_a1$grasshoppers_crickets_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_gra_2423_less <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2024, tax_bias_results_a1$grasshoppers_crickets_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_gra_2423_twosided <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2024, tax_bias_results_a1$grasshoppers_crickets_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_gra_2523_greater <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2025, tax_bias_results_a1$grasshoppers_crickets_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_gra_2523_less <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2025, tax_bias_results_a1$grasshoppers_crickets_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_gra_2523_twosided <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2025, tax_bias_results_a1$grasshoppers_crickets_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+bias_gra_2524_greater <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2025, tax_bias_results_a1$grasshoppers_crickets_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_gra_2524_less <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2025, tax_bias_results_a1$grasshoppers_crickets_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_gra_2524_twosided <- wilcox.test(tax_bias_results_a1$grasshoppers_crickets_2025, tax_bias_results_a1$grasshoppers_crickets_2024, paired = T, na.rm = drop)
+
+#merged
+results_gra_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_gra_2423_greater$statistic,
+                bias_gra_2423_less$statistic,
+                bias_gra_2423_twosided$statistic,bias_gra_2523_greater$statistic,
+                bias_gra_2523_less$statistic,
+                bias_gra_2523_twosided$statistic,bias_gra_2524_greater$statistic,
+                bias_gra_2524_less$statistic,
+                bias_gra_2524_twosided$statistic),
+
+  p.value = c(bias_gra_2423_greater$p.value,
+              bias_gra_2423_less$p.value,
+              bias_gra_2423_twosided$p.value,bias_gra_2523_greater$p.value,
+              bias_gra_2523_less$p.value,
+              bias_gra_2523_twosided$p.value,bias_gra_2524_greater$p.value,
+              bias_gra_2524_less$p.value,
+              bias_gra_2524_twosided$p.value),
+
+  alternative = c(bias_gra_2423_greater$alternative,bias_gra_2423_less$alternative,bias_gra_2423_twosided$alternative,bias_gra_2523_greater$alternative,bias_gra_2523_less$alternative,bias_gra_2523_twosided$alternative,bias_gra_2524_greater$alternative,bias_gra_2524_less$alternative,bias_gra_2524_twosided$alternative),
+
+  method = c(bias_gra_2423_greater$method, bias_gra_2423_less$method, bias_gra_2423_twosided$method,bias_gra_2523_greater$method, bias_gra_2523_less$method, bias_gra_2523_twosided$method,bias_gra_2524_greater$method, bias_gra_2524_less$method, bias_gra_2524_twosided$method)
+)
+
+
+
+######## ------ Fish ------ ########
+
+# 2024 ~ 2023
+## greater
+bias_fi_2423_greater <- wilcox.test(tax_bias_results_a1$fish_2024, tax_bias_results_a1$fish_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_fi_2423_less <- wilcox.test(tax_bias_results_a1$fish_2024, tax_bias_results_a1$fish_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_fi_2423_twosided <- wilcox.test(tax_bias_results_a1$fish_2024, tax_bias_results_a1$fish_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_fi_2523_greater <- wilcox.test(tax_bias_results_a1$fish_2025, tax_bias_results_a1$fish_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_fi_2523_less <- wilcox.test(tax_bias_results_a1$fish_2025, tax_bias_results_a1$fish_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_fi_2523_twosided <- wilcox.test(tax_bias_results_a1$fish_2025, tax_bias_results_a1$fish_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+bias_fi_2524_greater <- wilcox.test(tax_bias_results_a1$fish_2025, tax_bias_results_a1$fish_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_fi_2524_less <- wilcox.test(tax_bias_results_a1$fish_2025, tax_bias_results_a1$fish_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_fi_2524_twosided <- wilcox.test(tax_bias_results_a1$fish_2025, tax_bias_results_a1$fish_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_fi_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_fi_2423_greater$statistic,
+                bias_fi_2423_less$statistic,
+                bias_fi_2423_twosided$statistic,bias_fi_2523_greater$statistic,
+                bias_fi_2523_less$statistic,
+                bias_fi_2523_twosided$statistic,bias_fi_2524_greater$statistic,
+                bias_fi_2524_less$statistic,
+                bias_fi_2524_twosided$statistic),
+
+  p.value = c(bias_fi_2423_greater$p.value,
+              bias_fi_2423_less$p.value,
+              bias_fi_2423_twosided$p.value,bias_fi_2523_greater$p.value,
+              bias_fi_2523_less$p.value,
+              bias_fi_2523_twosided$p.value,bias_fi_2524_greater$p.value,
+              bias_fi_2524_less$p.value,
+              bias_fi_2524_twosided$p.value),
+
+  alternative = c(bias_fi_2423_greater$alternative,bias_fi_2423_less$alternative,bias_fi_2423_twosided$alternative,bias_fi_2523_greater$alternative,bias_fi_2523_less$alternative,bias_fi_2523_twosided$alternative,bias_fi_2524_greater$alternative,bias_fi_2524_less$alternative,bias_fi_2524_twosided$alternative),
+
+  method = c(bias_fi_2423_greater$method, bias_fi_2423_less$method, bias_fi_2423_twosided$method,bias_fi_2523_greater$method, bias_fi_2523_less$method, bias_fi_2523_twosided$method,bias_fi_2524_greater$method, bias_fi_2524_less$method, bias_fi_2524_twosided$method)
+)
+
+
+######## ------ Flies_mosquitoes ------ ########
+
+
+# 2024 ~ 2023
+## greater
+bias_flie_2423_greater <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2024, tax_bias_results_a1$flies_mosquitoes_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_flie_2423_less <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2024, tax_bias_results_a1$flies_mosquitoes_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_flie_2423_twosided <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2024, tax_bias_results_a1$flies_mosquitoes_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_flie_2523_greater <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2025, tax_bias_results_a1$flies_mosquitoes_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_flie_2523_less <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2025, tax_bias_results_a1$flies_mosquitoes_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_flie_2523_twosided <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2025, tax_bias_results_a1$flies_mosquitoes_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+bias_flie_2524_greater <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2025, tax_bias_results_a1$flies_mosquitoes_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_flie_2524_less <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2025, tax_bias_results_a1$flies_mosquitoes_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_flie_2524_twosided <- wilcox.test(tax_bias_results_a1$flies_mosquitoes_2025, tax_bias_results_a1$flies_mosquitoes_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_flie_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_flie_2423_greater$statistic,
+                bias_flie_2423_less$statistic,
+                bias_flie_2423_twosided$statistic,bias_flie_2523_greater$statistic,
+                bias_flie_2523_less$statistic,
+                bias_flie_2523_twosided$statistic,bias_flie_2524_greater$statistic,
+                bias_flie_2524_less$statistic,
+                bias_flie_2524_twosided$statistic),
+
+  p.value = c(bias_flie_2423_greater$p.value,
+              bias_flie_2423_less$p.value,
+              bias_flie_2423_twosided$p.value,bias_flie_2523_greater$p.value,
+              bias_flie_2523_less$p.value,
+              bias_flie_2523_twosided$p.value,bias_flie_2524_greater$p.value,
+              bias_flie_2524_less$p.value,
+              bias_flie_2524_twosided$p.value),
+
+  alternative = c(bias_flie_2423_greater$alternative,bias_flie_2423_less$alternative,bias_flie_2423_twosided$alternative,bias_flie_2523_greater$alternative,bias_flie_2523_less$alternative,bias_flie_2523_twosided$alternative,bias_flie_2524_greater$alternative,bias_flie_2524_less$alternative,bias_flie_2524_twosided$alternative),
+
+  method = c(bias_flie_2423_greater$method, bias_flie_2423_less$method, bias_flie_2423_twosided$method,bias_flie_2523_greater$method, bias_flie_2523_less$method, bias_flie_2523_twosided$method,bias_flie_2524_greater$method, bias_flie_2524_less$method, bias_flie_2524_twosided$method)
+)
+
+
+######## ------ Birds ------ ########
+
+# 2024 ~ 2023
+## greater
+
+bias_bi_2423_greater <- wilcox.test(tax_bias_results_a1$birds_2024, tax_bias_results_a1$birds_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bi_2423_less <- wilcox.test(tax_bias_results_a1$birds_2024, tax_bias_results_a1$birds_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bi_2423_twosided <- wilcox.test(tax_bias_results_a1$birds_2024, tax_bias_results_a1$birds_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+bias_bi_2523_greater <- wilcox.test(tax_bias_results_a1$birds_2025, tax_bias_results_a1$birds_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bi_2523_less <- wilcox.test(tax_bias_results_a1$birds_2025, tax_bias_results_a1$birds_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bi_2523_twosided <- wilcox.test(tax_bias_results_a1$birds_2025, tax_bias_results_a1$birds_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+bias_bi_2524_greater <- wilcox.test(tax_bias_results_a1$birds_2025, tax_bias_results_a1$birds_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bi_2524_less <- wilcox.test(tax_bias_results_a1$birds_2025, tax_bias_results_a1$birds_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bi_2524_twosided <- wilcox.test(tax_bias_results_a1$birds_2025, tax_bias_results_a1$birds_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_bi_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_bi_2423_greater$statistic,
+                bias_bi_2423_less$statistic,
+                bias_bi_2423_twosided$statistic,bias_bi_2523_greater$statistic,
+                bias_bi_2523_less$statistic,
+                bias_bi_2523_twosided$statistic,bias_bi_2524_greater$statistic,
+                bias_bi_2524_less$statistic,
+                bias_bi_2524_twosided$statistic),
+
+  p.value = c(bias_bi_2423_greater$p.value,
+              bias_bi_2423_less$p.value,
+              bias_bi_2423_twosided$p.value,bias_bi_2523_greater$p.value,
+              bias_bi_2523_less$p.value,
+              bias_bi_2523_twosided$p.value,bias_bi_2524_greater$p.value,
+              bias_bi_2524_less$p.value,
+              bias_bi_2524_twosided$p.value),
+
+  alternative = c(bias_bi_2423_greater$alternative,bias_bi_2423_less$alternative,bias_bi_2423_twosided$alternative,bias_bi_2523_greater$alternative,bias_bi_2523_less$alternative,bias_bi_2523_twosided$alternative,bias_bi_2524_greater$alternative,bias_bi_2524_less$alternative,bias_bi_2524_twosided$alternative),
+
+  method = c(bias_bi_2423_greater$method, bias_bi_2423_less$method, bias_bi_2423_twosided$method,bias_bi_2523_greater$method, bias_bi_2523_less$method, bias_bi_2523_twosided$method,bias_bi_2524_greater$method, bias_bi_2524_less$method, bias_bi_2524_twosided$method)
+)
+
+
+
+######## ------ Bugs_cicadas_aphids ------ ########
+
+# 2024 ~ 2023
+## greater
+
+bias_bu_2423_greater <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2024, tax_bias_results_a1$bugs_cicadas_aphids_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bu_2423_less <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2024, tax_bias_results_a1$bugs_cicadas_aphids_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bu_2423_twosided <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2024, tax_bias_results_a1$bugs_cicadas_aphids_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_bu_2523_greater <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2025, tax_bias_results_a1$bugs_cicadas_aphids_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bu_2523_less <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2025, tax_bias_results_a1$bugs_cicadas_aphids_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bu_2523_twosided <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2025, tax_bias_results_a1$bugs_cicadas_aphids_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+bias_bu_2524_greater <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2025, tax_bias_results_a1$bugs_cicadas_aphids_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_bu_2524_less <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2025, tax_bias_results_a1$bugs_cicadas_aphids_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_bu_2524_twosided <- wilcox.test(tax_bias_results_a1$bugs_cicadas_aphids_2025, tax_bias_results_a1$bugs_cicadas_aphids_2024, paired = T, na.rm = drop)
+
+#merged
+results_bu_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_bu_2423_greater$statistic,
+                bias_bu_2423_less$statistic,
+                bias_bu_2423_twosided$statistic,bias_bu_2523_greater$statistic,
+                bias_bu_2523_less$statistic,
+                bias_bu_2523_twosided$statistic,bias_bu_2524_greater$statistic,
+                bias_bu_2524_less$statistic,
+                bias_bu_2524_twosided$statistic),
+
+  p.value = c(bias_bu_2423_greater$p.value,
+              bias_bu_2423_less$p.value,
+              bias_bu_2423_twosided$p.value,bias_bu_2523_greater$p.value,
+              bias_bu_2523_less$p.value,
+              bias_bu_2523_twosided$p.value,bias_bu_2524_greater$p.value,
+              bias_bu_2524_less$p.value,
+              bias_bu_2524_twosided$p.value),
+
+  alternative = c(bias_bu_2423_greater$alternative,bias_bu_2423_less$alternative,bias_bu_2423_twosided$alternative,bias_bu_2523_greater$alternative,bias_bu_2523_less$alternative,bias_bu_2523_twosided$alternative,bias_bu_2524_greater$alternative,bias_bu_2524_less$alternative,bias_bu_2524_twosided$alternative),
+
+  method = c(bias_bu_2423_greater$method, bias_bu_2423_less$method, bias_bu_2423_twosided$method,bias_bu_2523_greater$method, bias_bu_2523_less$method, bias_bu_2523_twosided$method,bias_bu_2524_greater$method, bias_bu_2524_less$method, bias_bu_2524_twosided$method)
+)
+
+
+######## ------ Mollusks ------ ########
+
+# 2024 ~ 2023
+## greater
+
+bias_mol_2423_greater <- wilcox.test(tax_bias_results_a1$mollusks_2024, tax_bias_results_a1$mollusks_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mol_2423_less <- wilcox.test(tax_bias_results_a1$mollusks_2024, tax_bias_results_a1$mollusks_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mol_2423_twosided <- wilcox.test(tax_bias_results_a1$mollusks_2024, tax_bias_results_a1$mollusks_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_mol_2523_greater <- wilcox.test(tax_bias_results_a1$mollusks_2025, tax_bias_results_a1$mollusks_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mol_2523_less <- wilcox.test(tax_bias_results_a1$mollusks_2025, tax_bias_results_a1$mollusks_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mol_2523_twosided <- wilcox.test(tax_bias_results_a1$mollusks_2025, tax_bias_results_a1$mollusks_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+bias_mol_2524_greater <- wilcox.test(tax_bias_results_a1$mollusks_2025, tax_bias_results_a1$mollusks_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_mol_2524_less <- wilcox.test(tax_bias_results_a1$mollusks_2025, tax_bias_results_a1$mollusks_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_mol_2524_twosided <- wilcox.test(tax_bias_results_a1$mollusks_2025, tax_bias_results_a1$mollusks_2024, paired = T, na.rm = drop)
+
+#merged
+results_mol_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_mol_2423_greater$statistic,
+                bias_mol_2423_less$statistic,
+                bias_mol_2423_twosided$statistic,bias_mol_2523_greater$statistic,
+                bias_mol_2523_less$statistic,
+                bias_mol_2523_twosided$statistic,bias_mol_2524_greater$statistic,
+                bias_mol_2524_less$statistic,
+                bias_mol_2524_twosided$statistic),
+
+  p.value = c(bias_mol_2423_greater$p.value,
+              bias_mol_2423_less$p.value,
+              bias_mol_2423_twosided$p.value,bias_mol_2523_greater$p.value,
+              bias_mol_2523_less$p.value,
+              bias_mol_2523_twosided$p.value,bias_mol_2524_greater$p.value,
+              bias_mol_2524_less$p.value,
+              bias_mol_2524_twosided$p.value),
+
+  alternative = c(bias_mol_2423_greater$alternative,bias_mol_2423_less$alternative,bias_mol_2423_twosided$alternative,bias_mol_2523_greater$alternative,bias_mol_2523_less$alternative,bias_mol_2523_twosided$alternative,bias_mol_2524_greater$alternative,bias_mol_2524_less$alternative,bias_mol_2524_twosided$alternative),
+
+  method = c(bias_mol_2423_greater$method, bias_mol_2423_less$method, bias_mol_2423_twosided$method,bias_mol_2523_greater$method, bias_mol_2523_less$method, bias_mol_2523_twosided$method,bias_mol_2524_greater$method, bias_mol_2524_less$method, bias_mol_2524_twosided$method)
+)
+
+
+######## ------ Mammals ------ ########
+
+
+# 2024 ~ 2023
+## greater
+
+bias_ma_2423_greater <- wilcox.test(tax_bias_results_a1$mammals_2024, tax_bias_results_a1$mammals_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_ma_2423_less <- wilcox.test(tax_bias_results_a1$mammals_2024, tax_bias_results_a1$mammals_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_ma_2423_twosided <- wilcox.test(tax_bias_results_a1$mammals_2024, tax_bias_results_a1$mammals_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+bias_ma_2523_greater <- wilcox.test(tax_bias_results_a1$mammals_2025, tax_bias_results_a1$mammals_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_ma_2523_less <- wilcox.test(tax_bias_results_a1$mammals_2025, tax_bias_results_a1$mammals_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_ma_2523_twosided <- wilcox.test(tax_bias_results_a1$mammals_2025, tax_bias_results_a1$mammals_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+bias_ma_2524_greater <- wilcox.test(tax_bias_results_a1$mammals_2025, tax_bias_results_a1$mammals_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_ma_2524_less <- wilcox.test(tax_bias_results_a1$mammals_2025, tax_bias_results_a1$mammals_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_ma_2524_twosided <- wilcox.test(tax_bias_results_a1$mammals_2025, tax_bias_results_a1$mammals_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_ma_bias <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_ma_2423_greater$statistic,
+                bias_ma_2423_less$statistic,
+                bias_ma_2423_twosided$statistic,bias_ma_2523_greater$statistic,
+                bias_ma_2523_less$statistic,
+                bias_ma_2523_twosided$statistic,bias_ma_2524_greater$statistic,
+                bias_ma_2524_less$statistic,
+                bias_ma_2524_twosided$statistic),
+
+  p.value = c(bias_ma_2423_greater$p.value,
+              bias_ma_2423_less$p.value,
+              bias_ma_2423_twosided$p.value,bias_ma_2523_greater$p.value,
+              bias_ma_2523_less$p.value,
+              bias_ma_2523_twosided$p.value,bias_ma_2524_greater$p.value,
+              bias_ma_2524_less$p.value,
+              bias_ma_2524_twosided$p.value),
+
+  alternative = c(bias_ma_2423_greater$alternative,bias_ma_2423_less$alternative,bias_ma_2423_twosided$alternative,bias_ma_2523_greater$alternative,bias_ma_2523_less$alternative,bias_ma_2523_twosided$alternative,bias_ma_2524_greater$alternative,bias_ma_2524_less$alternative,bias_ma_2524_twosided$alternative),
+
+  method = c(bias_mol_2423_greater$method, bias_ma_2423_less$method, bias_ma_2423_twosided$method,bias_ma_2523_greater$method, bias_ma_2523_less$method, bias_ma_2523_twosided$method,bias_ma_2524_greater$method, bias_ma_2524_less$method, bias_ma_2524_twosided$method)
+)
+
+################  --- -adjust the code below
+
+
+######### t-test: Comparing how different are the estimated spatial cluster values to 1 (random data) . p >0.05 --> not different from 1, p<0.05 --> different from 1`
+
+## arthropods other
+bias_arthoth_a1_23 <- t.test(tax_bias_results_a1$arthropods_other_2023, mu = 1)
+bias_arthoth_a1_24 <-t.test(tax_bias_results_a1$arthropods_other_2024, mu = 1)
+bias_arthoth_a1_25 <-t.test(tax_bias_results_a1$arthropods_other_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_arthoth <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_arthoth_a1_23$estimate,
+           bias_arthoth_a1_24$estimate,
+           bias_arthoth_a1_25$estimate),
+  t = c(bias_arthoth_a1_23$statistic,
+        bias_arthoth_a1_24$statistic,
+        bias_arthoth_a1_25$statistic),
+  p_value = c(bias_arthoth_a1_23$p.value,
+              bias_arthoth_a1_24$p.value,
+              bias_arthoth_a1_25$p.value),
+  conf_low = c(bias_arthoth_a1_23$conf.int[1],
+               bias_arthoth_a1_24$conf.int[1],
+               bias_arthoth_a1_25$conf.int[1]),
+  conf_high = c(bias_arthoth_a1_23$conf.int[2],
+                bias_arthoth_a1_24$conf.int[2],
+                bias_arthoth_a1_25$conf.int[2])
+)
+
+
+
+## bees wasps ants
+bias_bwa_a1_23 <- t.test(tax_bias_results_a1$bees_wasps_ants_2023, mu = 1)
+bias_bwa_a1_24 <-t.test(tax_bias_results_a1$bees_wasps_ants_2024, mu = 1)
+bias_bwa_a1_25 <-t.test(tax_bias_results_a1$bees_wasps_ants_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_bwa <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_bwa_a1_23$estimate,
+           bias_bwa_a1_24$estimate,
+           bias_bwa_a1_25$estimate),
+  t = c(bias_bwa_a1_23$statistic,
+        bias_bwa_a1_24$statistic,
+        bias_bwa_a1_25$statistic),
+  p_value = c(bias_bwa_a1_23$p.value,
+              bias_bwa_a1_24$p.value,
+              bias_bwa_a1_25$p.value),
+  conf_low = c(bias_bwa_a1_23$conf.int[1],
+               bias_bwa_a1_24$conf.int[1],
+               bias_bwa_a1_25$conf.int[1]),
+  conf_high = c(bias_bwa_a1_23$conf.int[2],
+                bias_bwa_a1_24$conf.int[2],
+                bias_bwa_a1_25$conf.int[2])
+)
+
+### beetles
+bias_beet_a1_23 <- t.test(tax_bias_results_a1$beetles_2023, mu = 1)
+bias_beet_a1_24 <-t.test(tax_bias_results_a1$beetles_2024, mu = 1)
+bias_beet_a1_25 <-t.test(tax_bias_results_a1$beetles_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_beet <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_beet_a1_23$estimate,
+           bias_beet_a1_24$estimate,
+           bias_beet_a1_25$estimate),
+  t = c(bias_beet_a1_23$statistic,
+        bias_beet_a1_24$statistic,
+        bias_beet_a1_25$statistic),
+  p_value = c(bias_beet_a1_23$p.value,
+              bias_beet_a1_24$p.value,
+              bias_beet_a1_25$p.value),
+  conf_low = c(bias_beet_a1_23$conf.int[1],
+               bias_beet_a1_24$conf.int[1],
+               bias_beet_a1_25$conf.int[1]),
+  conf_high = c(bias_beet_a1_23$conf.int[2],
+                bias_beet_a1_24$conf.int[2],
+                bias_beet_a1_25$conf.int[2])
+)
+
+### birds
+bias_bir_a1_23 <- t.test(tax_bias_results_a1$birds_2023, mu = 1)
+bias_bir_a1_24 <-t.test(tax_bias_results_a1$birds_2024, mu = 1)
+bias_bir_a1_25 <-t.test(tax_bias_results_a1$birds_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_bir <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_bir_a1_23$estimate,
+           bias_bir_a1_24$estimate,
+           bias_bir_a1_25$estimate),
+  t = c(bias_bir_a1_23$statistic,
+        bias_bir_a1_24$statistic,
+        bias_bir_a1_25$statistic),
+  p_value = c(bias_bir_a1_23$p.value,
+              bias_bir_a1_24$p.value,
+              bias_bir_a1_25$p.value),
+  conf_low = c(bias_bir_a1_23$conf.int[1],
+               bias_bir_a1_24$conf.int[1],
+               bias_bir_a1_25$conf.int[1]),
+  conf_high = c(bias_bir_a1_23$conf.int[2],
+                bias_bir_a1_24$conf.int[2],
+                bias_bir_a1_25$conf.int[2])
+)
+
+
+### bugs cicadas aphids
+bias_bca_a1_23 <- t.test(tax_bias_results_a1$bugs_cicadas_aphids_2023, mu = 1)
+bias_bca_a1_24 <-t.test(tax_bias_results_a1$bugs_cicadas_aphids_2024, mu = 1)
+bias_bca_a1_25 <-t.test(tax_bias_results_a1$bugs_cicadas_aphids_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_bca <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_bca_a1_23$estimate,
+           bias_bca_a1_24$estimate,
+           bias_bca_a1_25$estimate),
+  t = c(bias_bca_a1_23$statistic,
+        bias_bca_a1_24$statistic,
+        bias_bca_a1_25$statistic),
+  p_value = c(bias_bca_a1_23$p.value,
+              bias_bca_a1_24$p.value,
+              bias_bca_a1_25$p.value),
+  conf_low = c(bias_bca_a1_23$conf.int[1],
+               bias_bca_a1_24$conf.int[1],
+               bias_bca_a1_25$conf.int[1]),
+  conf_high = c(bias_bca_a1_23$conf.int[2],
+                bias_bca_a1_24$conf.int[2],
+                bias_bca_a1_25$conf.int[2])
+)
+
+
+### butterflies
+bias_but_a1_23 <- t.test(tax_bias_results_a1$butterflies_2023, mu = 1)
+bias_but_a1_24 <-t.test(tax_bias_results_a1$butterflies_2024, mu = 1)
+bias_but_a1_25 <-t.test(tax_bias_results_a1$butterflies_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_but <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_but_a1_23$estimate,
+           bias_but_a1_24$estimate,
+           bias_but_a1_25$estimate),
+  t = c(bias_but_a1_23$statistic,
+        bias_but_a1_24$statistic,
+        bias_but_a1_25$statistic),
+  p_value = c(bias_but_a1_23$p.value,
+              bias_but_a1_24$p.value,
+              bias_but_a1_25$p.value),
+  conf_low = c(bias_but_a1_23$conf.int[1],
+               bias_but_a1_24$conf.int[1],
+               bias_but_a1_25$conf.int[1]),
+  conf_high = c(bias_but_a1_23$conf.int[2],
+                bias_but_a1_24$conf.int[2],
+                bias_but_a1_25$conf.int[2])
+)
+
+
+
+### dragonflies
+bias_dra_a1_23 <- t.test(tax_bias_results_a1$dragonflies_2023, mu = 1)
+bias_dra_a1_24 <-t.test(tax_bias_results_a1$dragonflies_2024, mu = 1)
+bias_dra_a1_25 <-t.test(tax_bias_results_a1$dragonflies_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_dra <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_dra_a1_23$estimate,
+           bias_dra_a1_24$estimate,
+           bias_dra_a1_25$estimate),
+  t = c(bias_dra_a1_23$statistic,
+        bias_dra_a1_24$statistic,
+        bias_dra_a1_25$statistic),
+  p_value = c(bias_dra_a1_23$p.value,
+              bias_dra_a1_24$p.value,
+              bias_dra_a1_25$p.value),
+  conf_low = c(bias_dra_a1_23$conf.int[1],
+               bias_dra_a1_24$conf.int[1],
+               bias_dra_a1_25$conf.int[1]),
+  conf_high = c(bias_dra_a1_23$conf.int[2],
+                bias_dra_a1_24$conf.int[2],
+                bias_dra_a1_25$conf.int[2])
+)
+
+
+### fish
+bias_fis_a1_23 <- t.test(tax_bias_results_a1$fish_2023, mu = 1)
+bias_fis_a1_24 <-t.test(tax_bias_results_a1$fish_2024, mu = 1)
+bias_fis_a1_25 <-t.test(tax_bias_results_a1$fish_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_fis <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_fis_a1_23$estimate,
+           bias_fis_a1_24$estimate,
+           bias_fis_a1_25$estimate),
+  t = c(bias_fis_a1_23$statistic,
+        bias_fis_a1_24$statistic,
+        bias_fis_a1_25$statistic),
+  p_value = c(bias_fis_a1_23$p.value,
+              bias_fis_a1_24$p.value,
+              bias_fis_a1_25$p.value),
+  conf_low = c(bias_fis_a1_23$conf.int[1],
+               bias_fis_a1_24$conf.int[1],
+               bias_fis_a1_25$conf.int[1]),
+  conf_high = c(bias_fis_a1_23$conf.int[2],
+                bias_fis_a1_24$conf.int[2],
+                bias_fis_a1_25$conf.int[2])
+)
+
+
+
+
+
+### flies mosquitoes
+bias_fli_a1_23 <- t.test(tax_bias_results_a1$flies_mosquitoes_2023, mu = 1)
+bias_fli_a1_24 <-t.test(tax_bias_results_a1$flies_mosquitoes_2024, mu = 1)
+bias_fli_a1_25 <-t.test(tax_bias_results_a1$flies_mosquitoes_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_fli <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_fli_a1_23$estimate,
+           bias_fli_a1_24$estimate,
+           bias_fli_a1_25$estimate),
+  t = c(bias_fli_a1_23$statistic,
+        bias_fli_a1_24$statistic,
+        bias_fli_a1_25$statistic),
+  p_value = c(bias_fli_a1_23$p.value,
+              bias_fli_a1_24$p.value,
+              bias_fli_a1_25$p.value),
+  conf_low = c(bias_fli_a1_23$conf.int[1],
+               bias_fli_a1_24$conf.int[1],
+               bias_fli_a1_25$conf.int[1]),
+  conf_high = c(bias_fli_a1_23$conf.int[2],
+                bias_fli_a1_24$conf.int[2],
+                bias_fli_a1_25$conf.int[2])
+)
+
+### grasshoppers crickets
+bias_gra_a1_23 <- t.test(tax_bias_results_a1$grasshoppers_crickets_2023, mu = 1)
+bias_gra_a1_24 <-t.test(tax_bias_results_a1$grasshoppers_crickets_2024, mu = 1)
+bias_gra_a1_25 <-t.test(tax_bias_results_a1$grasshoppers_crickets_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_gra <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_gra_a1_23$estimate,
+           bias_gra_a1_24$estimate,
+           bias_gra_a1_25$estimate),
+  t = c(bias_gra_a1_23$statistic,
+        bias_gra_a1_24$statistic,
+        bias_gra_a1_25$statistic),
+  p_value = c(bias_gra_a1_23$p.value,
+              bias_gra_a1_24$p.value,
+              bias_gra_a1_25$p.value),
+  conf_low = c(bias_gra_a1_23$conf.int[1],
+               bias_gra_a1_24$conf.int[1],
+               bias_gra_a1_25$conf.int[1]),
+  conf_high = c(bias_gra_a1_23$conf.int[2],
+                bias_gra_a1_24$conf.int[2],
+                bias_gra_a1_25$conf.int[2])
+)
+
+
+### insects other
+bias_ins_a1_23 <- t.test(tax_bias_results_a1$insects_other_2023, mu = 1)
+bias_ins_a1_24 <-t.test(tax_bias_results_a1$insects_other_2024, mu = 1)
+bias_ins_a1_25 <-t.test(tax_bias_results_a1$insects_other_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_ins <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_ins_a1_23$estimate,
+           bias_ins_a1_24$estimate,
+           bias_ins_a1_25$estimate),
+  t = c(bias_ins_a1_23$statistic,
+        bias_ins_a1_24$statistic,
+        bias_ins_a1_25$statistic),
+  p_value = c(bias_ins_a1_23$p.value,
+              bias_ins_a1_24$p.value,
+              bias_ins_a1_25$p.value),
+  conf_low = c(bias_ins_a1_23$conf.int[1],
+               bias_ins_a1_24$conf.int[1],
+               bias_ins_a1_25$conf.int[1]),
+  conf_high = c(bias_ins_a1_23$conf.int[2],
+                bias_ins_a1_24$conf.int[2],
+                bias_ins_a1_25$conf.int[2])
+)
+
+
+
+### mammals
+bias_mam_a1_23 <- t.test(tax_bias_results_a1$mammals_2023, mu = 1)
+bias_mam_a1_24 <-t.test(tax_bias_results_a1$mammals_2024, mu = 1)
+bias_mam_a1_25 <-t.test(tax_bias_results_a1$mammals_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_mam <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_mam_a1_23$estimate,
+           bias_mam_a1_24$estimate,
+           bias_mam_a1_25$estimate),
+  t = c(bias_mam_a1_23$statistic,
+        bias_mam_a1_24$statistic,
+        bias_mam_a1_25$statistic),
+  p_value = c(bias_mam_a1_23$p.value,
+              bias_mam_a1_24$p.value,
+              bias_mam_a1_25$p.value),
+  conf_low = c(bias_mam_a1_23$conf.int[1],
+               bias_mam_a1_24$conf.int[1],
+               bias_mam_a1_25$conf.int[1]),
+  conf_high = c(bias_mam_a1_23$conf.int[2],
+                bias_mam_a1_24$conf.int[2],
+                bias_mam_a1_25$conf.int[2])
+)
+
+
+
+### mollusks
+bias_mol_a1_23 <- t.test(tax_bias_results_a1$mollusks_2023, mu = 1)
+bias_mol_a1_24 <-t.test(tax_bias_results_a1$mollusks_2024, mu = 1)
+bias_mol_a1_25 <-t.test(tax_bias_results_a1$mollusks_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_mol <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_mol_a1_23$estimate,
+           bias_mol_a1_24$estimate,
+           bias_mol_a1_25$estimate),
+  t = c(bias_mol_a1_23$statistic,
+        bias_mol_a1_24$statistic,
+        bias_mol_a1_25$statistic),
+  p_value = c(bias_mol_a1_23$p.value,
+              bias_mol_a1_24$p.value,
+              bias_mol_a1_25$p.value),
+  conf_low = c(bias_mol_a1_23$conf.int[1],
+               bias_mol_a1_24$conf.int[1],
+               bias_mol_a1_25$conf.int[1]),
+  conf_high = c(bias_mol_a1_23$conf.int[2],
+                bias_mol_a1_24$conf.int[2],
+                bias_mol_a1_25$conf.int[2])
+)
+
+
+### mosses lichens
+bias_mos_a1_23 <- t.test(tax_bias_results_a1$mosses_lichens_2023, mu = 1)
+bias_mos_a1_24 <-t.test(tax_bias_results_a1$mosses_lichens_2024, mu = 1)
+bias_mos_a1_25 <-t.test(tax_bias_results_a1$mosses_lichens_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_mos <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_mos_a1_23$estimate,
+           bias_mos_a1_24$estimate,
+           bias_mos_a1_25$estimate),
+  t = c(bias_mos_a1_23$statistic,
+        bias_mos_a1_24$statistic,
+        bias_mos_a1_25$statistic),
+  p_value = c(bias_mos_a1_23$p.value,
+              bias_mos_a1_24$p.value,
+              bias_mos_a1_25$p.value),
+  conf_low = c(bias_mos_a1_23$conf.int[1],
+               bias_mos_a1_24$conf.int[1],
+               bias_mos_a1_25$conf.int[1]),
+  conf_high = c(bias_mos_a1_23$conf.int[2],
+                bias_mos_a1_24$conf.int[2],
+                bias_mos_a1_25$conf.int[2])
+)
+
+
+### moths micro's
+bias_mot_a1_23 <- t.test(tax_bias_results_a1$moths_micros_2023, mu = 1)
+bias_mot_a1_24 <-t.test(tax_bias_results_a1$moths_micros_2024, mu = 1)
+bias_mot_a1_25 <-t.test(tax_bias_results_a1$moths_micros_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_mot <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_mot_a1_23$estimate,
+           bias_mot_a1_24$estimate,
+           bias_mot_a1_25$estimate),
+  t = c(bias_mot_a1_23$statistic,
+        bias_mot_a1_24$statistic,
+        bias_mot_a1_25$statistic),
+  p_value = c(bias_mot_a1_23$p.value,
+              bias_mot_a1_24$p.value,
+              bias_mot_a1_25$p.value),
+  conf_low = c(bias_mot_a1_23$conf.int[1],
+               bias_mot_a1_24$conf.int[1],
+               bias_mot_a1_25$conf.int[1]),
+  conf_high = c(bias_mot_a1_23$conf.int[2],
+                bias_mot_a1_24$conf.int[2],
+                bias_mot_a1_25$conf.int[2])
+)
+
+
+### mushrooms
+bias_mus_a1_23 <- t.test(tax_bias_results_a1$mushrooms_2023, mu = 1)
+bias_mus_a1_24 <-t.test(tax_bias_results_a1$mushrooms_2024, mu = 1)
+bias_mus_a1_25 <-t.test(tax_bias_results_a1$mushrooms_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_mus <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_mus_a1_23$estimate,
+           bias_mus_a1_24$estimate,
+           bias_mus_a1_25$estimate),
+  t = c(bias_mus_a1_23$statistic,
+        bias_mus_a1_24$statistic,
+        bias_mus_a1_25$statistic),
+  p_value = c(bias_mus_a1_23$p.value,
+              bias_mus_a1_24$p.value,
+              bias_mus_a1_25$p.value),
+  conf_low = c(bias_mus_a1_23$conf.int[1],
+               bias_mus_a1_24$conf.int[1],
+               bias_mus_a1_25$conf.int[1]),
+  conf_high = c(bias_mus_a1_23$conf.int[2],
+                bias_mus_a1_24$conf.int[2],
+                bias_mus_a1_25$conf.int[2])
+)
+
+
+
+### invertebrates other
+bias_inv_a1_23 <- t.test(tax_bias_results_a1$invertebrates_other_2023, mu = 1)
+bias_inv_a1_24 <-t.test(tax_bias_results_a1$invertebrates_other_2024, mu = 1)
+bias_inv_a1_25 <-t.test(tax_bias_results_a1$invertebrates_other_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_inv <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_inv_a1_23$estimate,
+           bias_inv_a1_24$estimate,
+           bias_inv_a1_25$estimate),
+  t = c(bias_inv_a1_23$statistic,
+        bias_inv_a1_24$statistic,
+        bias_inv_a1_25$statistic),
+  p_value = c(bias_inv_a1_23$p.value,
+              bias_inv_a1_24$p.value,
+              bias_inv_a1_25$p.value),
+  conf_low = c(bias_inv_a1_23$conf.int[1],
+               bias_inv_a1_24$conf.int[1],
+               bias_inv_a1_25$conf.int[1]),
+  conf_high = c(bias_inv_a1_23$conf.int[2],
+                bias_inv_a1_24$conf.int[2],
+                bias_inv_a1_25$conf.int[2])
+)
+
+
+
+### plants
+bias_pla_a1_23 <- t.test(tax_bias_results_a1$plants_2023, mu = 1)
+bias_pla_a1_24 <-t.test(tax_bias_results_a1$plants_2024, mu = 1)
+bias_pla_a1_25 <-t.test(tax_bias_results_a1$plants_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_pla <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_pla_a1_23$estimate,
+           bias_pla_a1_24$estimate,
+           bias_pla_a1_25$estimate),
+  t = c(bias_pla_a1_23$statistic,
+        bias_pla_a1_24$statistic,
+        bias_pla_a1_25$statistic),
+  p_value = c(bias_pla_a1_23$p.value,
+              bias_pla_a1_24$p.value,
+              bias_pla_a1_25$p.value),
+  conf_low = c(bias_pla_a1_23$conf.int[1],
+               bias_pla_a1_24$conf.int[1],
+               bias_pla_a1_25$conf.int[1]),
+  conf_high = c(bias_pla_a1_23$conf.int[2],
+                bias_pla_a1_24$conf.int[2],
+                bias_pla_a1_25$conf.int[2])
+)
+
+
+### reptiles amphibians
+bias_rep_a1_23 <- t.test(tax_bias_results_a1$reptiles_amphibians_2023, mu = 1)
+bias_rep_a1_24 <-t.test(tax_bias_results_a1$reptiles_amphibians_2024, mu = 1)
+bias_rep_a1_25 <-t.test(tax_bias_results_a1$reptiles_amphibians_2025, mu = 1)
+
+
+### join as a table
+
+results_ttest_bias_rep <- data.frame(
+  year = c("2023", "2024", "2025"),
+  mean = c(bias_rep_a1_23$estimate,
+           bias_rep_a1_24$estimate,
+           bias_rep_a1_25$estimate),
+  t = c(bias_rep_a1_23$statistic,
+        bias_rep_a1_24$statistic,
+        bias_rep_a1_25$statistic),
+  p_value = c(bias_rep_a1_23$p.value,
+              bias_rep_a1_24$p.value,
+              bias_rep_a1_25$p.value),
+  conf_low = c(bias_rep_a1_23$conf.int[1],
+               bias_rep_a1_24$conf.int[1],
+               bias_rep_a1_25$conf.int[1]),
+  conf_high = c(bias_rep_a1_23$conf.int[2],
+                bias_rep_a1_24$conf.int[2],
+                bias_rep_a1_25$conf.int[2])
+)
