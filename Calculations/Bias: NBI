@@ -1,0 +1,533 @@
+
+####---- RQ 1+2: opp 2023 Biob 24-25
+
+## ---- USP --- ##
+
+## clip buildings to campus boundaries
+usp_build25 <- st_intersection(Top10NL_Buildings_allcampuses_25, USP_boundaries)
+
+usp_build24 <- st_intersection(Top10NL_Buildings_allcampuses_24, USP_boundaries)
+
+usp_build23 <- st_intersection(Top10NL_Buildings_allcampuses_23, USP_boundaries)
+
+## 2025
+
+### This function calculates the minimum distance from each randomly generated point to the nearest building. The mean of these minimum distances is then calculated for each of the 99 random datasets, yielding one summary value per dataset.
+
+mean_dists_usp25_build <- lapply(seq_along(random_replicates_usp_25), function(i){
+  sublist <- random_replicates_usp_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, usp_build25)
+    min_dists <- apply(d, 1, min)  # nearest point per point in POINT sf
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_usp_25))
+  res
+})
+
+
+## Results are in a list we unlist them
+mean_dists_usp25_build <- unlist(mean_dists_usp25_build)
+
+## We then take the mean across all the 99 random datasets
+mean_random_usp25_build <- mean(mean_dists_usp25_build)
+
+# we then take the mean of the minimum distances to the nearest building for the estimated values in our datasets. These are the calculated "distance to nearest building" values, calculated in the bias section of our analysis 
+
+mean_dist_usp25_build <- mean(USP25$distance_to_buil)
+
+# Finally we calculate the ratio to compare how the observed values compare to the expected values. 
+ratio_build_usp25 <- mean_dist_usp25_build / mean_random_usp25_build 
+
+## 2024
+mean_dists_usp24_build <- lapply(seq_along(random_replicates_usp_24), function(i){
+  sublist <- random_replicates_usp_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, usp_build24)
+    min_dists <- apply(d, 1, min) 
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_usp_24))
+  res
+})
+
+mean_dists_usp24_build <- unlist(mean_dists_usp24_build)
+mean_random_usp24_build <- mean(mean_dists_usp24_build)
+mean_dist_usp24_build <- mean(USP24$distance_to_buil)
+ratio_build_usp24 <- mean_dist_usp24_build / mean_random_usp24_build 
+
+# 2023
+mean_dists_usp23_build <- lapply(seq_along(random_replicates_usp_23), function(i){
+  sublist <- random_replicates_usp_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, usp_build23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_usp_23))
+  res
+})
+
+mean_dists_usp23_build <- unlist(mean_dists_usp23_build)
+mean_random_usp23_build <- mean(mean_dists_usp23_build)
+mean_dist_usp23_build <- mean(USP23$distance_to_buil)
+ratio_build_usp23 <- mean_dist_usp23_build / mean_random_usp23_build 
+
+## -- Amsterdam Science Park -- ##
+uva_build25 <- st_intersection(Top10NL_Buildings_allcampuses_25, Amsterdam_Science_Park_boundaries)
+uva_build24 <- st_intersection(Top10NL_Buildings_allcampuses_24, Amsterdam_Science_Park_boundaries)
+uva_build23 <- st_intersection(Top10NL_Buildings_allcampuses_23, Amsterdam_Science_Park_boundaries)
+
+##### 2025 
+mean_dists_uva25_build <- lapply(seq_along(random_replicates_uva_25), function(i){
+  sublist <- random_replicates_uva_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, uva_build25)
+    min_dists <- apply(d, 1, min) 
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_uva_25))
+  res
+})
+
+mean_dists_uva25_build <- unlist(mean_dists_uva25_build)
+mean_random_uva25_build <- mean(mean_dists_uva25_build)
+mean_dist_uva25_build <- mean(UvA25$distance_to_buil)
+ratio_build_uva25 <- mean_dist_uva25_build / mean_random_uva25_build 
+
+##### 2024 
+mean_dists_uva24_build <- lapply(seq_along(random_replicates_uva_24), function(i){
+  sublist <- random_replicates_uva_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, uva_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_uva_24))
+  res
+})
+
+mean_dists_uva24_build <- unlist(mean_dists_uva24_build)
+mean_random_uva24_build <- mean(mean_dists_uva24_build)
+mean_dist_uva24_build <- mean(UvA24$distance_to_buil)
+ratio_build_uva24 <- mean_dist_uva24_build / mean_random_uva24_build 
+
+# 2023
+mean_dists_uva23_build <- lapply(seq_along(random_replicates_uva_23), function(i){
+  sublist <- random_replicates_uva_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, uva_build23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_uva_23))
+  res
+})
+mean_dists_uva23_build <- unlist(mean_dists_uva23_build)
+mean_random_uva23_build <- mean(mean_dists_uva23_build)
+mean_dist_uva23_build <- mean(UvA23$distance_to_buil)
+ratio_build_uva23 <- mean_dist_uva23_build / mean_random_uva23_build 
+
+##-- Leiden Bioscience park --##
+
+leidenbiosc_build25 <- st_intersection(Top10NL_Buildings_allcampuses_25, Leiden_Bioscience_Park_boundaries)
+leidenbiosc_build24 <- st_intersection(Top10NL_Buildings_allcampuses_24, Leiden_Bioscience_Park_boundaries)
+leidenbiosc_build23 <- st_intersection(Top10NL_Buildings_allcampuses_23, Leiden_Bioscience_Park_boundaries)
+
+##### 2025
+mean_dists_leidenbiosc25_build <- lapply(seq_along(random_replicates_leidenbiosc_25), function(i){
+  sublist <- random_replicates_leidenbiosc_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leidenbiosc_build25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenbiosc_25))
+  res
+})
+
+mean_dists_leidenbiosc25_build <- unlist(mean_dists_leidenbiosc25_build)
+mean_random_leidenbiosc25_build <- mean(mean_dists_leidenbiosc25_build)
+mean_dist_leidenbiosc25_build <- mean(Leiden_Biosc25$distance_to_buil)
+ratio_build_leidenbiosc25 <- mean_dist_leidenbiosc25_build / mean_random_leidenbiosc25_build 
+
+##### 2024
+mean_dists_leidenbiosc24_build <- lapply(seq_along(random_replicates_leidenbiosc_24), function(i){
+  sublist <- random_replicates_leidenbiosc_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leidenbiosc_build24)
+    min_dists <- apply(d, 1, min) 
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenbiosc_24))
+  res
+})
+
+mean_dists_leidenbiosc24_build <- unlist(mean_dists_leidenbiosc24_build)
+mean_random_leidenbiosc24_build <- mean(mean_dists_leidenbiosc24_build)
+mean_dist_leidenbiosc24_build <- mean(Leiden_Biosc24$distance_to_buil)
+ratio_build_leidenbiosc24 <- mean_dist_leidenbiosc24_build / mean_random_leidenbiosc24_build 
+
+##### 2023
+mean_dists_leidenbiosc23_build <- lapply(seq_along(random_replicates_leidenbiosc_23), function(i){
+  sublist <- random_replicates_leidenbiosc_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leidenbiosc_build23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenbiosc_23))
+  res
+})
+
+mean_dists_leidenbiosc23_build <- unlist(mean_dists_leidenbiosc23_build)
+mean_random_leidenbiosc23_build <- mean(mean_dists_leidenbiosc23_build)
+mean_dist_leidenbiosc23_build <- mean(Leiden_Biosc23$distance_to_buil)
+ratio_build_leidenbiosc23 <- mean_dist_leidenbiosc23_build / mean_random_leidenbiosc23_build 
+
+##-- Leiden Binnenstad --##
+
+leidenstad_build25 <- st_intersection(Top10NL_Buildings_allcampuses_25, Leiden_Binnenstad_boundaries)
+leidenstad_build24 <- st_intersection(Top10NL_Buildings_allcampuses_24, Leiden_Binnenstad_boundaries)
+leidenstad_build23 <- st_intersection(Top10NL_Buildings_allcampuses_23, Leiden_Binnenstad_boundaries)
+
+##### 2025
+mean_dists_leidenstad25_build <- lapply(seq_along(random_replicates_leidenstad_25), function(i){
+  sublist <- random_replicates_leidenstad_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leidenstad_build25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenstad_25))
+  res
+})
+
+mean_dists_leidenstad25_build <- unlist(mean_dists_leidenstad25_build)
+mean_random_leidenstad25_build <- mean(mean_dists_leidenstad25_build)
+mean_dist_leidenstad25_build <- mean(Leiden_Bin25$distance_to_buil)
+ratio_build_leidenstad25 <- mean_dist_leidenstad25_build / mean_random_leidenstad25_build 
+
+##### 2024
+mean_dists_leidenstad24_build <- lapply(seq_along(random_replicates_leidenstad_24), function(i){
+  sublist <- random_replicates_leidenstad_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leidenstad_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenstad_24))
+  res
+})
+
+mean_dists_leidenstad24_build <- unlist(mean_dists_leidenstad24_build)
+mean_random_leidenstad24_build <- mean(mean_dists_leidenstad24_build)
+mean_dist_leidenstad24_build <- mean(Leiden_Bin24$distance_to_buil)
+ratio_build_leidenstad24 <- mean_dist_leidenstad24_build / mean_random_leidenstad24_build 
+
+##### 2023
+mean_dists_leidenstad23_build <- lapply(seq_along(random_replicates_leidenstad_23), function(i){
+  sublist <- random_replicates_leidenstad_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leidenstad_build23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenstad_23))
+  res
+})
+
+mean_dists_leidenstad23_build <- unlist(mean_dists_leidenstad23_build)
+mean_random_leidenstad23_build <- mean(mean_dists_leidenstad23_build)
+mean_dist_leidenstad23_build <- mean(Leiden_Bin23$distance_to_buil)
+ratio_build_leidenstad23 <- mean_dist_leidenstad23_build / mean_random_leidenstad23_build 
+
+##-- Leeuwarden Van Hall Larenstein --##
+
+leeu_build25 <- st_intersection(Top10NL_Buildings_allcampuses_25, Leeuwarden_Van_Hall_Larenstein_boundaries)
+leeu_build24 <- st_intersection(Top10NL_Buildings_allcampuses_24, Leeuwarden_Van_Hall_Larenstein_boundaries)
+leeu_build23 <- st_intersection(Top10NL_Buildings_allcampuses_23, Leeuwarden_Van_Hall_Larenstein_boundaries)
+
+##### 2025 
+mean_dists_leeu25_build <- lapply(seq_along(random_replicates_leeu_25), function(i){
+  sublist <- random_replicates_leeu_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leeu_build25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leeu_25))
+  res
+})
+
+mean_dists_leeu25_build <- unlist(mean_dists_leeu25_build)
+mean_random_leeu25_build <- mean(mean_dists_leeu25_build)
+mean_dist_leeu25_build <- mean(Leeuwarden_Van_Hall_Larenstein25$distance_to_buil)
+ratio_build_leeu25 <- mean_dist_leeu25_build / mean_random_leeu25_build 
+
+##### 2024 
+mean_dists_leeu24_build <- lapply(seq_along(random_replicates_leeu_24), function(i){
+  sublist <- random_replicates_leeu_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leeu_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leeu_24))
+  res
+})
+
+mean_dists_leeu24_build <- unlist(mean_dists_leeu24_build)
+mean_random_leeu24_build <- mean(mean_dists_leeu24_build)
+mean_dist_leeu24_build <- mean(Leeuwarden_Van_Hall_Larenstein24$distance_to_buil)
+ratio_build_leeu24 <- mean_dist_leeu24_build / mean_random_leeu24_build 
+
+# 2023
+mean_dists_leeu23_build <- lapply(seq_along(random_replicates_leeu_23), function(i){
+  sublist <- random_replicates_leeu_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leeu_build23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leeu_23))
+  res
+})
+
+mean_dists_leeu23_build <- unlist(mean_dists_leeu23_build)
+mean_random_leeu23_buil <- mean(mean_dists_leeu23_build)
+mean_dist_leeu23_build <- mean(Leeuwarden_Van_Hall_Larenstein23$distance_to_buil)
+ratio_build_leeu23 <- mean_dist_leeu23_build / mean_random_leeu23_buil 
+
+
+##-- HAN Arnhem --##
+arn_build25 <- st_intersection(Top10NL_Buildings_allcampuses_25, HAN_Arnhem_boundaries)
+arn_build24 <- st_intersection(Top10NL_Buildings_allcampuses_24, HAN_Arnhem_boundaries)
+arn_build23 <- st_intersection(Top10NL_Buildings_allcampuses_23, HAN_Arnhem_boundaries)
+
+##### 2025 
+mean_dists_arn25_build <- lapply(seq_along(random_replicates_hanarn_25), function(i){
+  sublist <- random_replicates_hanarn_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, arn_build25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_hanarn_25))
+  res
+})
+
+mean_dists_arn25_build <- unlist(mean_dists_arn25_build)
+mean_random_arn25_build <- mean(mean_dists_arn25_build)
+mean_dist_arn25_build <- mean(HAN_Arnhem25$distance_to_buil)
+ratio_build_arn25 <- mean_dist_arn25_build / mean_random_arn25_build 
+
+
+##### 2024 
+mean_dists_arn24_build <- lapply(seq_along(random_replicates_hanarn_24), function(i){
+  sublist <- random_replicates_hanarn_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, arn_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_hanarn_24))
+  res
+})
+
+mean_dists_arn24_build <- unlist(mean_dists_arn24_build)
+mean_random_arn24_build <- mean(mean_dists_arn24_build)
+mean_dist_arn24_build <- mean(HAN_Arnhem24$distance_to_buil)
+ratio_build_arn24 <- mean_dist_arn24_build / mean_random_arn24_build 
+
+# 2023
+mean_dists_arn23_build <- lapply(seq_along(random_replicates_hanarn_23), function(i){
+  sublist <- random_replicates_hanarn_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, arn_build23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_hanarn_23))
+  res
+})
+
+mean_dists_arn23_build <- unlist(mean_dists_arn23_build)
+mean_random_arn23_build <- mean(mean_dists_arn23_build)
+mean_dist_arn23_build <- mean(HAN_Arnhem23$distance_to_buil)
+ratio_build_arn23 <- mean_dist_arn23_build / mean_random_arn23_build 
+
+### join as a table
+bias_a1_nbi <- tibble(
+  campus = c("USP", "UvA", "Leiden_Bioscience","Leiden_Binnenstad","Leeuwarden_Van_Hall_Larenstein","HAN_Arnhem"),
+  "X2023" = c(ratio_build_usp23, ratio_build_uva23, ratio_build_leidenbiosc23,ratio_build_leidenstad23,ratio_build_leeu23,ratio_build_arn23),
+  "X2024" = c(ratio_build_usp24, ratio_build_uva23, ratio_build_leidenbiosc24,ratio_build_leidenstad24,ratio_build_leeu24,ratio_build_arn24),
+  "X2025" = c(ratio_build_usp25, ratio_build_uva23, ratio_build_leidenbiosc25,ratio_build_leidenstad25,ratio_build_leeu25,ratio_build_arn25)
+)
+
+write.csv(bias_a1_nbi,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NBI_a1.csv")
+
+write.xlsx(bias_a1_nbi,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NBI_a1.xlsx")
+
+
+
+### for boxplot
+
+bias_nbi_a1_long <- bias_a1_nbi %>%
+   rename(
+     "2023" = `X2023`,
+     "2024" = `X2024`,
+     "2025" = `X2025`
+   )
+
+bias_nbi_a1_long <- bias_nbi_a1_long %>%
+  tidyr::pivot_longer(
+    cols = "2023":"2025",
+    names_to = "year",
+    values_to = "value"
+  )
+
+write.csv(bias_nbi_a1_long,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NBI_a1_box.csv")
+
+
+####---- RQ 2 only: Biob 23-25
+
+## ---- WUR --- ##
+
+wur_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, WUR_main_campus_boundaries)
+
+## 2024
+mean_dists_wur24_build <- lapply(seq_along(random_replicates_wur_24), function(i){
+  sublist <- random_replicates_wur_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, wur_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_wur_24))
+  res
+})
+
+mean_dists_wur24_build <- unlist(mean_dists_wur24_build)
+mean_random_wur24_build <- mean(mean_dists_wur24_build)
+mean_dist_wur24_build <- mean(WUR_main_campus24_b$distance_to_buil)
+ratio_build_wur24 <- mean_dist_wur24_build / mean_random_wur24_build 
+
+##-- Nijmegen campus --##
+
+ruhan_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Nijmegen_campus_boundaries)
+
+##### 2024 
+mean_dists_ruhan24_build <- lapply(seq_along(random_replicates_ruhan_24), function(i){
+  sublist <- random_replicates_ruhan_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, ruhan_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_ruhan_24))
+  res
+})
+
+mean_dists_ruhan24_build <- unlist(mean_dists_ruhan24_build)
+mean_random_ruhan24_build <- mean(mean_dists_ruhan24_build)
+mean_dist_ruhan24_build <- mean(Nijmegen_campus24_b$distance_to_buil)
+ratio_build_ruhan24 <- mean_dist_ruhan24_build / mean_random_ruhan24_build 
+
+##-- TUDelft --##
+
+delft_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, TUDelft_boundaries)
+
+##### 2024 
+mean_dists_delft24_build <- lapply(seq_along(random_replicates_delft_24), function(i){
+  sublist <- random_replicates_delft_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, delft_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_delft_24))
+  res
+})
+
+mean_dists_delft24_build <- unlist(mean_dists_delft24_build)
+mean_random_delft24_build <- mean(mean_dists_delft24_build)
+mean_dist_delft24_build <- mean(TUDelft24_b$distance_to_buil)
+ratio_build_delft24 <- mean_dist_delft24_build / mean_random_delft24_build 
+
+###### Twente
+
+twente_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Twente_university_campus_boundaries)
+
+##### 2024 
+mean_dists_twente24_build <- lapply(seq_along(random_replicates_twente_24), function(i){
+  sublist <- random_replicates_twente_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, twente_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_twente_24))
+  res
+})
+
+mean_dists_twente24_build <- unlist(mean_dists_twente24_build)
+mean_random_twente24_build <- mean(mean_dists_twente24_build)
+mean_dist_twente24_build <- mean(Twente_university_campus24_b$distance_to_buil)
+ratio_build_twente24 <- mean_dist_twente24_build / mean_random_twente24_build 
+
+
+##-- Groningen Zernike campus --##
+
+gro_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Groningen_Zernike_campus_boundaries)
+
+##### 2024 
+mean_dists_gro24_build <- lapply(seq_along(random_replicates_gro_24), function(i){
+  sublist <- random_replicates_gro_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, gro_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_gro_24))
+  res
+})
+
+mean_dists_gro24_build <- unlist(mean_dists_gro24_build)
+mean_random_gro24_build <- mean(mean_dists_gro24_build)
+mean_dist_gro24_build <- mean(Groningen_Zernike_campus24_b$distance_to_buil)
+ratio_build_gro24 <- mean_dist_gro24_build / mean_random_gro24_build 
+
+
+##-- Velp Van Hall Larensten --##
+velp_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Velp_Van_Hall_Larenstein_boundaries)
+
+# 2024
+mean_dists_velp24_build <- lapply(seq_along(random_replicates_velp_24), function(i){
+  sublist <- random_replicates_velp_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, velp_build24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_velp_24))
+  res
+})
+
+mean_dists_velp24_build <- unlist(mean_dists_velp24_build)
+mean_random_velp24_build <- mean(mean_dists_velp24_build)
+mean_dist_velp24_build <- mean(Velp_Landgoed_Larenstein24_b$distance_to_buil)
+ratio_build_velp24 <- mean_dist_velp24_build / mean_random_velp24_build
+
+### join as a table
+bias_a2_nbi <- tibble(
+  dataset = c("WUR", "Nijmegen_campus", "TU_Delft","Twente","Groningen_Zernike_campus","Velp_Van_Hall_Larenstein"),
+    "X2024" = c(ratio_build_wur24, ratio_build_ruhan24, ratio_build_delft24,ratio_build_twente24,ratio_build_gro24,ratio_build_velp24),
+  
+)
+
+
+
+write.csv(bias_a2_nbi,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NBI_a2.csv")
+
+write.xlsx(bias_a2_nbi,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NBI_a2.xlsx")
