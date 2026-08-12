@@ -1,0 +1,462 @@
+
+## assign each campus to buildings -- this ensures that each building will be assigned to the correct campus. we will not need to run separately the analysis for each one, which will save some computational and memory space
+
+#2023
+Top10NL_Buildings_allcampuses_23 <- st_intersection(
+  Top10NL_Buildings_allcampuses_23,
+  campus_boundaries_merged_filtered_rq1
+)
+
+unique(Top10NL_Buildings_allcampuses_23$campus)
+
+#2024
+Top10NL_Buildings_allcampuses_24_rq1 <- st_intersection(
+  Top10NL_Buildings_allcampuses_24,
+  campus_boundaries_merged_filtered_rq1
+)
+
+unique(Top10NL_Buildings_allcampuses_24$campus)
+
+Top10NL_Buildings_allcampuses_rq2only <- st_intersection(
+  Top10NL_Buildings_allcampuses_24,
+  campus_boundaries_merged_filtered_rq2
+)
+
+
+#2025
+
+Top10NL_Buildings_allcampuses_25 <- st_intersection(
+  Top10NL_Buildings_allcampuses_25,
+  campus_boundaries_merged_filtered_rq1
+)
+
+unique(Top10NL_Buildings_allcampuses_25$campus)
+
+
+
+########### 
+
+
+
+### Leiden Bioscience Park
+distance_matrix_buil_leidbios23 <- st_distance(Leiden_Biosc23, Top10NL_Buildings_allcampuses_23)
+
+#### code description: then we find the column index with the nearest road or path --- The number "1" indicates that we check for each row the column with the lowest estimated values. So for each point we check the road id with the lowest estimated 
+
+nearest_buil_index_leidbios23 <- apply(distance_matrix_buil_leidbios23, 1, which.min)
+
+#### code description: then we find the row  with the lowest estimated road or path distance
+
+min_distances_buil_leidbios23 <- apply(distance_matrix_buil_leidbios23, 1, min)
+
+#### code description: then we add to our original data the id of the road or path with the lowest estimated distance
+
+Leiden_Biosc23$nearest_buil_id <- nearest_buil_index_leidbios23  # Nearest road index
+
+#### code description: then we add to our original data the actual distance of the nearest road or path 
+
+Leiden_Biosc23$distance_to_buil <- as.numeric(min_distances_buil_leidbios23)
+
+### Leiden Binnenstad
+distance_matrix_buil_leidbin23 <- st_distance(Leiden_Bin23, Top10NL_Buildings_allcampuses_23)
+
+nearest_buil_index_leidbin23 <- apply(distance_matrix_buil_leidbin23, 1, which.min)
+
+#### code description: then we find the row  with the lowest estimated road or path distance
+
+min_distances_buil_leidbin23 <- apply(distance_matrix_buil_leidbin23, 1, min)
+
+#### code description: then we add to our original data the id of the road or path with the lowest estimated distance
+
+Leiden_Bin23$nearest_buil_id <- nearest_buil_index_leidbin23  # Nearest road index
+
+#### code description: then we add to our original data the actual distance of the nearest road or path 
+
+Leiden_Bin23$distance_to_buil <- as.numeric(min_distances_buil_leidbin23)
+
+#### code description: first we estimate all the distance of all osbervations to all roads and paths 
+
+## HAN_Arnhem
+distance_matrix_buil_han_arnhem23 <- st_distance(HAN_Arnhem23, Top10NL_Buildings_allcampuses_23)
+
+# Find the nearest road and distance for each point
+# Get the index of the minimum distance for each point
+nearest_buil_index_han_arnhem23 <- apply(distance_matrix_buil_han_arnhem23, 1, which.min)
+
+# Get the minimum distances for each point
+min_distances_buil_han_arnhem23 <- apply(distance_matrix_buil_han_arnhem23, 1, min)
+
+# Add results to your_data
+HAN_Arnhem23$nearest_buil_id <- nearest_buil_index_han_arnhem23  # Nearest road index
+HAN_Arnhem23$distance_to_buil <- as.numeric(min_distances_buil_han_arnhem23)
+
+### Leeuwarden
+distance_matrix_buil_leeu23 <- st_distance(Leeuwarden_Van_Hall_Larenstein23, Top10NL_Buildings_allcampuses_23)
+
+nearest_buil_index_leeu23 <- apply(distance_matrix_buil_leeu23, 1, which.min)
+
+min_distances_buil_leeu23 <- apply(distance_matrix_buil_leeu23, 1, min)
+
+Leeuwarden_Van_Hall_Larenstein23$nearest_buil_id <- nearest_buil_index_leeu23  # Nearest road index
+Leeuwarden_Van_Hall_Larenstein23$distance_to_buil <- as.numeric(min_distances_buil_leeu23)
+
+### USP
+distance_matrix_buil_usp23 <- st_distance(USP23, Top10NL_Buildings_allcampuses_23)
+
+nearest_buil_index_usp23 <- apply(distance_matrix_buil_usp23, 1, which.min)
+
+min_distances_buil_usp23 <- apply(distance_matrix_buil_usp23, 1, min)
+
+USP23$nearest_buil_id <- nearest_buil_index_usp23  # 
+USP23$distance_to_buil <- as.numeric(min_distances_buil_usp23)
+
+### Amsterdam Science Park
+distance_matrix_buil_uva23 <- st_distance(UvA23, Top10NL_Buildings_allcampuses_23)
+
+nearest_buil_index_uva23 <- apply(distance_matrix_buil_uva23, 1, which.min)
+
+min_distances_buil_uva23 <- apply(distance_matrix_buil_uva23, 1, min)
+
+UvA23$nearest_buil_id <- nearest_buil_index_uva23  # 
+UvA23$distance_to_buil <- as.numeric(min_distances_buil_uva23)
+
+## Join campuses with opportunistic observations in 23 and bioblitz in 24,25 
+Observations_2023_clip_lu_buil_analysis1 <- rbind(UvA23,USP23,Leiden_Bin23,Leiden_Biosc23,Leeuwarden_Van_Hall_Larenstein23,HAN_Arnhem23) 
+
+## create 5m bins
+Observations_2023_clip_lu_buil_analysis1$distance_to_buil_5mbin <- cut(Observations_2023_clip_lu_buil_analysis1$distance_to_buil, breaks = seq(0, max(Observations_2023_clip_lu_buil_analysis1$distance_to_buil) + 5, by = 5), right = FALSE, include.lowest = F)
+
+
+## get the median distance per campus: Campus --> median distance to nearest road/path (use the original distance) --> save --> then add all years in 1 csv file --> use for bias, added value
+
+Observations_2023_clip_lu_buil_analysis1_med <- Observations_2023_clip_lu_buil_analysis1 %>%
+  group_by(campus) %>%
+  summarise("X2023" = median(distance_to_buil))
+
+Observations_2023_clip_lu_buil_analysis1_med <- st_drop_geometry(Observations_2023_clip_lu_buil_analysis1_med)
+
+#  Calculate full distance matrix from points to all roads for each campus
+
+######## RQ1+RQ2
+
+### Leiden Bioscience Park
+distance_matrix_buil_leidbios24 <- st_distance(Leiden_Biosc24, Top10NL_Buildings_allcampuses_24_rq1)
+
+#### code description: then we find the column index with the nearest road or path --- The number "1" indicates that we check for each row the column with the lowest estimated values. So for each point we check the road id with the lowest estimated 
+
+nearest_buil_index_leidbios24 <- apply(distance_matrix_buil_leidbios24, 1, which.min)
+
+#### code description: then we find the row  with the lowest estimated road or path distance
+
+min_distances_buil_leidbios24 <- apply(distance_matrix_buil_leidbios24, 1, min)
+
+#### code description: then we add to our original data the id of the road or path with the lowest estimated distance
+
+Leiden_Biosc24$nearest_buil_id <- nearest_buil_index_leidbios24  # Nearest road index
+
+#### code description: then we add to our original data the actual distance of the nearest road or path 
+
+Leiden_Biosc24$distance_to_buil <- as.numeric(min_distances_buil_leidbios24)
+
+### Leiden Binnenstad
+distance_matrix_buil_leidbin24 <- st_distance(Leiden_Bin24, Top10NL_Buildings_allcampuses_24_rq1)
+
+nearest_buil_index_leidbin24 <- apply(distance_matrix_buil_leidbin24, 1, which.min)
+
+#### code description: then we find the row  with the lowest estimated road or path distance
+
+min_distances_buil_leidbin24 <- apply(distance_matrix_buil_leidbin24, 1, min)
+
+#### code description: then we add to our original data the id of the road or path with the lowest estimated distance
+
+Leiden_Bin24$nearest_buil_id <- nearest_buil_index_leidbin24  # Nearest road index
+
+#### code description: then we add to our original data the actual distance of the nearest road or path 
+
+Leiden_Bin24$distance_to_buil <- as.numeric(min_distances_buil_leidbin24)
+
+#### code description: first we estimate all the distance of all osbervations to all roads and paths 
+
+## HAN_Arnhem
+distance_matrix_buil_han_arnhem24 <- st_distance(HAN_Arnhem24, Top10NL_Buildings_allcampuses_24_rq1)
+
+# Find the nearest road and distance for each point
+# Get the index of the minimum distance for each point
+nearest_buil_index_han_arnhem24 <- apply(distance_matrix_buil_han_arnhem24, 1, which.min)
+
+# Get the minimum distances for each point
+min_distances_buil_han_arnhem24 <- apply(distance_matrix_buil_han_arnhem24, 1, min)
+
+# Add results to your_data
+HAN_Arnhem24$nearest_buil_id <- nearest_buil_index_han_arnhem24  # Nearest road index
+HAN_Arnhem24$distance_to_buil <- as.numeric(min_distances_buil_han_arnhem24)
+
+### Leeuwarden
+distance_matrix_buil_leeu24 <- st_distance(Leeuwarden_Van_Hall_Larenstein24, Top10NL_Buildings_allcampuses_24_rq1)
+
+nearest_buil_index_leeu24 <- apply(distance_matrix_buil_leeu24, 1, which.min)
+
+min_distances_buil_leeu24 <- apply(distance_matrix_buil_leeu24, 1, min)
+
+Leeuwarden_Van_Hall_Larenstein24$nearest_buil_id <- nearest_buil_index_leeu24  
+Leeuwarden_Van_Hall_Larenstein24$distance_to_buil <- as.numeric(min_distances_buil_leeu24)
+
+### USP
+distance_matrix_buil_usp24 <- st_distance(USP24, Top10NL_Buildings_allcampuses_24_rq1)
+
+nearest_buil_index_usp24 <- apply(distance_matrix_buil_usp24, 1, which.min)
+
+min_distances_buil_usp24 <- apply(distance_matrix_buil_usp24, 1, min)
+
+USP24$nearest_buil_id <- nearest_buil_index_usp24  # 
+USP24$distance_to_buil <- as.numeric(min_distances_buil_usp24)
+
+### Amsterdam Science Park
+distance_matrix_buil_uva24 <- st_distance(UvA24, Top10NL_Buildings_allcampuses_24_rq1)
+
+nearest_buil_index_uva24 <- apply(distance_matrix_buil_uva24, 1, which.min)
+
+min_distances_buil_uva24 <- apply(distance_matrix_buil_uva24, 1, min)
+
+UvA24$nearest_buil_id <- nearest_buil_index_uva24  # 
+UvA24$distance_to_buil <- as.numeric(min_distances_buil_uva24)
+
+## Join campuses with opportunistic observations in 23 and bioblitz in 24,25 
+Observations_2024_clip_lu_buil_analysis1 <- rbind(UvA24,USP24,Leiden_Bin24,Leiden_Biosc24,Leeuwarden_Van_Hall_Larenstein24,HAN_Arnhem24) 
+
+## create 5m bins
+Observations_2024_clip_lu_buil_analysis1$distance_to_buil_5mbin <- cut(Observations_2024_clip_lu_buil_analysis1$distance_to_buil, breaks = seq(0, max(Observations_2024_clip_lu_buil_analysis1$distance_to_buil) + 5, by = 5), right = FALSE, include.lowest = F)
+
+
+## get the median distance per campus: Campus --> median distance to nearest road/path (use the original distance) --> save --> then add all years in 1 csv file --> use for bias, added value
+
+Observations_2024_clip_lu_buil_analysis1_med <- Observations_2024_clip_lu_buil_analysis1 %>%
+  group_by(campus) %>%
+  summarise("X2024" = median(distance_to_buil))
+
+Observations_2024_clip_lu_buil_analysis1_med <- st_drop_geometry(Observations_2024_clip_lu_buil_analysis1_med)
+
+#### RQ2 only
+
+Nijmegen_campus_boundaries <- 
+campuses_boundaries_split$Nijmegen_campus
+
+Velp_Van_Hall_Larenstein_boundaries <- 
+campuses_boundaries_split$Velp_Landgoed_Larenstein
+
+Twente_university_campus_boundaries <- 
+campuses_boundaries_split$UT_campus
+
+TUDelft_boundaries <- 
+campuses_boundaries_split$Delft_TU_Campus
+
+WUR_main_campus_boundaries <- 
+campuses_boundaries_split$WUR_main_campus
+
+Groningen_Zernike_campus_boundaries <- 
+campuses_boundaries_split$Groningen_Zernike
+
+
+## build
+velp_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Velp_Van_Hall_Larenstein_boundaries)
+
+gro_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Groningen_Zernike_campus_boundaries)
+
+twente_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Twente_university_campus_boundaries)
+
+delft_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, TUDelft_boundaries)
+
+ruhan_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, Nijmegen_campus_boundaries)
+
+wur_build24 <- st_intersection(Top10NL_Buildings_allcampuses_rq2only, WUR_main_campus_boundaries)
+
+### Velp
+distance_matrix_buil_velp24 <- st_distance(Velp_Van_Hall_Larenstein24, Top10NL_Buildings_allcampuses_rq2only)
+
+nearest_buil_index_velp24 <- apply(distance_matrix_buil_velp24, 1, which.min)
+
+min_distances_buil_velp24 <- apply(distance_matrix_buil_velp24, 1, min)
+
+Velp_Van_Hall_Larenstein24$nearest_buil_id <- nearest_buil_index_velp24  # Nearest road index
+Velp_Van_Hall_Larenstein24$distance_to_buil <- as.numeric(min_distances_buil_velp24)
+
+
+## Groningen
+distance_matrix_buil_groningen24 <- st_distance(Groningen_Zernike_campus24, Top10NL_Buildings_allcampuses_rq2only)
+
+nearest_buil_index_groningen24 <- apply(distance_matrix_buil_groningen24, 1, which.min)
+
+min_distances_buil_groningen24 <- apply(distance_matrix_buil_groningen24, 1, min)
+
+Groningen_Zernike_campus24$nearest_buil_id <- nearest_buil_index_groningen24  
+Groningen_Zernike_campus24$distance_to_buil <- as.numeric(min_distances_buil_groningen24)
+
+## RU_HAN
+distance_matrix_buil_ruhan24 <- st_distance(Radboud_University_and_HAN_Nijmegen24, Top10NL_Buildings_allcampuses_rq2only)
+
+nearest_buil_index_ruhan24 <- apply(distance_matrix_buil_ruhan24, 1, which.min)
+
+min_distances_buil_ruhan24 <- apply(distance_matrix_buil_ruhan24, 1, min)
+
+Radboud_University_and_HAN_Nijmegen24$nearest_buil_id <- nearest_buil_index_ruhan24  
+Radboud_University_and_HAN_Nijmegen24$distance_to_buil <- as.numeric(min_distances_buil_ruhan24)
+
+### TUDelft
+distance_matrix_buil_delf24 <- st_distance(TUDelft24, Top10NL_Buildings_allcampuses_rq2only)
+
+nearest_buil_index_delf24 <- apply(distance_matrix_buil_delf24, 1, which.min)
+
+min_distances_buil_delf24 <- apply(distance_matrix_buil_delf24, 1, min)
+
+TUDelft24$nearest_buil_id <- nearest_buil_index_delf24  
+TUDelft24$distance_to_buil <- as.numeric(min_distances_buil_delf24)
+
+### Twente campus
+distance_matrix_buil_twe24 <- st_distance(Twente_university_campus24, Top10NL_Buildings_allcampuses_rq2only)
+
+nearest_buil_index_twe24 <- apply(distance_matrix_buil_twe24, 1, which.min)
+
+min_distances_buil_twe24 <- apply(distance_matrix_buil_twe24, 1, min)
+
+Twente_university_campus24$nearest_buil_id <- nearest_buil_index_twe24  
+Twente_university_campus24$distance_to_buil <- as.numeric(min_distances_buil_twe24)
+
+### WUR
+distance_matrix_buil_wur24 <- st_distance(WUR_main_campus24, Top10NL_Buildings_allcampuses_rq2only)
+
+nearest_buil_index_wur24 <- apply(distance_matrix_buil_wur24, 1, which.min)
+
+min_distances_buil_wur24 <- apply(distance_matrix_buil_wur24, 1, min)
+
+WUR_main_campus24$nearest_buil_id <- nearest_buil_index_wur24  
+WUR_main_campus24$distance_to_buil <- as.numeric(min_distances_buil_wur24)
+
+## Join campuses with bioblitz in 23,24,25 
+scope_buil_a2 <- rbind(WUR_main_campus24,TUDelft24,Velp_Van_Hall_Larenstein24,Twente_university_campus24,Radboud_University_and_HAN_Nijmegen24,Groningen_Zernike_campus24) 
+
+## create 5m bins
+scope_buil_a2$distance_to_buil_5mbin <- cut(scope_buil_a2$distance_to_buil, breaks = seq(0, max(scope_buil_a2$distance_to_buil) + 5, by = 5), right = FALSE, include.lowest = F)
+
+
+## get the median distance per campus: Campus --> median distance to nearest road/path (use the original distance) --> save --> then add all years in 1 csv file --> use for bias, added value
+
+scope_buil_a2_med <- scope_buil_a2 %>%
+  group_by(campus) %>%
+  summarise("X2024" = median(distance_to_buil))
+
+scope_buil_a2_med <- st_drop_geometry(scope_buil_a2_med)
+
+write.csv(scope_buil_a2_med,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Analysis2_Median_Buil24.csv")
+
+
+#### 2025
+
+### Leiden Bioscience Park
+distance_matrix_buil_leidbios25 <- st_distance(Leiden_Biosc25, Top10NL_Buildings_allcampuses_25)
+
+#### code description: then we find the column index with the nearest road or path --- The number "1" indicates that we check for each row the column with the lowest estimated values. So for each point we check the road id with the lowest estimated 
+
+nearest_buil_index_leidbios25 <- apply(distance_matrix_buil_leidbios25, 1, which.min)
+
+#### code description: then we find the row  with the lowest estimated road or path distance
+
+min_distances_buil_leidbios25 <- apply(distance_matrix_buil_leidbios25, 1, min)
+
+#### code description: then we add to our original data the id of the road or path with the lowest estimated distance
+
+Leiden_Biosc25$nearest_buil_id <- nearest_buil_index_leidbios25  # Nearest road index
+
+#### code description: then we add to our original data the actual distance of the nearest road or path 
+
+Leiden_Biosc25$distance_to_buil <- as.numeric(min_distances_buil_leidbios25)
+
+### Leiden Binnenstad
+distance_matrix_buil_leidbin25 <- st_distance(Leiden_Bin25, Top10NL_Buildings_allcampuses_25)
+
+nearest_buil_index_leidbin25 <- apply(distance_matrix_buil_leidbin25, 1, which.min)
+
+#### code description: then we find the row  with the lowest estimated road or path distance
+
+min_distances_buil_leidbin25 <- apply(distance_matrix_buil_leidbin25, 1, min)
+
+#### code description: then we add to our original data the id of the road or path with the lowest estimated distance
+
+Leiden_Bin25$nearest_buil_id <- nearest_buil_index_leidbin25  # Nearest road index
+
+#### code description: then we add to our original data the actual distance of the nearest road or path 
+
+Leiden_Bin25$distance_to_buil <- as.numeric(min_distances_buil_leidbin25)
+
+#### code description: first we estimate all the distance of all osbervations to all roads and paths 
+
+## HAN_Arnhem
+distance_matrix_buil_han_arnhem25 <- st_distance(HAN_Arnhem25, Top10NL_Buildings_allcampuses_25)
+
+# Find the nearest road and distance for each point
+# Get the index of the minimum distance for each point
+nearest_buil_index_han_arnhem25 <- apply(distance_matrix_buil_han_arnhem25, 1, which.min)
+
+# Get the minimum distances for each point
+min_distances_buil_han_arnhem25 <- apply(distance_matrix_buil_han_arnhem25, 1, min)
+
+# Add results to your_data
+HAN_Arnhem25$nearest_buil_id <- nearest_buil_index_han_arnhem25  # Nearest road index
+HAN_Arnhem25$distance_to_buil <- as.numeric(min_distances_buil_han_arnhem25)
+
+### Leeuwarden
+distance_matrix_buil_leeu25 <- st_distance(Leeuwarden_Van_Hall_Larenstein25, Top10NL_Buildings_allcampuses_25)
+
+nearest_buil_index_leeu25 <- apply(distance_matrix_buil_leeu25, 1, which.min)
+
+min_distances_buil_leeu25 <- apply(distance_matrix_buil_leeu25, 1, min)
+
+Leeuwarden_Van_Hall_Larenstein25$nearest_buil_id <- nearest_buil_index_leeu25  
+Leeuwarden_Van_Hall_Larenstein25$distance_to_buil <- as.numeric(min_distances_buil_leeu25)
+
+### USP
+distance_matrix_buil_usp25 <- st_distance(USP25, Top10NL_Buildings_allcampuses_25)
+
+nearest_buil_index_usp25 <- apply(distance_matrix_buil_usp25, 1, which.min)
+
+min_distances_buil_usp25 <- apply(distance_matrix_buil_usp25, 1, min)
+
+USP25$nearest_buil_id <- nearest_buil_index_usp25  # 
+USP25$distance_to_buil <- as.numeric(min_distances_buil_usp25)
+
+### Amsterdam Science Park
+distance_matrix_buil_uva25 <- st_distance(UvA25, Top10NL_Buildings_allcampuses_25)
+
+nearest_buil_index_uva25 <- apply(distance_matrix_buil_uva25, 1, which.min)
+
+min_distances_buil_uva25 <- apply(distance_matrix_buil_uva25, 1, min)
+
+UvA25$nearest_buil_id <- nearest_buil_index_uva25  # 
+UvA25$distance_to_buil <- as.numeric(min_distances_buil_uva25)
+
+## Join campuses with opportunistic observations in 23 and bioblitz in 24,25 
+Observations_2025_clip_lu_buil_analysis1 <- rbind(UvA25,USP25,Leiden_Bin25,Leiden_Biosc25,Leeuwarden_Van_Hall_Larenstein25,HAN_Arnhem25) 
+
+## create 5m bins
+Observations_2025_clip_lu_buil_analysis1$distance_to_buil_5mbin <- cut(Observations_2025_clip_lu_buil_analysis1$distance_to_buil, breaks = seq(0, max(Observations_2025_clip_lu_buil_analysis1$distance_to_buil) + 5, by = 5), right = FALSE, include.lowest = F)
+
+
+## get the median distance per campus: Campus --> median distance to nearest road/path (use the original distance) --> save --> then add all years in 1 csv file --> use for bias, added value
+
+Observations_2025_clip_lu_buil_analysis1_med <- Observations_2025_clip_lu_buil_analysis1 %>%
+  group_by(campus) %>%
+  summarise("X2025" = median(distance_to_buil))
+
+Observations_2025_clip_lu_buil_analysis1_med <- st_drop_geometry(Observations_2025_clip_lu_buil_analysis1_med)
+
+####### Now join as 1 table
+
+scope_buil_2023_24 <- left_join(Observations_2023_clip_lu_buil_analysis1_med,Observations_2024_clip_lu_buil_analysis1_med, by = "campus")
+
+
+scope_buil_2023_24_25 <- left_join(scope_buil_2023_24,Observations_2025_clip_lu_buil_analysis1_med, by = "campus")
+
+write.csv(scope_buil_2023_24_25,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Analysis1_Median_Buil23_24_25.csv")
+
+write.xlsx(scope_buil_2023_24_25,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Analysis1_Median_Buil23_24_25.xlsx")
+
+
