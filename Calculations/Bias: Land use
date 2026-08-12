@@ -1,0 +1,1232 @@
+
+#### Use data from "Pre-processing step"
+
+###-- RQ1,2 Opp 23 biob 24-25
+
+########## USP ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_usp <-subset(landuse_rearranged_all , campus == "USP")
+
+USP_landuse <- landuse_rearranged_usp 
+
+
+######### HAN_Arnhem ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_hanarn <-subset(landuse_rearranged_all, campus == "HAN_arnhem")
+
+HAN_ARN_landuse <- landuse_rearranged_hanarn 
+
+######## Leeuwarden_Van_Hall_Larenstein ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_leeu <-subset(landuse_rearranged_all, campus == "Leeuwarden_Van_Hall_Larenstein")
+
+Leeuwarden_landuse <- landuse_rearranged_leeu 
+
+
+######### Leiden_Binnenstad ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_leid_binn <-subset(landuse_rearranged_all, campus == "Leiden_Binnenstad")
+
+Leiden_binnen_landuse <- landuse_rearranged_leid_binn 
+
+
+
+######### Leiden_Bioscience park ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_leid_biosc <-subset(landuse_rearranged_all, campus == "Leiden_Bioscience_Park")
+
+Leiden_bioscpark_landuse <- landuse_rearranged_leid_biosc 
+
+######### Amsterdam_Science_Park ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_uva <-subset(landuse_rearranged_all, campus == "Amsterdam_Science_Park")
+
+uva_main_campus_landuse <- landuse_rearranged_uva 
+
+
+### --- RQ2 only, biob 23-25 
+######### Groningen_Zernike_campus ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_gro <-subset(landuse_rearranged_all, campus == "Groningen_Zernike")
+
+Groningen_landuse <- landuse_rearranged_gro 
+
+######### Nijmegen campus ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_nijm <-subset(landuse_rearranged_all, campus == "Nijmegen_campus")
+
+Nijmegen_landuse <- landuse_rearranged_nijm 
+
+######### TUDelft ###########
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_delft <-subset(landuse_rearranged_all, campus == "Delft_TU_Campus")
+
+delft_main_campus_landuse <- landuse_rearranged_delft 
+
+######### UT_campus ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_twe <-subset(landuse_rearranged_all, campus == "UT_campus")
+
+twente_main_campus_landuse <- landuse_rearranged_twe 
+
+######### Velp_Van_Hall_Larenstein ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_velp <-subset(landuse_rearranged_all, campus == "Velp_Landgoed_Larenstein")
+
+velp_main_campus_landuse <- landuse_rearranged_velp 
+
+######### WUR_main_campus ###########
+
+# rearrange estimated land use area from earlier steps 
+landuse_rearranged_wur <-subset(landuse_rearranged_all, campus == "WUR_main_campus")
+
+wur_main_campus_landuse <- landuse_rearranged_wur 
+
+
+##7.7 Run function: then replicate for observer
+
+######## Methodology
+## 1. Count what is the % of each land use area within each campus and for each year
+ 
+# 2. Then we need to assign this number as the expected number of observations so land use area% X total observations = expected observations per land use. 
+
+# We need to group the table as "land use, %, total observations, expected observations"
+
+# 3. Then we estimate the modified hoover index for each campus and year 
+
+# 4. We also estimate confidence intervals. 
+
+# Everything is according to backstrom 2025 methodology (journal p 77)
+
+## Note for both 2023 and 2024 i use land use data for 2024. If necessary i will extract also for 2023 but note that for now is not a priority. 
+
+######### Challenges: 
+
+#The estimated confidence values are extremely large: (i would expect only decimal difference based on backstrom). Upper 97.5% is frequently >> 1 
+
+## rq1, 2 opp 23 biob 24-25
+
+# The function is used to estimate hoover for a lot of random datasets to use as the confidence ranges (see code below)
+
+## function for all years common for all campuses --- replace with one common function for also observer
+Hoover_original_function_landuse <- function(obs_counts, expected_counts) {
+  expected_scaled <- expected_counts * (sum(obs_counts) / sum(expected_counts)) ### i had to scale because of much larger than 1 ratio result 
+  sum(abs(obs_counts - expected_scaled)) / (2 * sum(obs_counts))
+}
+
+
+## bootstrap function
+
+bootstrap_hoover <- function(obs_data, expected_landuse){
+
+  # Bootstrap the original observations
+  boot <- obs_data[sample(nrow(obs_data), replace = TRUE), ]
+
+  # Count observations per land-use class
+  boot_counts <- boot %>%
+    group_by(landuse_value2) %>%
+    summarise(total_observations = n(), .groups = "drop") %>%
+    rename(landuse_values = landuse_value2)
+
+  # Join with expected land-use table
+  merged <- left_join(expected_landuse, boot_counts,
+                      by = "landuse_values")
+
+  # Categories absent in the bootstrap sample get zero observations
+  merged$total_observations[is.na(merged$total_observations)] <- 0
+
+  # Expected counts
+  merged <- merged %>%
+    mutate(expected_obs = perc_area *
+             sum(total_observations) / 100)
+
+  # Hoover index
+  Hoover_original_function_landuse(
+    merged$total_observations,
+    merged$expected_obs
+  )
+}
+
+
+####### USP ##########
+
+## 2025 
+
+dist_comb_usp25 <-subset(Observations_2025_clip_lu, campus == "USP")
+dist_comb_usp25_counts <- dist_comb_usp25 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_usp25_counts <- st_drop_geometry(dist_comb_usp25_counts)
+
+dist_comb_usp25_counts <- dist_comb_usp25_counts %>%
+  rename(landuse_values = landuse_value2)
+
+usp25_merged <- left_join(dist_comb_usp25_counts,USP_landuse, by = "landuse_values" )
+
+
+## 2024 
+dist_comb_usp24 <-subset(Observations_2024_clip_lu, campus == "USP")
+dist_comb_usp24_counts <- dist_comb_usp24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_usp24_counts <- st_drop_geometry(dist_comb_usp24_counts)
+
+dist_comb_usp24_counts <- dist_comb_usp24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+usp24_merged <- left_join(dist_comb_usp24_counts,USP_landuse, by = "landuse_values" )
+
+### 2023 ---
+dist_comb_usp23 <-subset(Observations_2023_clip_lu, campus == "USP")
+dist_comb_usp23_counts <- dist_comb_usp23 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_usp23_counts <- st_drop_geometry(dist_comb_usp23_counts)
+
+dist_comb_usp23_counts <- dist_comb_usp23_counts %>%
+  rename(landuse_values = landuse_value2)
+
+usp23_merged <- left_join(dist_comb_usp23_counts,USP_landuse, by = "landuse_values" )
+
+###### Estimate expected observations estimation = total observations X % area cover 
+
+### i can use the n_obs_campus_year from the data preparation code
+
+## note: i deleted n_obs_... to save space . so i replace with the total observations visually what is best?
+
+## 2025
+usp25_obs_land_exp <- usp25_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+## 2024
+usp24_obs_land_exp <- usp24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+# 2023
+usp23_obs_land_exp <- usp23_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+
+#  Calculate Modified Hoover Index (H')
+
+# 2025
+Hoover_usp25_landuse <- sum(abs(usp25_obs_land_exp$total_observations - usp25_obs_land_exp$expected_obs)) / 
+      (2 * sum(usp25_obs_land_exp$total_observations))
+
+
+# 2024
+Hoover_usp24_landuse <- sum(abs(usp24_obs_land_exp$total_observations - usp24_obs_land_exp$expected_obs)) / 
+      (2 * sum(usp24_obs_land_exp$total_observations))
+
+# 2023
+Hoover_usp23_landuse <- sum(abs(usp23_obs_land_exp$total_observations - usp23_obs_land_exp$expected_obs)) / 
+      (2 * sum(usp23_obs_land_exp$total_observations))
+
+
+### Bootstrap
+
+#2025
+set.seed(123)
+
+Hoover_usp25_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_usp25,
+    USP_landuse
+  )
+)
+
+summary(Hoover_usp25_boot)
+
+Hoover_usp25_boot<-quantile(Hoover_usp25_boot,
+         c(0.025,0.975))
+
+#2024
+set.seed(123)
+
+Hoover_usp24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_usp24,
+    USP_landuse
+  )
+)
+
+summary(Hoover_usp24_boot)
+
+Hoover_usp24_boot<-quantile(Hoover_usp24_boot,
+         c(0.025,0.975))
+
+#2023
+set.seed(123)
+
+Hoover_usp23_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_usp23,
+    USP_landuse
+  )
+)
+
+summary(Hoover_usp23_boot)
+
+Hoover_usp23_boot<-quantile(Hoover_usp23_boot,
+         c(0.025,0.975))
+
+####### HAN Arnhem ##########
+
+## 2025 
+dist_comb_hanarn25 <-subset(Observations_2025_clip_lu, campus == "HAN_arnhem")
+
+dist_comb_hanarn25_counts <- dist_comb_hanarn25 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_hanarn25_counts <- st_drop_geometry(dist_comb_hanarn25_counts)
+
+dist_comb_hanarn25_counts <- dist_comb_hanarn25_counts %>%
+  rename(landuse_values = landuse_value2)
+
+hanarn25_merged <- left_join(dist_comb_hanarn25_counts,HAN_ARN_landuse, by = "landuse_values" )
+
+
+## 2024 
+dist_comb_hanarn24 <-subset(Observations_2024_clip_lu, campus == "HAN_arnhem")
+dist_comb_hanarn24_counts <- dist_comb_hanarn24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_hanarn24_counts <- st_drop_geometry(dist_comb_hanarn24_counts)
+
+dist_comb_hanarn24_counts <- dist_comb_hanarn24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+hanarn24_merged <- left_join(dist_comb_hanarn24_counts,HAN_ARN_landuse, by = "landuse_values" )
+
+### 2023 ---
+dist_comb_hanarn23 <-subset(Observations_2023_clip_lu, campus == "HAN_arnhem")
+dist_comb_hanarn23_counts <- dist_comb_hanarn23 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_hanarn23_counts <- st_drop_geometry(dist_comb_hanarn23_counts)
+dist_comb_hanarn23_counts <- dist_comb_hanarn23_counts %>%
+  rename(landuse_values = landuse_value2)
+
+hanarn23_merged <- left_join(dist_comb_hanarn23_counts,HAN_ARN_landuse, by = "landuse_values" )
+
+## 2025
+hanarn25_obs_land_exp <- hanarn25_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+## 2024
+hanarn24_obs_land_exp <- hanarn24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+# 2023
+hanarn23_obs_land_exp <- hanarn23_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+
+#  Calculate Modified Hoover Index (H')
+
+# 2025
+Hoover_hanarn25_landuse <- sum(abs(hanarn25_obs_land_exp$total_observations - hanarn25_obs_land_exp$expected_obs)) / 
+      (2 * sum(hanarn25_obs_land_exp$total_observations))
+
+# 2024
+Hoover_hanarn24_landuse <- sum(abs(hanarn24_obs_land_exp$total_observations - hanarn24_obs_land_exp$expected_obs)) / 
+      (2 * sum(hanarn24_obs_land_exp$total_observations))
+
+# 2023
+Hoover_hanarn23_landuse <- sum(abs(hanarn23_obs_land_exp$total_observations -hanarn23_obs_land_exp$expected_obs)) / 
+      (2 * sum(hanarn23_obs_land_exp$total_observations))
+
+### Bootstrap
+
+#2025
+set.seed(123)
+
+Hoover_hanarn25_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_hanarn25,
+    HAN_ARN_landuse
+  )
+)
+
+summary(Hoover_hanarn25_boot)
+
+Hoover_hanarn25_boot<-quantile(Hoover_hanarn25_boot,
+         c(0.025,0.975))
+
+#2024
+set.seed(123)
+
+Hoover_hanarn24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_hanarn24,
+    HAN_ARN_landuse
+  )
+)
+
+summary(Hoover_hanarn24_boot)
+
+Hoover_hanarn24_boot<-quantile(Hoover_hanarn24_boot,
+         c(0.025,0.975))
+
+#2023
+set.seed(123)
+
+Hoover_hanarn23_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_hanarn23,
+    HAN_ARN_landuse
+  )
+)
+
+summary(Hoover_hanarn23_boot)
+
+Hoover_hanarn23_boot<-quantile(Hoover_hanarn23_boot,
+         c(0.025,0.975))
+
+
+####### UvA ##########
+
+## 2025 
+
+dist_comb_uva25 <-subset(Observations_2025_clip_lu, campus == "Amsterdam_Science_Park")
+dist_comb_uva25_counts <- dist_comb_uva25 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_uva25_counts <- st_drop_geometry(dist_comb_uva25_counts)
+
+dist_comb_uva25_counts <- dist_comb_uva25_counts %>%
+  rename(landuse_values = landuse_value2)
+
+uva25_merged <- left_join(dist_comb_uva25_counts,uva_main_campus_landuse, by = "landuse_values" )
+
+
+## 2024 
+
+dist_comb_uva24 <-subset(Observations_2024_clip_lu, campus == "Amsterdam_Science_Park")
+dist_comb_uva24_counts <- dist_comb_uva24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_uva24_counts <- st_drop_geometry(dist_comb_uva24_counts)
+
+dist_comb_uva24_counts <- dist_comb_uva24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+uva24_merged <- left_join(dist_comb_uva24_counts,uva_main_campus_landuse, by = "landuse_values" )
+
+### 2023 ---
+dist_comb_uva23 <-subset(Observations_2023_clip_lu, campus == "Amsterdam_Science_Park")
+dist_comb_uva23_counts <- dist_comb_uva23 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_uva23_counts <- st_drop_geometry(dist_comb_uva23_counts)
+dist_comb_uva23_counts <- dist_comb_uva23_counts %>%
+  rename(landuse_values = landuse_value2)
+
+uva23_merged <- left_join(dist_comb_uva23_counts,uva_main_campus_landuse, by = "landuse_values" )
+
+## 2025
+uva25_obs_land_exp <- uva25_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+## 2024
+uva24_obs_land_exp <- uva24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+# 2023
+uva23_obs_land_exp <- uva23_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+
+#  Calculate Modified Hoover Index (H')
+
+# 2025
+Hoover_uva25_landuse <- sum(abs(uva25_obs_land_exp$total_observations - uva25_obs_land_exp$expected_obs)) / 
+      (2 * sum(uva25_obs_land_exp$total_observations))
+
+
+# 2024
+Hoover_uva24_landuse <- sum(abs(uva24_obs_land_exp$total_observations - uva24_obs_land_exp$expected_obs)) / 
+      (2 * sum(uva24_obs_land_exp$total_observations))
+
+# 2023
+
+Hoover_uva23_landuse <- sum(abs(uva23_obs_land_exp$total_observations -uva23_obs_land_exp$expected_obs)) / 
+      (2 * sum(uva23_obs_land_exp$total_observations))
+
+
+### Bootstrap
+
+#2025
+set.seed(123)
+
+Hoover_uva25_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_uva25,
+    uva_main_campus_landuse
+  )
+)
+
+summary(Hoover_uva25_boot)
+
+Hoover_uva25_boot<-quantile(Hoover_uva25_boot,
+         c(0.025,0.975))
+
+#2024
+set.seed(123)
+
+Hoover_uva24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_uva24,
+    uva_main_campus_landuse
+  )
+)
+
+summary(Hoover_uva24_boot)
+
+Hoover_uva24_boot<-quantile(Hoover_uva24_boot,
+         c(0.025,0.975))
+
+#2023
+set.seed(123)
+
+Hoover_uva23_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_uva23,
+    uva_main_campus_landuse
+  )
+)
+
+summary(Hoover_uva23_boot)
+
+Hoover_uva23_boot<-quantile(Hoover_uva23_boot,
+         c(0.025,0.975))
+
+
+
+####### Leiden Bioscience Park ##########
+
+## 2025 
+dist_comb_leibios25 <-subset(Observations_2025_clip_lu, campus == "Leiden_Bioscience_Park")
+dist_comb_leibios25_counts <- dist_comb_leibios25 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leibios25_counts <- st_drop_geometry(dist_comb_leibios25_counts)
+dist_comb_leibios25_counts <- dist_comb_leibios25_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leibios25_merged <- left_join(dist_comb_leibios25_counts,Leiden_bioscpark_landuse, by = "landuse_values" )
+
+
+## 2024 
+dist_comb_leibios24 <-subset(Observations_2024_clip_lu, campus == "Leiden_Bioscience_Park")
+dist_comb_leibios24_counts <- dist_comb_leibios24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leibios24_counts <- st_drop_geometry(dist_comb_leibios24_counts)
+dist_comb_leibios24_counts <- dist_comb_leibios24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leibios24_merged <- left_join(dist_comb_leibios24_counts,Leiden_bioscpark_landuse, by = "landuse_values" )
+
+### 2023 ---
+dist_comb_leibios23 <-subset(Observations_2023_clip_lu, campus == "Leiden_Bioscience_Park")
+dist_comb_leibios23_counts <- dist_comb_leibios23 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leibios23_counts <- st_drop_geometry(dist_comb_leibios23_counts)
+dist_comb_leibios23_counts <- dist_comb_leibios23_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leibios23_merged <- left_join(dist_comb_leibios23_counts,Leiden_bioscpark_landuse, by = "landuse_values" )
+
+## 2025
+leibios25_obs_land_exp <- leibios25_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+## 2024
+leibios24_obs_land_exp <- leibios24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+# 2023
+leibios23_obs_land_exp <- leibios23_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+
+#  Calculate Modified Hoover Index (H')
+
+# 2025
+Hoover_leibios25_landuse <- sum(abs(leibios25_obs_land_exp$total_observations - leibios25_obs_land_exp$expected_obs)) / 
+      (2 * sum(leibios25_obs_land_exp$total_observations))
+
+# 2024
+Hoover_leibios24_landuse <- sum(abs(leibios24_obs_land_exp$total_observations - leibios24_obs_land_exp$expected_obs)) / 
+      (2 * sum(leibios24_obs_land_exp$total_observations))
+
+# 2023
+
+Hoover_leibios23_landuse <- sum(abs(leibios23_obs_land_exp$total_observations -leibios23_obs_land_exp$expected_obs)) / 
+      (2 * sum(leibios23_obs_land_exp$total_observations))
+
+### Bootstrap
+
+#2025
+set.seed(123)
+
+Hoover_leibios25_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leibios25,
+    Leiden_bioscpark_landuse
+  )
+)
+
+summary(Hoover_leibios25_boot)
+
+Hoover_leibios25_boot<-quantile(Hoover_leibios25_boot,
+         c(0.025,0.975))
+
+#2024
+set.seed(123)
+
+Hoover_leibios24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leibios24,
+    Leiden_bioscpark_landuse
+  )
+)
+
+summary(Hoover_leibios24_boot)
+
+Hoover_leibios24_boot<-quantile(Hoover_leibios24_boot,
+         c(0.025,0.975))
+
+#2023
+set.seed(123)
+
+Hoover_leibios23_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leibios23,
+    Leiden_bioscpark_landuse
+  )
+)
+
+summary(Hoover_leibios23_boot)
+
+Hoover_leibios23_boot<-quantile(Hoover_leibios23_boot,
+         c(0.025,0.975))
+
+
+####### Leiden Binnenstad ##########
+
+## 2025 
+dist_comb_leibin25 <-subset(Observations_2025_clip_lu, campus == "Leiden_Binnenstad")
+dist_comb_leibin25_counts <- dist_comb_leibin25 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leibin25_counts <- st_drop_geometry(dist_comb_leibin25_counts)
+
+dist_comb_leibin25_counts <- dist_comb_leibin25_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leibin25_merged <- left_join(dist_comb_leibin25_counts,Leiden_binnen_landuse, by = "landuse_values" )
+
+
+## 2024 
+dist_comb_leibin24 <-subset(Observations_2024_clip_lu, campus == "Leiden_Binnenstad")
+dist_comb_leibin24_counts <- dist_comb_leibin24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leibin24_counts <- st_drop_geometry(dist_comb_leibin24_counts)
+dist_comb_leibin24_counts <- dist_comb_leibin24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leibin24_merged <- left_join(dist_comb_leibin24_counts,Leiden_binnen_landuse, by = "landuse_values" )
+
+### 2023 ---
+dist_comb_leibin23 <-subset(Observations_2023_clip_lu, campus == "Leiden_Binnenstad")
+dist_comb_leibin23_counts <- dist_comb_leibin23 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leibin23_counts <- st_drop_geometry(dist_comb_leibin23_counts)
+dist_comb_leibin23_counts <- dist_comb_leibin23_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leibin23_merged <- left_join(dist_comb_leibin23_counts,Leiden_binnen_landuse, by = "landuse_values" )
+
+## 2025
+leibin25_obs_land_exp <- leibin25_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+## 2024
+leibin24_obs_land_exp <- leibin24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+# 2023
+leibin23_obs_land_exp <- leibin23_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+
+#  Calculate Modified Hoover Index (H')
+
+# 2025
+Hoover_leibin25_landuse <- sum(abs(leibin25_obs_land_exp$total_observations - leibin25_obs_land_exp$expected_obs)) / 
+      (2 * sum(leibin25_obs_land_exp$total_observations))
+
+# 2024
+Hoover_leibin24_landuse <- sum(abs(leibin24_obs_land_exp$total_observations - leibin24_obs_land_exp$expected_obs)) / 
+      (2 * sum(leibin24_obs_land_exp$total_observations))
+
+# 2023
+Hoover_leibin23_landuse <- sum(abs(leibin23_obs_land_exp$total_observations -leibin23_obs_land_exp$expected_obs)) / 
+      (2 * sum(leibin23_obs_land_exp$total_observations))
+
+
+### Bootstrap
+
+#2025
+set.seed(123)
+
+Hoover_leibin25_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leibin25,
+    Leiden_binnen_landuse
+  )
+)
+
+summary(Hoover_leibin25_boot)
+
+Hoover_leibin25_boot<-quantile(Hoover_leibin25_boot,
+         c(0.025,0.975))
+
+#2024
+set.seed(123)
+
+Hoover_leibin24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leibin24,
+    Leiden_binnen_landuse
+  )
+)
+
+summary(Hoover_leibin24_boot)
+
+Hoover_leibin24_boot<-quantile(Hoover_leibin24_boot,
+         c(0.025,0.975))
+
+#2023
+set.seed(123)
+
+Hoover_leibin23_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leibin23,
+    Leiden_binnen_landuse
+  )
+)
+
+summary(Hoover_leibin23_boot)
+
+Hoover_leibin23_boot<-quantile(Hoover_leibin23_boot,
+         c(0.025,0.975))
+
+
+
+####### Leeuwarden Van Hall Larenstein ##########
+
+## 2025 
+
+dist_comb_leeu25 <-subset(Observations_2025_clip_lu, campus == "Leeuwarden_Van_Hall_Larenstein")
+dist_comb_leeu25_counts <- dist_comb_leeu25 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leeu25_counts <- st_drop_geometry(dist_comb_leeu25_counts)
+
+dist_comb_leeu25_counts <- dist_comb_leeu25_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leeu25_merged <- left_join(dist_comb_leeu25_counts,Leeuwarden_landuse, by = "landuse_values" )
+
+
+## 2024 
+
+dist_comb_leeu24 <-subset(Observations_2024_clip_lu, campus == "Leeuwarden_Van_Hall_Larenstein")
+dist_comb_leeu24_counts <- dist_comb_leeu24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leeu24_counts <- st_drop_geometry(dist_comb_leeu24_counts)
+
+dist_comb_leeu24_counts <- dist_comb_leeu24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leeu24_merged <- left_join(dist_comb_leeu24_counts,Leeuwarden_landuse, by = "landuse_values" )
+
+### 2023 ---
+dist_comb_leeu23 <-subset(Observations_2023_clip_lu, campus == "Leeuwarden_Van_Hall_Larenstein")
+
+dist_comb_leeu23_counts <- dist_comb_leeu23 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_leeu23_counts <- st_drop_geometry(dist_comb_leeu23_counts)
+dist_comb_leeu23_counts <- dist_comb_leeu23_counts %>%
+  rename(landuse_values = landuse_value2)
+
+leeu23_merged <- left_join(dist_comb_leeu23_counts,Leeuwarden_landuse, by = "landuse_values" )
+
+## 2025
+leeu25_obs_land_exp <- leeu25_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+## 2024
+leeu24_obs_land_exp <- leeu24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+# 2023
+leeu23_obs_land_exp <- leeu23_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+#  Calculate Modified Hoover Index (H')
+
+# 2025
+Hoover_leeu25_landuse <- sum(abs(leeu25_obs_land_exp$total_observations - leeu25_obs_land_exp$expected_obs)) / 
+      (2 * sum(leeu25_obs_land_exp$total_observations))
+
+# 2024
+Hoover_leeu24_landuse <- sum(abs(leeu24_obs_land_exp$total_observations - leeu24_obs_land_exp$expected_obs)) / 
+      (2 * sum(leeu24_obs_land_exp$total_observations))
+
+# 2023
+Hoover_leeu23_landuse <- sum(abs(leeu23_obs_land_exp$total_observations -leeu23_obs_land_exp$expected_obs)) / 
+      (2 * sum(leeu23_obs_land_exp$total_observations))
+
+
+
+### Bootstrap
+
+#2025
+set.seed(123)
+
+Hoover_leeu25_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leeu25,
+    Leeuwarden_landuse
+  )
+)
+
+summary(Hoover_leeu25_boot)
+
+Hoover_leeu25_boot<-quantile(Hoover_leeu25_boot,
+         c(0.025,0.975))
+
+#2024
+set.seed(123)
+
+Hoover_leeu24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leeu24,
+    Leeuwarden_landuse
+  )
+)
+
+summary(Hoover_leeu24_boot)
+
+Hoover_leeu24_boot<-quantile(Hoover_leeu24_boot,
+         c(0.025,0.975))
+
+#2023
+set.seed(123)
+
+Hoover_leeu23_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_leeu23,
+    Leeuwarden_landuse
+  )
+)
+
+summary(Hoover_leeu23_boot)
+
+Hoover_leeu23_boot<-quantile(Hoover_leeu23_boot,
+         c(0.025,0.975))
+
+
+### MHI values table 
+bias_a1_landuse <- tibble(
+  campus = c("USP","HAN_Arnhem","UvA", "Leiden_Bioscience","Leiden_Binnenstad","Leeuwarden_Van_Hall_Larenstein"
+),
+  "X2023" = c(Hoover_usp23_landuse,Hoover_hanarn23_landuse,Hoover_uva23_landuse, Hoover_leibios23_landuse,Hoover_leibin23_landuse,Hoover_leeu23_landuse),
+  "X2024" = c(Hoover_usp24_landuse,Hoover_hanarn24_landuse,Hoover_uva24_landuse,Hoover_leibios24_landuse,Hoover_leibin24_landuse,Hoover_leeu24_landuse),
+  "X2025" = c(Hoover_usp25_landuse,Hoover_hanarn25_landuse,Hoover_uva25_landuse,Hoover_leibios25_landuse,Hoover_leibin25_landuse,Hoover_leeu25_landuse)
+)
+
+write.csv(bias_a1_landuse,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHILanduse_a1.csv")
+
+### for boxplot
+
+bias_landuse_a1_long <- bias_a1_landuse %>%
+     rename(
+       "2023" = `X2023`,
+       "2024" = `X2024`,
+       "2025" = `X2025`
+     )
+
+bias_a1_landuse_long <- bias_landuse_a1_long %>%
+  tidyr::pivot_longer(
+    cols = "2023":"2025",
+    names_to = "year",
+    values_to = "value"
+  )
+write.csv(bias_landuse_a1_long,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIlanduse_a1_box.csv")
+
+
+##### Bootstrap table
+
+bias_a1_landuse_CI <- data.frame(
+  bias_a1_landuse,
+  "2023_2.5%" = c(Hoover_usp23_boot[1],Hoover_hanarn23_boot[1],Hoover_uva23_boot[1], Hoover_leibios23_boot[1],Hoover_leibin23_boot[1], Hoover_leeu23_boot[1]),
+  "2023_97.5%" = c(Hoover_usp23_boot[2],Hoover_hanarn23_boot[2],Hoover_uva23_boot[2], Hoover_leibios23_boot[2],Hoover_leibin23_boot[2], Hoover_leeu23_boot[2]),
+  "2024_2.5%" = c(Hoover_usp24_boot[1],Hoover_hanarn24_boot[1],Hoover_uva24_boot[1], Hoover_leibios24_boot[1],Hoover_leibin24_boot[1], Hoover_leeu24_boot[1]),
+  "2024_97.5%" = c(Hoover_usp24_boot[2],Hoover_hanarn24_boot[2],Hoover_uva24_boot[2], Hoover_leibios24_boot[2],Hoover_leibin24_boot[2], Hoover_leeu24_boot[2]),
+  "2025_2.5%" = c(Hoover_usp25_boot[1],Hoover_hanarn25_boot[1],Hoover_uva25_boot[1], Hoover_leibios25_boot[1],Hoover_leibin25_boot[1], Hoover_leeu25_boot[1]),
+  "2025_97.5%" = c(Hoover_usp25_boot[2],Hoover_hanarn25_boot[2],Hoover_uva25_boot[2], Hoover_leibios25_boot[2],Hoover_leibin25_boot[2], Hoover_leeu25_boot[2])
+)
+
+bias_a1_landuse_CI <- bias_a1_landuse_CI %>%
+  mutate(
+    X2023 = round(X2023, 2),
+    X2024 = round(X2024, 2),
+    X2025 = round(X2025, 2),
+    X2023_2.5. = round(X2023_2.5., 4),
+    X2024_2.5. = round(X2024_2.5., 4), 
+    X2025_2.5. = round(X2025_2.5., 4), 
+    X2023_97.5. = round(X2023_97.5., 4),
+    X2024_97.5. = round(X2024_97.5., 4), 
+    X2025_97.5. = round(X2025_97.5., 4), 
+  )
+
+write.csv(bias_a1_landuse_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIlanduse_a1_CI.csv")
+
+
+
+write.xlsx(bias_a1_landuse_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIlanduse_a1_CI.xlsx")
+
+## -- Rq2 only bioblitz 23-25
+
+####### WUR main campus ##########
+
+## 2024 
+dist_comb_wur24 <-subset(Observations_2024_clip_lu2, campus == "WUR_main_campus")
+dist_comb_wur24_counts <- dist_comb_wur24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_wur24_counts <- st_drop_geometry(dist_comb_wur24_counts)
+
+dist_comb_wur24_counts <- dist_comb_wur24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+wur24_merged <- left_join(dist_comb_wur24_counts,wur_main_campus_landuse, by = "landuse_values" )
+
+wur24_obs_land_exp <- wur24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+Hoover_wur24_landuse <- sum(abs(wur24_obs_land_exp$total_observations - wur24_obs_land_exp$expected_obs)) / 
+      (2 * sum(wur24_obs_land_exp$total_observations))
+
+Hoover_wur24_landuse_obscount <- wur24_obs_land_exp$total_observations
+Hoover_wur24_landuse_expcount <- wur24_obs_land_exp$expected_obs
+
+
+### Bootstrap
+
+#2024
+set.seed(123)
+
+Hoover_wur24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_wur24,
+    wur_main_campus_landuse
+  )
+)
+
+summary(Hoover_wur24_boot)
+
+Hoover_wur24_boot<-quantile(Hoover_wur24_boot,
+         c(0.025,0.975))
+
+
+
+####### Nijmegen campus ##########
+
+## 2024 
+dist_comb_nij24 <-subset(Observations_2024_clip_lu2, campus == "Nijmegen_campus")
+dist_comb_nij24_counts <- dist_comb_nij24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_nij24_counts <- st_drop_geometry(dist_comb_nij24_counts)
+dist_comb_nij24_counts <- dist_comb_nij24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+nij24_merged <- left_join(dist_comb_nij24_counts,Nijmegen_landuse, by = "landuse_values" )
+
+nij24_obs_land_exp <- nij24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+Hoover_nij24_landuse <- sum(abs(nij24_obs_land_exp$total_observations - nij24_obs_land_exp$expected_obs)) / 
+      (2 * sum(nij24_obs_land_exp$total_observations))
+
+Hoover_nij24_landuse_obscount <- nij24_obs_land_exp$total_observations
+Hoover_nij24_landuse_expcount <- nij24_obs_land_exp$expected_obs
+
+#2024
+set.seed(123)
+
+Hoover_nij24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_nij24,
+    Nijmegen_landuse
+  )
+)
+
+summary(Hoover_nij24_boot)
+
+Hoover_nij24_boot<-quantile(Hoover_nij24_boot,
+         c(0.025,0.975))
+
+####### Velp_Landgoed_Larenstein ##########
+
+## 2024 
+dist_comb_vel24 <-subset(Observations_2024_clip_lu2, campus == "Velp_Landgoed_Larenstein")
+dist_comb_vel24_counts <- dist_comb_vel24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_vel24_counts <- st_drop_geometry(dist_comb_vel24_counts)
+dist_comb_vel24_counts <- dist_comb_vel24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+vel24_merged <- left_join(dist_comb_vel24_counts,velp_main_campus_landuse, by = "landuse_values" )
+
+vel24_obs_land_exp <- vel24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+Hoover_vel24_landuse <- sum(abs(vel24_obs_land_exp$total_observations - vel24_obs_land_exp$expected_obs)) / 
+      (2 * sum(vel24_obs_land_exp$total_observations))
+
+Hoover_vel24_landuse_obscount <- vel24_obs_land_exp$total_observations
+Hoover_vel24_landuse_expcount <- vel24_obs_land_exp$expected_obs
+
+#2024
+set.seed(123)
+
+Hoover_vel24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_vel24,
+    velp_main_campus_landuse
+  )
+)
+
+summary(Hoover_vel24_boot)
+
+Hoover_vel24_boot<-quantile(Hoover_vel24_boot,
+         c(0.025,0.975))
+
+####### UT_campus ##########
+
+## 2024 
+dist_comb_ut24 <-subset(Observations_2024_clip_lu2, campus == "UT_campus")
+dist_comb_ut24_counts <- dist_comb_ut24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_ut24_counts <- st_drop_geometry(dist_comb_ut24_counts)
+
+dist_comb_ut24_counts <- dist_comb_ut24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+ut24_merged <- left_join(dist_comb_ut24_counts,twente_main_campus_landuse, by = "landuse_values" )
+
+ut24_obs_land_exp <- ut24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+Hoover_ut24_landuse <- sum(abs(ut24_obs_land_exp$total_observations - ut24_obs_land_exp$expected_obs)) / 
+      (2 * sum(ut24_obs_land_exp$total_observations))
+
+Hoover_ut24_landuse_obscount <- ut24_obs_land_exp$total_observations
+Hoover_ut24_landuse_expcount <- ut24_obs_land_exp$expected_obs
+
+#2024
+set.seed(123)
+
+Hoover_ut24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_ut24,
+    twente_main_campus_landuse
+  )
+)
+
+summary(Hoover_ut24_boot)
+
+Hoover_ut24_boot<-quantile(Hoover_ut24_boot,
+         c(0.025,0.975))
+
+####### Delft_TU_Campus ##########
+
+## 2024 
+
+dist_comb_del24 <-subset(Observations_2024_clip_lu2, campus == "Delft_TU_Campus")
+dist_comb_del24_counts <- dist_comb_del24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_del24_counts <- st_drop_geometry(dist_comb_del24_counts)
+
+dist_comb_del24_counts <- dist_comb_del24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+del24_merged <- left_join(dist_comb_del24_counts,delft_main_campus_landuse, by = "landuse_values" )
+
+del24_obs_land_exp <- del24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+Hoover_del24_landuse <- sum(abs(del24_obs_land_exp$total_observations - del24_obs_land_exp$expected_obs)) / 
+      (2 * sum(del24_obs_land_exp$total_observations))
+
+Hoover_del24_landuse_obscount <- del24_obs_land_exp$total_observations
+Hoover_del24_landuse_expcount <- del24_obs_land_exp$expected_obs
+
+#2024
+set.seed(123)
+
+Hoover_del24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_del24,
+    delft_main_campus_landuse
+  )
+)
+
+summary(Hoover_del24_boot)
+
+Hoover_del24_boot<-quantile(Hoover_del24_boot,
+         c(0.025,0.975))
+
+####### Groningen_Zernike ##########
+
+## 2024 
+
+dist_comb_gro24 <-subset(Observations_2024_clip_lu2, campus == "Groningen_Zernike")
+dist_comb_gro24_counts <- dist_comb_gro24 %>% 
+  group_by(landuse_value2) %>%
+  summarise(total_observations = n())
+
+dist_comb_gro24_counts <- st_drop_geometry(dist_comb_gro24_counts)
+
+dist_comb_gro24_counts <- dist_comb_gro24_counts %>%
+  rename(landuse_values = landuse_value2)
+
+gro24_merged <- left_join(dist_comb_gro24_counts,Groningen_landuse, by = "landuse_values" )
+
+## 2024
+gro24_obs_land_exp <- gro24_merged %>%
+  mutate(expected_obs = perc_area*sum(total_observations)/100)
+
+Hoover_gro24_landuse <- sum(abs(gro24_obs_land_exp$total_observations - gro24_obs_land_exp$expected_obs)) / 
+      (2 * sum(gro24_obs_land_exp$total_observations))
+
+Hoover_gro24_landuse_obscount <- gro24_obs_land_exp$total_observations
+Hoover_gro24_landuse_expcount <- gro24_obs_land_exp$expected_obs
+
+#2024
+set.seed(123)
+
+Hoover_gro24_boot <- replicate(
+  1000,
+  bootstrap_hoover(
+    dist_comb_gro24,
+    Groningen_landuse
+  )
+)
+
+summary(Hoover_gro24_boot)
+
+Hoover_gro24_boot<-quantile(Hoover_gro24_boot,
+         c(0.025,0.975))
+
+### join MHI land use values as a table
+bias_a2_landuse <- tibble(
+  campus = c("WUR_main_campus","Nijmegen_campus","Velp_Landgoed_Larenstein","UT_campus", "Delft_TU_Campus","Groningen_Zernike"
+),
+  "X2024" = c(Hoover_wur24_landuse,Hoover_nij24_landuse,Hoover_vel24_landuse,Hoover_ut24_landuse,Hoover_del24_landuse,Hoover_gro24_landuse)
+  
+)
+
+write.csv(bias_a2_landuse,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHILanduse_a2.csv")
+
+
+## join bootstrap values
+
+bias_a2_landuse_CI <- data.frame(
+  bias_a2_landuse,
+  "conf_low" = c(Hoover_wur24_boot[1],Hoover_nij24_boot[1],Hoover_vel24_boot[1],Hoover_ut24_boot[1],Hoover_del24_boot[1],Hoover_gro24_boot[1]),
+  "conf_high" = c(Hoover_wur24_boot[2],Hoover_nij24_boot[2],Hoover_vel24_boot[2],Hoover_ut24_boot[2],Hoover_del24_boot[2],Hoover_gro24_boot[2])
+)
+
+bias_a2_landuse_CI <- bias_a2_landuse_CI %>%
+  mutate(
+    X2024 = round(X2024, 2),
+    conf_low   = round(conf_low  , 4), 
+    conf_high = round(conf_high, 4)
+  )
+
+write.csv(bias_a2_landuse_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIlanduse_a2_CI.csv")
+
+write.xlsx(bias_a2_landuse_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIlanduse_a2_CI.xlsx")
+
