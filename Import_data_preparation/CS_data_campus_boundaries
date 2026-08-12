@@ -1,0 +1,326 @@
+
+##### ------ 1. Merge polygons ------ #######
+
+# Import all campus polygons
+campus_boundaries <- st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/July_analysis/campus_NL.shp") 
+
+### Join  polygons with a nearest distance <=200m from each other 
+distance_boundaries <- 200 #meters
+
+
+## Get the euclidean distance of the two nearest edges of each polygon 
+pols_as_campus <- st_is_within_distance(campus_boundaries,campus_boundaries,distance_boundaries)
+
+# Create groups of polygons connected by distance 
+pols_as_campus_groups <- graph_from_adj_list(pols_as_campus)
+
+## Get a cluster id (membership) and assign each polygon from the campus boundary file to a membership 
+campus_boundaries$group <- components(pols_as_campus_groups)$membership
+
+# Merge polygons in each group based on the newly assigned "group" value. This is done through the summarize (st_union). Furthermore, merged_values = list() adds all the polygon names we joined as a list so i can use them for the analysis. The mutate() makes the polygon names readable
+
+campus_boundaries_merged <- campus_boundaries %>%
+  group_by(group) %>%
+  summarise(geometry = st_union(geometry),
+  merged_values = list(Name)) %>%
+   mutate(campus = sapply(merged_values, paste, collapse = ", "))
+
+##### ---- 2. Based on the merged campus, we rename the polygons with spaces ---- ####
+
+# All polygon locations were visually inspected by compared to Open Street Maps. Polygons that did not correspond to a main campus were classified accordingly and excluded from further analysis 
+
+## Nijmegen campus
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Nijmegen - Heijendaal, HAN University of Applied Sciences Prof. Molkenboerstraat 3, HAN University of Applied Sciences - Albertinum, HAN University of Applied Sciences - Campus Nijmegen, HAN University of Applied Sciences GWW1, HAN University of Applied Sciences Heyendaalseweg 141")] <- "Nijmegen_campus"
+
+# Avans Breda
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Avans Hogeschool Lovendijkstraat, Avans Hogeschoollaan")] <- "Avans_Breda"
+
+# Avans Hertogenbosch
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Avans Hogeschool Onderwijsboulevard 215, Avans Hogeschool Statenlaan 29-67, Avans Hogeschool Onderwijsboulevard 256")] <- "Avans_Hertogenbosch"
+
+# Leiden_Binnenstad
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Campus Binnenstad Leiden KOG, Campus Binnenstad Oude UB, Campus Binnenstad Leiden Humanities Campus en Hortus")] <- "Leiden_Binnenstad"
+
+# WUR_main_campus
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Wageningen - Kielekampsteeg, Wageningen - Campus, Proefveldjes prof Piet Zonneveld")] <- "WUR_main_campus"
+
+# WUR NOT main campus (research sites)
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("IJmuiden - Wageningen Marine Research","WUR glastuinbouw Bleiswijk","WUR Proeftuin Randwijk","WUR Valthermond BioBlitz 2024","WUR De Marke BioBlitz 2024", "WUR Vredepeel proefvlak_1 BioBlitz 2024, WUR Vredepeel proefvlak_2 BioBlitz 2024",  "WUR Lelystad WBVR BioBlitz 2024" )] <- "WUR_Not_main_campus"
+
+# Not universities!!
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Vroege Vogels - Ooijpolder 1, Vroege Vogels - Ooijpolder 2","Lelystad - Runderweg, Lelystad - Edelhertweg e.o.","Polder Boksum")] <- "Not_main_campuses"
+
+## Remove locations that dont correspond to campuses (research sites, polders)
+campus_boundaries_merged <- campus_boundaries_merged[!campus_boundaries_merged$campus %in% c("WUR_NOT_main_campus","Not_main_campuses"), ]
+
+#### ----- 3. Import Citizen science observations and assign to corresponding campus ----- ##### 
+
+## Import 2023, 2024, 2025 datasets
+Observations_2023 <- read.csv("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/Waarneming2023/Universities_of_Applied_Sciences/bioblitz-hoger-onderwijs-bloeit-waarnemingen.csv",sep = ";")
+
+Observations_2024 <- read.csv("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/Bioblitz2024/bioblitz-hoger-onderwijs-bloeit-waarnemingen.csv",sep = ";")
+
+Observations_2025 <- read.csv("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/2025/bioblitz-hoger-onderwijs-bloeit-2025.csv/observation-2025-10-30-16-17-bioblitz-hoger-onderwijs-bloeit-2025-waarnemingen.csv",sep = ",")
+
+
+## First we need to convert the observation data into sf format
+
+# 2023
+
+# Data cleaning: I choose to use the local.x, y coordinates which are already projected in 28992. However, the code receives a comment stating NA coordinates for some points. Therefore, i remove these entries.
+
+Observations_2023$local.x <- as.numeric(gsub("[^0-9.-]", "", Observations_2023$local.x))
+Observations_2023$local.y <- as.numeric(gsub("[^0-9.-]", "", Observations_2023$local.y))
+
+# Remove rows with missing coordinates
+Observations_2023_clean <- Observations_2023[!is.na(Observations_2023$local.x) & !is.na(Observations_2023$local.y), ]
+
+# Convert to sf
+Observations_2023_sf <- st_as_sf(Observations_2023_clean, coords = c("local.x", "local.y"), crs = 28992)
+
+### 2024
+
+# Remove rows with missing coordinates
+
+Observations_2024_sf <- st_as_sf(Observations_2024, coords = c("local.x", "local.y"), crs = 28992)
+
+### 2025
+Observations_2025_sf <- st_as_sf(Observations_2025, coords = c("local.x", "local.y"), crs = 28992)
+
+#### ----- 4. Extract observations per campus and filter to only keep campuses with > 100 observations (explained in methods) in each year ----- ##### 
+
+
+### Clip observations based on boundaries. This also shows in WHICH campus does each observation correspond to!!
+
+Observations_2023_clip <- st_intersection(Observations_2023_sf, campus_boundaries_merged)
+
+Observations_2024_clip <- st_intersection(Observations_2024_sf, campus_boundaries_merged)
+
+Observations_2025_clip <- st_intersection(Observations_2025_sf, campus_boundaries_merged)
+
+#2023
+Total_observations_2023 <- Observations_2023_clip %>%
+  group_by(campus) %>%
+  summarise(total_observations_23 = n()) %>%
+  filter(total_observations_23 >= 100)
+
+Total_observations_2023 <- st_drop_geometry(Total_observations_2023)
+
+#2024
+Total_observations_2024 <- Observations_2024_clip %>%
+  group_by(campus) %>%
+  summarise(total_observations_24 = n()) %>%
+  filter(total_observations_24 >= 100)
+
+Total_observations_2024 <- st_drop_geometry(Total_observations_2024)
+
+#2025
+Total_observations_2025 <- Observations_2025_clip %>%
+  group_by(campus) %>%
+  summarise(total_observations_25 = n()) %>%
+  filter(total_observations_25 >= 100)
+
+Total_observations_2025 <- st_drop_geometry(Total_observations_2025)
+
+## join in one table
+Total_observations_2023_24 <- left_join(Total_observations_2023,Total_observations_2024, by = "campus")
+
+Total_observations_23_24_25 <- left_join(Total_observations_2023_24,Total_observations_2025, by = "campus") %>%
+  filter(campus != "WUR_Not_main_campus")
+
+##  rename campus names to remove spaces
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("Leeuwarden - Van Hall Larenstein")] <- "Leeuwarden_Van_Hall_Larenstein"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("Velp - Landgoed Larenstein")] <- "Velp_Landgoed_Larenstein"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("HAN University of Applied Sciences - Campus Arnhem")] <- "HAN_arnhem"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("UT campus")] <- "UT_campus"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("Delft - TU Campus")] <- "Delft_TU_Campus"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("Leiden Bioscience Park")] <- "Leiden_Bioscience_Park"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("Amsterdam - Science Park")] <- "Amsterdam_Science_Park"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("Groningen - Zernike")] <- "Groningen_Zernike"
+
+Total_observations_23_24_25$campus[Total_observations_23_24_25$campus %in% c("Utrecht - Science park / De Uithof")] <- "USP"
+
+write.csv(Total_observations_23_24_25,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Total_observations.csv")
+
+write.xlsx(Total_observations_23_24_25,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Total_observations.xlsx")
+
+#### Rename again 
+
+##  rename campus names to remove spaces
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("Leeuwarden - Van Hall Larenstein")] <- "Leeuwarden_Van_Hall_Larenstein"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("Velp - Landgoed Larenstein")] <- "Velp_Landgoed_Larenstein"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("HAN University of Applied Sciences - Campus Arnhem")] <- "HAN_arnhem"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("UT campus")] <- "UT_campus"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("Delft - TU Campus")] <- "Delft_TU_Campus"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("Leiden Bioscience Park")] <- "Leiden_Bioscience_Park"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("Amsterdam - Science Park")] <- "Amsterdam_Science_Park"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("Groningen - Zernike")] <- "Groningen_Zernike"
+
+Observations_2023_clip$campus[Observations_2023_clip$campus %in% c("Utrecht - Science park / De Uithof")] <- "USP"
+
+
+##  rename campus names to remove spaces 2024
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("Leeuwarden - Van Hall Larenstein")] <- "Leeuwarden_Van_Hall_Larenstein"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("Velp - Landgoed Larenstein")] <- "Velp_Landgoed_Larenstein"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("HAN University of Applied Sciences - Campus Arnhem")] <- "HAN_arnhem"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("UT campus")] <- "UT_campus"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("Delft - TU Campus")] <- "Delft_TU_Campus"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("Leiden Bioscience Park")] <- "Leiden_Bioscience_Park"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("Amsterdam - Science Park")] <- "Amsterdam_Science_Park"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("Groningen - Zernike")] <- "Groningen_Zernike"
+
+Observations_2024_clip$campus[Observations_2024_clip$campus %in% c("Utrecht - Science park / De Uithof")] <- "USP"
+
+
+##  rename campus names to remove spaces 2025
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("Leeuwarden - Van Hall Larenstein")] <- "Leeuwarden_Van_Hall_Larenstein"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("Velp - Landgoed Larenstein")] <- "Velp_Landgoed_Larenstein"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("HAN University of Applied Sciences - Campus Arnhem")] <- "HAN_arnhem"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("UT campus")] <- "UT_campus"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("Delft - TU Campus")] <- "Delft_TU_Campus"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("Leiden Bioscience Park")] <- "Leiden_Bioscience_Park"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("Amsterdam - Science Park")] <- "Amsterdam_Science_Park"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("Groningen - Zernike")] <- "Groningen_Zernike"
+
+Observations_2025_clip$campus[Observations_2025_clip$campus %in% c("Utrecht - Science park / De Uithof")] <- "USP"
+
+
+##### Filter for all the campuses with > 100 observations in each year 
+
+unique(Observations_2023_clip$campus)
+unique(Total_observations_23_24_25$campus)
+
+Observations_2023_clip_filtered <- Observations_2023_clip %>%
+  filter(campus %in% Total_observations_23_24_25$campus)
+
+Observations_2024_clip_filtered <- Observations_2024_clip %>%
+  filter(campus %in% Total_observations_23_24_25$campus)
+
+Observations_2025_clip_filtered <- Observations_2025_clip %>%
+  filter(campus %in% Total_observations_23_24_25$campus)
+
+###### --- 5. Separate campuses for research question 1 ----- #####
+
+# Following the method described in the SI, we separate for campuses used in analysis for research question 1 (to only keep campuses with opportunistic data in 2023 and Bioblitz in 2024-2025) and 2 (all campuses for 2024)
+
+Observations_2023_clip_filtered_analysis1 <- Observations_2023_clip_filtered[Observations_2023_clip_filtered$campus %in% c("Amsterdam_Science_Park","HAN_arnhem",  "Leeuwarden_Van_Hall_Larenstein","Leiden_Bioscience_Park", "Leiden_Binnenstad",   "USP"), ]
+
+
+Observations_2024_clip_filtered_analysis1 <- Observations_2024_clip_filtered[Observations_2024_clip_filtered$campus %in% c("Amsterdam_Science_Park","HAN_arnhem",  "Leeuwarden_Van_Hall_Larenstein","Leiden_Bioscience_Park", "Leiden_Binnenstad",   "USP"), ]
+
+Observations_2025_clip_filtered_analysis1 <- Observations_2025_clip_filtered[Observations_2025_clip_filtered$campus %in% c("Amsterdam_Science_Park","HAN_arnhem",  "Leeuwarden_Van_Hall_Larenstein","Leiden_Bioscience_Park", "Leiden_Binnenstad",   "USP"), ]
+
+## campuses bioblitz 23-25 - analysis 2 (RQ2o  only)
+Observations_2024_clip_filtered_analysis2 <- Observations_2024_clip_filtered[Observations_2024_clip_filtered$campus %in% c("Nijmegen_campus","Velp_Landgoed_Larenstein",  "UT_campus","Delft_TU_Campus", "WUR_main_campus", "Groningen_Zernike"), ]
+
+### now i have the "merged values" col as a list within the df --> I will drop it so i can then save it
+
+Observations_2023_clip_filtered_analysis1$merged_values <- NULL
+Observations_2024_clip_filtered_analysis1$merged_values <- NULL
+Observations_2024_clip_filtered_analysis2$merged_values <- NULL
+Observations_2025_clip_filtered_analysis1$merged_values <- NULL
+
+write.csv(Observations_2023_clip_filtered_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/2023rq1.csv")
+
+write.csv(Observations_2024_clip_filtered_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/2024rq1.csv")
+
+write.csv(Observations_2024_clip_filtered_analysis2,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/2024rq2.csv")
+
+write.csv(Observations_2025_clip_filtered_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/2025rq1.csv")
+
+### In order to use for the analysis also separate the total observations to only maintain campuses with opportunistic 2023 and bioblitz 2024-25 data
+
+observations_all_summary_analysis1 <- Total_observations_23_24_25[Total_observations_23_24_25$campus %in% c("Amsterdam_Science_Park", "HAN_arnhem",  "Leeuwarden_Van_Hall_Larenstein","Leiden_Bioscience_Park", "Leiden_Binnenstad", "USP"), ]
+
+write.csv(observations_all_summary_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/Total_observations_summary_analysis1.csv")
+
+write.xlsx(observations_all_summary_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/Total_observations_summary_analysis1.xlsx")
+
+####------ 6. Filter campuses accordingly -------- #####
+
+unique(campus_boundaries_merged$campus)
+
+## opp 23 biob 24-25
+
+### finally rename campus names that correspond to the campuses with > 100 observations per year
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Leeuwarden - Van Hall Larenstein")] <- "Leeuwarden_Van_Hall_Larenstein"
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("HAN University of Applied Sciences - Campus Arnhem")] <- "HAN_arnhem"
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Leiden Bioscience Park")] <- "Leiden_Bioscience_Park"
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Amsterdam - Science Park")] <- "Amsterdam_Science_Park"
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Utrecht - Science park / De Uithof")] <- "USP"
+
+
+## biob 23-25
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Velp - Landgoed Larenstein")] <- "Velp_Landgoed_Larenstein"
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("UT campus")] <- "UT_campus"
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Delft - TU Campus")] <- "Delft_TU_Campus"
+
+campus_boundaries_merged$campus[campus_boundaries_merged$campus %in% c("Groningen - Zernike")] <- "Groningen_Zernike"
+
+
+
+####
+campus_boundaries_merged_filtered <- campus_boundaries_merged %>%
+  filter(campus %in% Total_observations_23_24_25$campus)
+
+
+#### assign each campus boundary to the corresponding RQ
+
+unique(campus_boundaries_merged_filtered$campus)
+
+#rq1
+campus_boundaries_merged_filtered_rq1 <- campus_boundaries_merged_filtered[campus_boundaries_merged_filtered$campus %in% c("Amsterdam_Science_Park", "HAN_arnhem",  "Leeuwarden_Van_Hall_Larenstein","Leiden_Bioscience_Park", "Leiden_Binnenstad", "USP"), ]
+
+#rq2
+
+campus_boundaries_merged_filtered_rq2 <- campus_boundaries_merged_filtered[campus_boundaries_merged_filtered$campus %in% c("Nijmegen_campus", "Velp_Landgoed_Larenstein",  "UT_campus","Delft_TU_Campus", "WUR_main_campus", "Groningen_Zernike"), ]
+
+#rq1
+campus_boundaries_merged_filtered_rq1$merged_values <- NULL
+
+# Un comment to run the code 
+
+# st_write(campus_boundaries_merged_filtered_rq1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/campuses_merged_filteredrq1.shp")
+
+#rq2
+campus_boundaries_merged_filtered_rq2$merged_values <- NULL
+
+# Un comment to run the code 
+
+# st_write(campus_boundaries_merged_filtered_rq2,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/campuses_merged_filteredrq2.shp")
