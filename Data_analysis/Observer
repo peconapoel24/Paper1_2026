@@ -1,0 +1,59 @@
+
+
+# 2024 ~ 2023
+## greater
+bias_observer_2423_greater <- wilcox.test(bias_a1_observer$X2024, bias_a1_observer$X2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_observer_2423_less <- wilcox.test(bias_a1_observer$X2024, bias_a1_observer$X2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_observer_2423_twosided <- wilcox.test(bias_a1_observer$X2024, bias_a1_observer$X2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+## greater
+bias_observer_2523_greater <- wilcox.test(bias_a1_observer$X2025, bias_a1_observer$X2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_observer_2523_less <- wilcox.test(bias_a1_observer$X2025, bias_a1_observer$X2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_observer_2523_twosided <- wilcox.test(bias_a1_observer$X2025, bias_a1_observer$X2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+## greater
+bias_observer_2524_greater <- wilcox.test(bias_a1_observer$X2025, bias_a1_observer$X2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+bias_observer_2524_less <- wilcox.test(bias_a1_observer$X2025, bias_a1_observer$X2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+bias_observer_2524_twosided <- wilcox.test(bias_a1_observer$X2025, bias_a1_observer$X2024, paired = T, na.rm = drop)
+
+#####
+results_bias_observer <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(bias_observer_2423_greater$statistic,
+                bias_observer_2423_less$statistic,
+                bias_observer_2423_twosided$statistic,bias_observer_2523_greater$statistic,
+                bias_observer_2523_less$statistic,
+                bias_observer_2523_twosided$statistic,bias_observer_2524_greater$statistic,
+                bias_observer_2524_less$statistic,
+                bias_observer_2524_twosided$statistic),
+
+  p.value = c(bias_observer_2423_greater$p.value,
+              bias_observer_2423_less$p.value,
+              bias_observer_2423_twosided$p.value,bias_observer_2523_greater$p.value,
+              bias_observer_2523_less$p.value,
+              bias_observer_2523_twosided$p.value,bias_observer_2524_greater$p.value,
+              bias_observer_2524_less$p.value,
+              bias_observer_2524_twosided$p.value),
+
+  alternative = c(bias_observer_2423_greater$alternative,bias_observer_2423_less$alternative,bias_observer_2423_twosided$alternative,bias_observer_2523_greater$alternative,bias_observer_2523_less$alternative,bias_observer_2523_twosided$alternative,bias_observer_2524_greater$alternative,bias_observer_2524_less$alternative,bias_observer_2524_twosided$alternative),
+
+  method = c(bias_observer_2423_greater$method, bias_observer_2423_less$method, bias_observer_2423_twosided$method,bias_observer_2523_greater$method, bias_observer_2523_less$method, bias_observer_2523_twosided$method,bias_observer_2524_greater$method, bias_observer_2524_less$method, bias_observer_2524_twosided$method)
+)
+
+write.csv(results_bias_observer,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_observer.csv")
