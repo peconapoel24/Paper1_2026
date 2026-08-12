@@ -1,0 +1,1122 @@
+
+Hoover_original_function <- function(obs_counts, expected_counts) {
+  expected_scaled <- expected_counts * (sum(obs_counts) / sum(expected_counts)) ### i had to scale because of much larger than 1 ratio result 
+  sum(abs(obs_counts - expected_scaled)) / (2 * sum(obs_counts))
+}
+
+### 2025
+total_observers25 <- length(unique(Observations_2025_clip_filtered$user.name))
+
+tot_obs_camp25 <- Observations_2025_clip_filtered %>%
+  group_by(campus) %>%
+  summarize(count_observations_campus = n())
+
+tot_obs_camp25 <- st_drop_geometry(tot_obs_camp25)
+
+tot_observers25 <- Observations_2025_clip_filtered %>%
+  group_by(campus) %>%
+  summarize(count_observers = n_distinct(user.name))
+
+tot_obs_observ25 <- Observations_2025_clip_filtered %>%
+  group_by(campus,user.name) %>%
+  summarize(count_observations_observer = n())
+
+## Join
+tot25 <- tot_obs_observ25 %>%
+  left_join(tot_obs_camp25, by = "campus")
+
+tot25 <-st_drop_geometry(tot25)
+
+tot25 <- tot25 %>%
+  left_join(tot_observers25, by = "campus")
+
+## Read this !! https://dplyr.tidyverse.org/reference/reframe.html
+
+total_observers_all25 <- tot25 %>%
+  group_by(campus,user.name,count_observations_observer) %>%
+  reframe(expected_observations = count_observations_campus * 1/count_observers) 
+
+### 2024
+total_observers24 <- length(unique(Observations_2024_clip_filtered$user.name))
+
+tot_obs_camp24 <- Observations_2024_clip_filtered %>%
+  group_by(campus) %>%
+  summarize(count_observations_campus = n())
+
+tot_obs_camp24 <- st_drop_geometry(tot_obs_camp24)
+
+tot_observers24 <- Observations_2024_clip_filtered %>%
+  group_by(campus) %>%
+  summarize(count_observers = n_distinct(user.name))
+
+tot_obs_observ24 <- Observations_2024_clip_filtered %>%
+  group_by(campus,user.name) %>%
+  summarize(count_observations_observer = n())
+
+## Join
+tot24 <- tot_obs_observ24 %>%
+  left_join(tot_obs_camp24, by = "campus")
+
+tot24 <-st_drop_geometry(tot24)
+
+tot24 <- tot24 %>%
+  left_join(tot_observers24, by = "campus")
+
+## Read this !! https://dplyr.tidyverse.org/reference/reframe.html
+
+total_observers_all24 <- tot24 %>%
+  group_by(campus,user.name,count_observations_observer) %>%
+  reframe(expected_observations = count_observations_campus * 1/count_observers) 
+
+
+## 2023
+
+total_observers23 <- length(unique(Observations_2023_clip_filtered$user.name))
+
+tot_obs_camp23 <- Observations_2023_clip_filtered %>%
+  group_by(campus) %>%
+  summarize(count_observations_campus = n())
+
+tot_observers23 <- Observations_2023_clip_filtered %>%
+  group_by(campus) %>%
+  summarize(count_observers = n_distinct(user.name))
+
+tot_obs_observ23 <- Observations_2023_clip_filtered %>%
+  group_by(campus,user.name) %>%
+  summarize(count_observations_observer = n())
+
+tot_obs_camp23 <- st_drop_geometry(tot_obs_camp23)
+## Join
+tot23 <- tot_obs_observ23 %>%
+  left_join(tot_obs_camp23, by = "campus")
+
+tot23 <-st_drop_geometry(tot23)
+
+tot23 <- tot23 %>%
+  left_join(tot_observers23, by = "campus")
+
+## Read this !! https://dplyr.tidyverse.org/reference/reframe.html
+
+total_observers_all23 <- tot23 %>%
+  group_by(campus,user.name,count_observations_observer) %>%
+  reframe(expected_observations = count_observations_campus * 1/count_observers) 
+
+##### Functions
+
+observer_boot_function <- function(obs_data, expected_observer){
+
+  boot <- obs_data[sample(nrow(obs_data), replace = TRUE), ]
+
+  boot_counts <- boot %>%
+    group_by(user.name) %>%
+    summarise(
+      count_observations_observer = n(),
+      .groups = "drop"
+    )
+
+  merged <- left_join(
+    expected_observer,
+    boot_counts,
+    by = "user.name"
+  )
+
+  merged$count_observations_observer[
+    is.na(merged$count_observations_observer)
+  ] <- 0
+
+ Hoover_original_function(
+  obs_counts = merged$count_observations_observer,
+  expected_counts = merged$expected_observations
+)
+}
+ 
+observer_boot_function <- function(obs_data, expected_observer){
+
+  obs_data <- st_drop_geometry(obs_data)
+  expected_observer <- st_drop_geometry(expected_observer)
+
+  boot <- obs_data[sample(nrow(obs_data), replace = TRUE), ]
+
+  boot_counts <- boot %>%
+    group_by(user.name) %>%
+    summarise(
+      count_observations_observer = n(),
+      .groups = "drop"
+    )
+
+  merged <- left_join(
+    expected_observer,
+    boot_counts,
+    by = "user.name"
+  )
+
+  merged$count_observations_observer[
+    is.na(merged$count_observations_observer)
+  ] <- 0
+
+  Hoover_original_function(
+    obs_counts = merged$count_observations_observer,
+    expected_counts = merged$expected_observations
+  )
+}
+
+
+### 1 Hoover index value will be estimated per campus per year ---> From here each step will happen for each campus separately
+
+#### Subset for each campus
+
+unique(total_observers_all24$campus)
+
+### rq1,2 opp 23 biob 24-25
+
+#2025
+total_observers_all25_usp <- subset(total_observers_all25, campus == "USP")
+
+total_observers_all25_uva <- subset(total_observers_all25, campus == "Amsterdam_Science_Park")
+
+total_observers_all25_hanarn <- subset(total_observers_all25, campus == "HAN_arnhem")
+
+total_observers_all25_leeu <- subset(total_observers_all25, campus == "Leeuwarden_Van_Hall_Larenstein")
+
+total_observers_all25_leid_biosc <- subset(total_observers_all25, campus == "Leiden_Bioscience_Park")
+
+total_observers_all25_leid_bin <- subset(total_observers_all25, campus == "Leiden_Binnenstad")
+
+#2024
+total_observers_all24_usp <- subset(total_observers_all24, campus == "USP")
+
+total_observers_all24_uva <- subset(total_observers_all24, campus == "Amsterdam_Science_Park")
+
+total_observers_all24_hanarn <- subset(total_observers_all24, campus == "HAN_arnhem")
+
+total_observers_all24_leeu <- subset(total_observers_all24, campus == "Leeuwarden_Van_Hall_Larenstein")
+
+total_observers_all24_leid_biosc <- subset(total_observers_all24, campus == "Leiden_Bioscience_Park")
+
+total_observers_all24_leid_bin <- subset(total_observers_all24, campus == "Leiden_Binnenstad")
+
+#2023
+total_observers_all23_usp <- subset(total_observers_all23, campus == "USP")
+
+total_observers_all23_uva <- subset(total_observers_all23, campus == "Amsterdam_Science_Park")
+
+total_observers_all23_hanarn <- subset(total_observers_all23, campus == "HAN_arnhem")
+
+total_observers_all23_leeu <- subset(total_observers_all23, campus == "Leeuwarden_Van_Hall_Larenstein")
+
+total_observers_all23_leid_biosc <- subset(total_observers_all23, campus == "Leiden_Bioscience_Park")
+
+total_observers_all23_leid_bin <- subset(total_observers_all23, campus == "Leiden_Binnenstad")
+
+
+## rq2 only biob 23-25
+
+#2024
+
+total_observers_all24_del <- subset(total_observers_all24, campus == "Delft_TU_Campus")
+
+total_observers_all24_gro <- subset(total_observers_all24, campus == "Groningen_Zernike")
+
+total_observers_all24_nij <- subset(total_observers_all24, campus == "Nijmegen_campus")
+
+total_observers_all24_twe <- subset(total_observers_all24, campus == "UT_campus")
+
+total_observers_all24_velp <- subset(total_observers_all24, campus == "Velp_Landgoed_Larenstein")
+
+total_observers_all24_wur <- subset(total_observers_all24, campus == "WUR_main_campus")
+
+
+
+###### ---------- USP --------- #####
+
+## 2025
+# Estimate Modified Hoover index
+Hoover_observer_usp25 <- sum(abs(total_observers_all25_usp$count_observations_observer - total_observers_all25_usp$expected_observations)) / (2 * sum(total_observers_all25_usp$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2025_clip_filtered_usp25 <- Observations_2025_clip_filtered %>%
+  filter(campus == "USP")
+
+total_observers_all25_usp_expected <- total_observers_all25_usp %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+## 2025
+Hoover_usp25_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2025_clip_filtered_usp25,
+    total_observers_all25_usp_expected
+  )
+)
+
+
+summary(Hoover_usp25_boot_ob)
+
+Hoover_usp25_boot_ob_CI<-quantile(Hoover_usp25_boot_ob,
+         c(0.025,0.975))
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_usp24 <- sum(abs(total_observers_all24_usp$count_observations_observer - total_observers_all24_usp$expected_observations)) / (2 * sum(total_observers_all24_usp$count_observations_observer))
+  
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_usp24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "USP")
+
+total_observers_all24_usp_expected <- total_observers_all24_usp %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_usp24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_usp24,
+    total_observers_all24_usp_expected
+  )
+)
+
+
+summary(Hoover_usp24_boot_ob)
+
+Hoover_usp24_boot_ob_CI<-quantile(Hoover_usp24_boot_ob,
+         c(0.025,0.975))
+
+
+
+## 2023
+# Estimate Modified Hoover index
+Hoover_observer_usp23 <- sum(abs(total_observers_all23_usp$count_observations_observer - total_observers_all23_usp$expected_observations)) / (2 * sum(total_observers_all23_usp$count_observations_observer))
+  
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2023_clip_filtered_usp23 <- Observations_2023_clip_filtered %>%
+  filter(campus == "USP")
+
+total_observers_all23_usp_expected <- total_observers_all23_usp %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_usp23_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2023_clip_filtered_usp23,
+    total_observers_all23_usp_expected
+  )
+)
+
+
+summary(Hoover_usp23_boot_ob)
+
+Hoover_usp23_boot_ob_CI<-quantile(Hoover_usp23_boot_ob,
+         c(0.025,0.975))
+
+
+###### ---------- HAN Arnhem --------- #####
+
+## 2025
+# Estimate Modified Hoover index
+Hoover_observer_hanarn25 <- sum(abs(total_observers_all25_hanarn$count_observations_observer - total_observers_all25_hanarn$expected_observations)) / (2 * sum(total_observers_all25_hanarn$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2025_clip_filtered_hanarn25 <- Observations_2025_clip_filtered %>%
+  filter(campus == "HAN_arnhem")
+
+total_observers_all25_hanarn_expected <- total_observers_all25_hanarn %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+## 2025
+Hoover_hanarn25_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2025_clip_filtered_hanarn25,
+    total_observers_all25_hanarn_expected
+  )
+)
+
+
+summary(Hoover_hanarn25_boot_ob)
+
+Hoover_hanarn25_boot_ob_CI<-quantile(Hoover_hanarn25_boot_ob,
+         c(0.025,0.975))
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_hanarn24 <- sum(abs(total_observers_all24_hanarn$count_observations_observer - total_observers_all24_hanarn$expected_observations)) / (2 * sum(total_observers_all24_hanarn$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_hanarn24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "HAN_arnhem")
+
+total_observers_all24_hanarn_expected <- total_observers_all24_hanarn %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_hanarn24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_hanarn24,
+    total_observers_all24_hanarn_expected
+  )
+)
+
+
+summary(Hoover_hanarn24_boot_ob)
+
+Hoover_hanarn24_boot_ob_CI<-quantile(Hoover_hanarn24_boot_ob,
+         c(0.025,0.975))
+
+## 2023
+# Estimate Modified Hoover index
+Hoover_observer_hanarn23 <- sum(abs(total_observers_all23_hanarn$count_observations_observer - total_observers_all23_hanarn$expected_observations)) / (2 * sum(total_observers_all23_hanarn$count_observations_observer))
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2023_clip_filtered_hanarn23 <- Observations_2023_clip_filtered %>%
+  filter(campus == "HAN_arnhem")
+
+total_observers_all23_hanarn_expected <- total_observers_all23_hanarn %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_hanarn23_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2023_clip_filtered_hanarn23,
+    total_observers_all23_hanarn_expected
+  )
+)
+
+
+summary(Hoover_hanarn23_boot_ob)
+
+Hoover_hanarn23_boot_ob_CI<-quantile(Hoover_hanarn23_boot_ob,
+         c(0.025,0.975))
+
+
+
+###### ---------- UvA --------- #####
+
+## 2025
+# Estimate Modified Hoover index
+Hoover_observer_uva25 <- sum(abs(total_observers_all25_uva$count_observations_observer - total_observers_all25_uva$expected_observations)) / (2 * sum(total_observers_all25_uva$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2025_clip_filtered_uva25 <- Observations_2025_clip_filtered %>%
+  filter(campus == "Amsterdam_Science_Park")
+
+total_observers_all25_uva_expected <- total_observers_all25_uva %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+## 2025
+Hoover_uva25_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2025_clip_filtered_uva25,
+    total_observers_all25_uva_expected
+  )
+)
+
+
+summary(Hoover_uva25_boot_ob)
+
+Hoover_uva25_boot_ob_CI<-quantile(Hoover_uva25_boot_ob,
+         c(0.025,0.975))
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_uva24 <- sum(abs(total_observers_all24_uva$count_observations_observer - total_observers_all24_uva$expected_observations)) / (2 * sum(total_observers_all24_uva$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_uva24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Amsterdam_Science_Park")
+
+total_observers_all24_uva_expected <- total_observers_all24_uva %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_uva24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_uva24,
+    total_observers_all24_uva_expected
+  )
+)
+
+
+summary(Hoover_uva24_boot_ob)
+
+Hoover_uva24_boot_ob_CI<-quantile(Hoover_uva24_boot_ob,
+         c(0.025,0.975))
+
+## 2023
+# Estimate Modified Hoover index
+Hoover_observer_uva23 <- sum(abs(total_observers_all23_uva$count_observations_observer - total_observers_all23_uva$expected_observations)) / (2 * sum(total_observers_all23_uva$count_observations_observer))
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2023_clip_filtered_uva23 <- Observations_2023_clip_filtered %>%
+  filter(campus == "Amsterdam_Science_Park")
+
+total_observers_all23_uva_expected <- total_observers_all23_uva %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_uva23_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2023_clip_filtered_uva23,
+    total_observers_all23_uva_expected
+  )
+)
+
+
+summary(Hoover_uva23_boot_ob)
+
+Hoover_uva23_boot_ob_CI<-quantile(Hoover_uva23_boot_ob,
+         c(0.025,0.975))
+
+
+###### ---------- Leiden_Bioscience_Park --------- #####
+
+## 2025
+# Estimate Modified Hoover index
+Hoover_observer_leibios25 <- sum(abs(total_observers_all25_leid_biosc$count_observations_observer - total_observers_all25_leid_biosc$expected_observations)) / (2 * sum(total_observers_all25_leid_biosc$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2025_clip_filtered_leibios25 <- Observations_2025_clip_filtered %>%
+  filter(campus == "Leiden_Bioscience_Park")
+
+total_observers_all25_leibios_expected <- total_observers_all25_leid_biosc %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+## 2025
+Hoover_leibios25_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2025_clip_filtered_leibios25,
+    total_observers_all25_leibios_expected
+  )
+)
+
+
+summary(Hoover_leibios25_boot_ob)
+
+Hoover_leibios25_boot_ob_CI<-quantile(Hoover_leibios25_boot_ob,
+         c(0.025,0.975))
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_leibios24 <- sum(abs(total_observers_all24_leid_biosc$count_observations_observer - total_observers_all24_leid_biosc$expected_observations)) / (2 * sum(total_observers_all24_leid_biosc$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_leibios24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Leiden_Bioscience_Park")
+
+total_observers_all24_leibios_expected <- total_observers_all24_leid_biosc %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_leibios24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_leibios24,
+    total_observers_all24_leibios_expected
+  )
+)
+
+
+summary(Hoover_leibios24_boot_ob)
+
+Hoover_leibios24_boot_ob_CI<-quantile(Hoover_leibios24_boot_ob,
+         c(0.025,0.975))
+
+## 2023
+# Estimate Modified Hoover index
+Hoover_observer_leibios23 <- sum(abs(total_observers_all23_leid_biosc$count_observations_observer - total_observers_all23_leid_biosc$expected_observations)) / (2 * sum(total_observers_all23_leid_biosc$count_observations_observer))
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2023_clip_filtered_leibios23 <- Observations_2023_clip_filtered %>%
+  filter(campus == "Leiden_Bioscience_Park")
+
+total_observers_all23_leibios_expected <- total_observers_all23_leid_biosc %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_leibios23_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2023_clip_filtered_leibios23,
+    total_observers_all23_leibios_expected
+  )
+)
+
+
+summary(Hoover_leibios23_boot_ob)
+
+Hoover_leibios23_boot_ob_CI<-quantile(Hoover_leibios23_boot_ob,
+         c(0.025,0.975))
+
+
+
+###### ---------- Leiden_Binnenstad --------- #####
+
+## 2025
+# Estimate Modified Hoover index
+Hoover_observer_leibin25 <- sum(abs(total_observers_all25_leid_bin$count_observations_observer - total_observers_all25_leid_bin$expected_observations)) / (2 * sum(total_observers_all25_leid_bin$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2025_clip_filtered_leibin25 <- Observations_2025_clip_filtered %>%
+  filter(campus == "Leiden_Binnenstad")
+
+total_observers_all25_leibin_expected <- total_observers_all25_leid_bin %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+## 2025
+Hoover_leibin25_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2025_clip_filtered_leibin25,
+    total_observers_all25_leibin_expected
+  )
+)
+
+
+summary(Hoover_leibin25_boot_ob)
+
+Hoover_leibin25_boot_ob_CI<-quantile(Hoover_leibin25_boot_ob,
+         c(0.025,0.975))
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_leibin24 <- sum(abs(total_observers_all24_leid_bin$count_observations_observer - total_observers_all24_leid_bin$expected_observations)) / (2 * sum(total_observers_all24_leid_bin$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_leibin24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Leiden_Binnenstad")
+
+total_observers_all24_leibin_expected <- total_observers_all24_leid_bin %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_leibin24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_leibin24,
+    total_observers_all24_leibin_expected
+  )
+)
+
+
+summary(Hoover_leibin24_boot_ob)
+
+Hoover_leibin24_boot_ob_CI<-quantile(Hoover_leibin24_boot_ob,
+         c(0.025,0.975))
+
+## 2023
+# Estimate Modified Hoover index
+Hoover_observer_leibin23 <- sum(abs(total_observers_all23_leid_bin$count_observations_observer - total_observers_all23_leid_bin$expected_observations)) / (2 * sum(total_observers_all23_leid_bin$count_observations_observer))
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2023_clip_filtered_leibin23 <- Observations_2023_clip_filtered %>%
+  filter(campus == "Leiden_Binnenstad")
+
+total_observers_all23_leibin_expected <- total_observers_all23_leid_bin %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_leibin23_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2023_clip_filtered_leibin23,
+    total_observers_all23_leibin_expected
+  )
+)
+
+
+summary(Hoover_leibin23_boot_ob)
+
+Hoover_leibin23_boot_ob_CI<-quantile(Hoover_leibin23_boot_ob,
+         c(0.025,0.975))
+
+
+###### ---------- Leeuwarden_Van_Hall_Larenstein --------- #####
+
+## 2025
+# Estimate Modified Hoover index
+Hoover_observer_leeu25 <- sum(abs(total_observers_all25_leeu$count_observations_observer - total_observers_all25_leeu$expected_observations)) / (2 * sum(total_observers_all25_leeu$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2025_clip_filtered_leeu25 <- Observations_2025_clip_filtered %>%
+  filter(campus == "Leeuwarden_Van_Hall_Larenstein")
+
+total_observers_all25_leeu_expected <- total_observers_all25_leeu %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+## 2025
+Hoover_leeu25_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2025_clip_filtered_leeu25,
+    total_observers_all25_leeu_expected
+  )
+)
+
+
+summary(Hoover_leeu25_boot_ob)
+
+Hoover_leeu25_boot_ob_CI<-quantile(Hoover_leeu25_boot_ob,
+         c(0.025,0.975))
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_leeu24 <- sum(abs(total_observers_all24_leeu$count_observations_observer - total_observers_all24_leeu$expected_observations)) / (2 * sum(total_observers_all24_leeu$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_leeu24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Leeuwarden_Van_Hall_Larenstein")
+
+total_observers_all24_leeu_expected <- total_observers_all24_leeu %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_leeu24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_leeu24,
+    total_observers_all24_leeu_expected
+  )
+)
+
+
+summary(Hoover_leeu24_boot_ob)
+
+Hoover_leeu24_boot_ob_CI<-quantile(Hoover_leeu24_boot_ob,
+         c(0.025,0.975))
+
+## 2023
+# Estimate Modified Hoover index
+Hoover_observer_leeu23 <- sum(abs(total_observers_all23_leeu$count_observations_observer - total_observers_all23_leeu$expected_observations)) / (2 * sum(total_observers_all23_leeu$count_observations_observer))
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2023_clip_filtered_leeu23 <- Observations_2023_clip_filtered %>%
+  filter(campus == "Leeuwarden_Van_Hall_Larenstein")
+
+total_observers_all23_leeu_expected <- total_observers_all23_leeu %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_leeu23_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2023_clip_filtered_leeu23,
+    total_observers_all23_leeu_expected
+  )
+)
+
+
+summary(Hoover_leeu23_boot_ob)
+
+Hoover_leeu23_boot_ob_CI<-quantile(Hoover_leeu23_boot_ob,
+         c(0.025,0.975))
+
+### MHI values table 
+bias_a1_observer <- tibble(
+  campus = c("USP","HAN_Arnhem","UvA", "Leiden_Bioscience","Leiden_Binnenstad","Leeuwarden_Van_Hall_Larenstein"
+),
+  "X2023" = c(Hoover_observer_usp23 ,Hoover_observer_hanarn23,Hoover_observer_uva23,Hoover_observer_leibios23, Hoover_observer_leibin23,Hoover_observer_leeu23),
+  "X2024" = c(Hoover_observer_usp24 ,Hoover_observer_hanarn24,Hoover_observer_uva24,Hoover_observer_leibios24,Hoover_observer_leibin24,Hoover_observer_leeu24),
+  "X2025" = c(Hoover_observer_usp25 ,Hoover_observer_hanarn25,Hoover_observer_uva25,Hoover_observer_leibios25,Hoover_observer_leibin25,Hoover_observer_leeu25)
+)
+
+write.csv(bias_a1_observer,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIobserver_a1.csv")
+
+### for boxplot
+
+bias_observer_a1_long <- bias_a1_observer %>%
+      rename(
+        "2023" = `X2023`,
+        "2024" = `X2024`,
+        "2025" = `X2025`
+      )
+
+bias_observer_a1_long <- bias_observer_a1_long %>%
+  tidyr::pivot_longer(
+    cols = "2023":"2025",
+    names_to = "year",
+    values_to = "value"
+  )
+
+write.csv(bias_observer_a1_long,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIobserver_a1_box.csv")
+
+
+##### Bootstrap table
+
+bias_a1_observer_CI <- data.frame(
+  bias_a1_observer,
+  "2023_2.5%" = c(Hoover_usp23_boot_ob_CI[1],Hoover_hanarn23_boot_ob_CI[1],Hoover_uva23_boot_ob_CI[1], Hoover_leibios23_boot_ob_CI[1],Hoover_leibin23_boot_ob_CI[1], Hoover_leeu23_boot_ob_CI[1]),
+  "2023_97.5%" = c(Hoover_usp23_boot_ob_CI[2],Hoover_hanarn23_boot_ob_CI[2],Hoover_uva23_boot_ob_CI[2], Hoover_leibios23_boot_ob_CI[2],Hoover_leibin23_boot_ob_CI[2], Hoover_leeu23_boot_ob_CI[2]),
+  "2024_2.5%" = c(Hoover_usp24_boot_ob_CI[1],Hoover_hanarn24_boot_ob_CI[1],Hoover_uva24_boot_ob_CI[1], Hoover_leibios24_boot_ob_CI[1],Hoover_leibin24_boot_ob_CI[1], Hoover_leeu24_boot_ob_CI[1]),
+  "2024_97.5%" = c(Hoover_usp24_boot_ob_CI[2],Hoover_hanarn24_boot_ob_CI[2],Hoover_uva24_boot_ob_CI[2], Hoover_leibios24_boot_ob_CI[2],Hoover_leibin24_boot_ob_CI[2], Hoover_leeu24_boot_ob_CI[2]),
+  "2025_2.5%" = c(Hoover_usp25_boot_ob_CI[1],Hoover_hanarn25_boot_ob_CI[1],Hoover_uva25_boot_ob_CI[1], Hoover_leibios25_boot_ob_CI[1],Hoover_leibin25_boot_ob_CI[1], Hoover_leeu25_boot_ob_CI[1]),
+  "2025_97.5%" = c(Hoover_usp25_boot_ob_CI[2],Hoover_hanarn25_boot_ob_CI[2],Hoover_uva25_boot_ob_CI[2], Hoover_leibios25_boot_ob_CI[2],Hoover_leibin25_boot_ob_CI[2], Hoover_leeu25_boot_ob_CI[2])
+)
+
+bias_a1_observer_CI <- bias_a1_observer_CI %>%
+  mutate(
+    X2023 = round(X2023, 2),
+    X2024 = round(X2024, 2),
+    X2025 = round(X2025, 2),
+    X2023_2.5. = round(X2023_2.5., 4),
+    X2024_2.5. = round(X2024_2.5., 4), 
+    X2025_2.5. = round(X2025_2.5., 4), 
+    X2023_97.5. = round(X2023_97.5., 4),
+    X2024_97.5. = round(X2024_97.5., 4), 
+    X2025_97.5. = round(X2025_97.5., 4), 
+  )
+
+write.csv(bias_a1_observer_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIobserver_CI_a1.csv")
+
+write.xlsx(bias_a1_observer_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIobserver_CI_a1.xlsx")
+
+########### rq2 only biobl 23-25 
+
+###### ------ WUR main campus -- ######
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_wur24 <- sum(abs(total_observers_all24_wur$count_observations_observer - total_observers_all24_wur$expected_observations)) / (2 * sum(total_observers_all24_wur$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_wur24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "WUR_main_campus")
+
+total_observers_all24_wur_expected <- total_observers_all24_wur %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_wur24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_wur24,
+    total_observers_all24_wur_expected
+  )
+)
+
+
+summary(Hoover_wur24_boot_ob)
+
+Hoover_wur24_boot_ob_CI<-quantile(Hoover_wur24_boot_ob,
+         c(0.025,0.975))
+
+
+
+
+###### ---------- Nijmegen campus --------- #####
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_nij24 <- sum(abs(total_observers_all24_nij$count_observations_observer - total_observers_all24_nij$expected_observations)) / (2 * sum(total_observers_all24_nij$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_nij24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Nijmegen_campus")
+
+total_observers_all24_nij_expected <- total_observers_all24_nij %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_nij24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_nij24,
+    total_observers_all24_nij_expected
+  )
+)
+
+
+summary(Hoover_nij24_boot_ob)
+
+Hoover_nij24_boot_ob_CI<-quantile(Hoover_nij24_boot_ob,
+         c(0.025,0.975))
+
+
+###### ---------- TUDelft--------- #####
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_del24 <- sum(abs(total_observers_all24_del$count_observations_observer - total_observers_all24_del$expected_observations)) / (2 * sum(total_observers_all24_del$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_del24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Delft_TU_Campus")
+
+total_observers_all24_del_expected <- total_observers_all24_del %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_del24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_del24,
+    total_observers_all24_del_expected
+  )
+)
+
+
+summary(Hoover_del24_boot_ob)
+
+Hoover_del24_boot_ob_CI<-quantile(Hoover_del24_boot_ob,
+         c(0.025,0.975))
+
+
+
+###### ---------- Twente university--------- #####
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_ut24 <- sum(abs(total_observers_all24_twe$count_observations_observer - total_observers_all24_twe$expected_observations)) / (2 * sum(total_observers_all24_twe$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_ut24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "UT_campus")
+
+total_observers_all24_ut_expected <- total_observers_all24_twe %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_ut24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_ut24,
+    total_observers_all24_ut_expected
+  )
+)
+
+
+summary(Hoover_ut24_boot_ob)
+
+Hoover_ut24_boot_ob_CI<-quantile(Hoover_ut24_boot_ob,
+         c(0.025,0.975))
+
+
+#### -- Groningen -- ###
+
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_gro24 <- sum(abs(total_observers_all24_gro$count_observations_observer - total_observers_all24_gro$expected_observations)) / (2 * sum(total_observers_all24_gro$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_gro24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Groningen_Zernike")
+
+total_observers_all24_gro_expected <- total_observers_all24_gro %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_gro24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_gro24,
+    total_observers_all24_gro_expected
+  )
+)
+
+
+summary(Hoover_gro24_boot_ob)
+
+Hoover_gro24_boot_ob_CI<-quantile(Hoover_gro24_boot_ob,
+         c(0.025,0.975))
+
+
+#### -- Velp - Landgoed Larenstein -- ###
+
+# 2024
+# Estimate Modified Hoover index
+Hoover_observer_vel24 <- sum(abs(total_observers_all24_velp$count_observations_observer - total_observers_all24_velp$expected_observations)) / (2 * sum(total_observers_all24_velp$count_observations_observer))
+  
+
+### Bootstrap
+
+## function should run only for the campus investigated -- filter all observations 
+Observations_2024_clip_filtered_vel24 <- Observations_2024_clip_filtered %>%
+  filter(campus == "Velp_Landgoed_Larenstein")
+
+total_observers_all24_vel_expected <- total_observers_all24_velp %>%
+  dplyr::select(user.name, expected_observations)
+
+## then run bootstrap
+set.seed(123)
+
+Hoover_vel24_boot_ob <- replicate(
+  1000,
+  observer_boot_function(
+    Observations_2024_clip_filtered_vel24,
+    total_observers_all24_vel_expected
+  )
+)
+
+
+summary(Hoover_vel24_boot_ob)
+
+Hoover_vel24_boot_ob_CI<-quantile(Hoover_vel24_boot_ob,
+         c(0.025,0.975))
+
+
+
+## join MHI land use values as a table
+bias_a2_observer <- tibble(
+  campus = c("WUR_main_campus","Nijmegen_campus","Velp_Landgoed_Larenstein","UT_campus", "Delft_TU_Campus","Groningen_Zernike"
+),
+  "X2024" = c(Hoover_observer_wur24 ,Hoover_observer_nij24,Hoover_observer_vel24,Hoover_observer_ut24,Hoover_observer_del24,Hoover_observer_gro24)
+  
+)
+
+write.csv(bias_a2_observer,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIObserver_a2.csv")
+
+### for boxplot
+bias_a2_observer_long <- bias_a2_observer %>%
+  tidyr::pivot_longer(
+    cols = "X2024",
+    names_to = "year",
+    values_to = "value"
+  )
+write.csv(bias_a2_observer_long,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIObserver_a2_box.csv")
+
+## join bootstrap values
+
+bias_a2_observer_CI <- data.frame(
+  bias_a2_observer,
+  "conf_low" = c(Hoover_wur24_boot_ob_CI[1],Hoover_nij24_boot_ob_CI[1],Hoover_vel24_boot_ob_CI[1],Hoover_ut24_boot_ob_CI[1],Hoover_del24_boot_ob_CI[1],Hoover_gro24_boot_ob_CI[1]),
+  "conf_high" = c(Hoover_wur24_boot_ob_CI[2],Hoover_nij24_boot_ob_CI[2],Hoover_vel24_boot_ob_CI[2],Hoover_ut24_boot_ob_CI[2],Hoover_del24_boot_ob_CI[2],Hoover_gro24_boot_ob_CI[2])
+)
+
+
+bias_a2_observer_CI <- bias_a2_observer_CI %>%
+  mutate(
+    X2024 = round(X2024, 2),
+    conf_low = round(conf_low, 4),
+    conf_high = round(conf_high, 4), 
+  )
+
+write.csv(bias_a2_observer_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIObserver_a2_CI.csv")
+
+write.xlsx(bias_a2_observer_CI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/MHIObserver_a2_CI.xlsx")
