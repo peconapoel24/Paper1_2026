@@ -1,0 +1,556 @@
+
+## consider improving further
+
+## Automatic function
+
+### style function
+visuals_function <- function() {
+
+  theme_classic(base_size = 11) + 
+    theme(
+      text = element_text(family = "sans"),
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      plot.title = element_text(face = "italic", size = 12),
+      axis.title = element_text(face = "bold"),
+      strip.background = element_blank(),
+      panel.grid.minor = element_blank(),
+      legend.position = "top",
+      legend.title = element_blank(),
+      plot.tag = element_text(face = "bold", size = 12),
+      plot.tag.position = c(0, 1),
+      plot.margin = margin(5, 5, 5, 5)
+    )
+}
+
+### boxplot function
+boxplot_function <- function(data, x, y, fill = NULL) {
+
+  if (is.null(substitute(fill))) {
+
+    # CASE 1: no fill
+    ggplot(data, aes(x = {{ x }}, y = {{ y }})) +
+      geom_boxplot( fill = "steelblue") +
+      theme_classic()
+
+  } else {
+
+    # CASE 2: with fill
+    ggplot(
+      data,
+      aes(
+        x = {{ x }},
+        y = {{ y }},
+        fill = {{ fill }},
+        group = interaction({{ x }}, {{ fill }})
+      )
+    ) +
+      geom_boxplot(position = position_dodge(0.8)) +
+      theme_classic()
+  }
+}
+
+
+boxplot_function_tax <- function(data, x, y, fill = NULL) {
+
+       ggplot(
+      data,
+      aes(
+        x = {{ x }},
+        y = {{ y }},
+        fill = {{ fill }},
+        group = interaction({{ x }}, {{ fill }})
+      )
+    ) +
+      geom_boxplot(position = position_dodge(0.8)) +
+      theme_classic()
+  }
+
+
+### Total observations
+
+totalobservations <- observations_all_summary_analysis1 %>%
+  rename(
+    "2023" = `total_observations_23`,
+    "2024" = `total_observations_24`,
+    "2025" = `total_observations_25`
+  )
+
+totalobservations_long <- totalobservations %>%
+  pivot_longer(
+    cols = c(`2023`, `2024`, `2025`),
+    names_to = "year",
+    values_to = "value"
+  )
+
+total_observations_addval <- data.frame(
+  years = c("2023","2024","2025"),
+  added_value = c("A","B","B"),
+  y = max(totalobservations_long$value) * 1.05)  
+
+
+p1 <- boxplot_function(totalobservations_long,  x = as.factor(year), y = value)+ visuals_function()+labs(x="Year",y="Observations (total)", title = "Observations") + geom_text(data = total_observations_addval,
+              aes(x = years, y = y, label = added_value ),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1) +scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0,0)))
+
+p1
+
+
+scope_buil_2023_24_25 <- scope_buil_2023_24_25 %>%
+  rename(
+    "2023" = `X2023`,
+    "2024" = `X2024`,
+    "2025" = `X2025`
+  )
+
+
+
+scope_buil_analysis1_long <- scope_buil_2023_24_25 %>%
+  pivot_longer(
+    cols = c(`2023`, `2024`, `2025`),
+    names_to = "year",
+    values_to = "value"
+  )
+
+#### letters -- based on the statistical analysis file: results_buil_bias for alternative = greater
+scope_buil_addval <- data.frame(
+  years = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),    
+  y = max(scope_buil_analysis1_long$value) * 1.05  
+)
+
+p2 <- boxplot_function(scope_buil_analysis1_long,  x = as.factor(year), y = value)+ visuals_function()+labs(x="Year",y="Median distance (m)", title = "Distance to nearest\n building") +  geom_text(data = scope_buil_addval,
+              aes(x = years, y = y, label = added_value),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1)+scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+p2  
+
+
+scope_ropa_analysis1 <- scope_ropa_2023_24_25 %>%
+  rename(
+    "2023" = `X2023`,
+    "2024" = `X2024`,
+    "2025" = `X2025`
+  )
+
+scope_ropa_analysis1_long <- scope_ropa_analysis1 %>%
+  pivot_longer(
+    cols = c(`2023`, `2024`, `2025`),
+    names_to = "year",
+    values_to = "value"
+  )
+
+## letters based on the statistical analysis file: results_buil_bias for alternative = greater
+scope_ropa_addval <- data.frame(
+  years = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),    
+  y = max(scope_ropa_analysis1_long$value) * 1.1  
+)
+
+p3 <- boxplot_function(scope_ropa_analysis1_long,  x = as.factor(year), y = value)+ visuals_function()+labs(x="Year",y="Median distance (m)", title = "Distance to nearest\n road/path") +  geom_text(data = scope_ropa_addval,
+              aes(x = years, y = y, label = added_value),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1)+scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+p3  
+
+
+### land use
+
+
+
+## maybe make sure you convert to long format either in the plots or after the analysis!
+
+scope_landuse_addval <- data.frame(
+  landuse_value2 = c("Agriculture","Agriculture","Agriculture","built_areas","built_areas","built_areas", "Freshwater","Freshwater","Freshwater","Natural_in_Built","Natural_in_Built","Natural_in_Built","Terrestrial_Natural","Terrestrial_Natural","Terrestrial_Natural"),
+  year = c("2023", "2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025"),
+  addedvalue = c("A", "A", "A","A","AB","B",
+                 "A","AB","B"
+                 , "A","B","B","A","A","A")
+)
+
+## convert to factors
+scope_landuse_addval$year <- as.factor(scope_landuse_addval$year)
+
+scope_landuse_addval$landuse_value2 <- as.factor(scope_landuse_addval$landuse_value2)
+
+Observations_all_clip_lugrouped_analysis1$landuse_value2 <- as.factor(Observations_all_clip_lugrouped_analysis1$landuse_value2)
+
+Observations_all_clip_lugrouped_analysis1$year <- as.factor(Observations_all_clip_lugrouped_analysis1$year)
+
+### estimate the max calue of each plot and add the letters on top
+scope_landuse_addval <- scope_landuse_addval %>%
+  left_join(
+    Observations_all_clip_lugrouped_analysis1 %>%
+      group_by(landuse_value2, year) %>%
+      summarise(y = max(Observations_all_clip_lugrouped_analysis1
+                        $total, na.rm = TRUE), .groups = "drop"),
+    by = c("landuse_value2", "year")
+  ) %>%
+  mutate(y = y )  # lift labels above boxes
+
+### remove "other" land use
+Observations_all_clip_lugrouped_analysis1 <- Observations_all_clip_lugrouped_analysis1[Observations_all_clip_lugrouped_analysis1$landuse_value2 != "other",]
+
+p4 <- boxplot_function(Observations_all_clip_lugrouped_analysis1,  x = landuse_value2, y = total, fill = year)+visuals_function() +labs(x="",y="Observations (total)", title = "Land use")  + theme(legend.position.inside = c(0, 0.8))+ geom_text(data = scope_landuse_addval,
+              aes(x = landuse_value2 , y = y , label = addedvalue),size = 2.5, position = position_dodge(width = 0.8)) + theme(aspect.ratio = 1) +scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(labels = \(x) gsub("_", " ", x) |> stringr::str_to_sentence(),expand = expansion(mult = c(0, 0))) + coord_flip()
+
+p4
+
+p4 <- p4+ theme(
+    legend.position = c(0.5, 1), 
+    legend.direction = "horizontal",
+    legend.justification = c(0.5, 1),
+     legend.title = element_blank(),
+    legend.text = element_text(size = 7),
+    
+    legend.key.size = unit(0.2, "cm"),
+      legend.background = element_blank(),
+  legend.key = element_blank()
+        )
+  
+
+p4
+
+### observer
+scope_observer_addval <- data.frame(
+  years = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),    
+  y = max(Observer_all_a1_plot$median) * 1.05  
+)
+
+
+p5 <- boxplot_function(Observer_all_a1_plot,  x = as.factor(year), y = median,fill=NULL)+visuals_function()+ labs(x="Year",y="Observations (median)", title = "Observer") +  geom_text(data = scope_observer_addval,
+              aes(x = years, y = y, label = added_value),
+              inherit.aes = FALSE)+ theme(aspect.ratio = 1)+scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+p5  
+
+#### taxonomic  --- 5.8 this graph needs a bit fix. improve and finish with graphs
+
+## create a table also with the letters/names?
+
+taxonomic_observations_all_analysis1_letters <- data.frame(
+  species.group = c("Plants","Plants","Plants",
+  "Moths_micros","Moths_micros","Moths_micros",
+     "Flies_mosquitoes","Flies_mosquitoes","Flies_mosquitoes","Mollusks","Mollusks","Mollusks","Mammals","Mammals","Mammals","Grasshoppers_crickets","Grasshoppers_crickets","Grasshoppers_crickets","Insects_other","Insects_other","Insects_other","Invertebrates_other","Invertebrates_other","Invertebrates_other","Fish","Fish","Fish","Mushrooms","Mushrooms","Mushrooms","Reptiles_amphibians","Reptiles_amphibians","Reptiles_amphibians","Birds","Birds","Birds","Beetles","Beetles","Beetles","Butterflies","Butterflies","Butterflies","Bees_wasps_ants","Bees_wasps_ants","Bees_wasps_ants","Arthropods_other","Arthropods_other","Arthropods_other","Bugs_cicadas_aphids","Bugs_cicadas_aphids","Bugs_cicadas_aphids","Mosses_lichens","Mosses_lichens","Mosses_lichens","Dragonflies","Dragonflies","Dragonflies"),
+  year = c("2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025"),
+  addedvalue = c("A", "B", "B","A","B","B","A","B","B","A","B","B","A","B","B","A","B","B","A","AB","B","A","A","A","A","A","A","A","AB","B","A","AB","B","AB","A","B","A","AB","B","A","A","B","A","A","B","A","AB","B","A","AB","B","A","A","A","A","A","A")
+)
+
+## convert to factors
+taxonomic_observations_all_analysis1_letters$year <- as.factor(taxonomic_observations_all_analysis1_letters$year)
+
+taxonomic_observations_all_analysis1_letters$species.group <- as.factor(taxonomic_observations_all_analysis1_letters$species.group)
+
+Observations_all_clip_filtered_group_a1$species.group <- as.factor(Observations_all_clip_filtered_group_a1$species.group)
+
+Observations_all_clip_filtered_group_a1$year <- as.factor(Observations_all_clip_filtered_group_a1$year)
+
+
+## filter for readability
+taxonomic_observations_all_analysis1_filtered <- Observations_all_clip_filtered_group_a1 %>%
+  filter(total_observations <= 750)
+
+### estimate the max value of each plot and add letters on top
+
+### estimate the max value of each plot and add the letters on top
+taxonomic_observations_all_analysis1_letters_df <- taxonomic_observations_all_analysis1_letters %>%
+  left_join(
+    taxonomic_observations_all_analysis1_filtered %>%
+      group_by(species.group, year) %>%
+      summarise(y = max(taxonomic_observations_all_analysis1_filtered$total_observations, na.rm = TRUE), .groups = "drop"),
+    by = c("species.group", "year")
+  ) %>%
+  mutate(y = y * 1.05)
+
+###
+taxonomic_observations_all_analysis1_letters_df <- 
+  taxonomic_observations_all_analysis1_letters_df %>%
+  mutate(
+    y = ifelse(
+      species.group == "Invertebrates_other" &
+      year == "2023" &
+      is.na(y),
+      730,
+      y
+    )
+  )
+
+
+## exclude algae weeds and unicellular
+
+taxonomic_observations_all_analysis1_filtered <- taxonomic_observations_all_analysis1_filtered %>%
+  filter(species.group != "Algae_weeds_unicellular")
+
+p6 <- boxplot_function_tax(taxonomic_observations_all_analysis1_filtered,  x = species.group, y = total_observations, fill = year)+ visuals_function() + labs(x="",y="Observations (total)", title = "")+theme(legend.position.inside = c(0, 0.8)) +  geom_text(data = taxonomic_observations_all_analysis1_letters_df,
+  aes(
+    x = species.group,
+    y = y,
+    label = addedvalue,
+    group = year
+  ),
+  position = position_dodge(0.8),
+  size = 2) +
+  coord_flip() +scale_x_discrete(labels = c("Arthropods_other" = "Arthropods (other)", "Bees_wasps_ants"= "Bees,wasps,and ants", "Bugs_cicadas_aphids"="Bugs,cicadas,and aphids","Flies_mosquitoes"="Flies and mosquitoes","Grasshoppers_crickets" = "Grasshoppers and crickets", "Insects_other" = "Insects (other)","Mosses_lichens"="Mosses and lichens", "Invertebrates_other"="Invertebrates (other)", "Reptiles_amphibians"="Reptiles and amphibians", "Moths_micros" = "Moths and micros"),expand = expansion(mult = c(0, 0))) + scale_y_continuous(limits = c(0, 750))
+
+p6
+
+
+# p6 <- p6 +  theme(
+#   legend.position = c(0.8, 0.8),legend.text = element_text(size = 6),
+#   legend.title = element_text(size = 7),
+#   legend.key.size = unit(0.4, "cm"), legend.background = element_blank()
+# )
+
+### 
+
+
+### To save i opened an r script and exported as pdf and image. this helped to specify the dimensions of the exported images
+
+
+# pdf("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/graphs/bias1.pdf", width = 10, height = 7)
+# 
+
+
+
+
+###### Bias
+
+#### NNI 
+
+## letters: showing two-sided change
+bias_nni_addval  <- data.frame(
+  years = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),  
+  y = max(bias_nni_a1_long$value) * 1.8  # top of each group + small margin
+)
+
+## convert to factor outside the plot
+bias_nni_a1_long$year <- factor(bias_nni_a1_long$year)
+
+p1b <- boxplot_function(bias_nni_a1_long,  x = as.factor(year), y = value)+ visuals_function()+labs(x="Year",y="Nearest Neighbor Index", title = "") + geom_text(data = bias_nni_addval,
+              aes(x = years, y = y, label = added_value ),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1) +  geom_hline(yintercept = 1, color = "green")+scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+
+
+#### NBI
+
+### letters: two-sided change
+bias_nbi_addval <- data.frame(
+  years = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),  
+  y = max(bias_nbi_a1_long$value) * 1.05  # top of each group + small margin
+)
+## convert to factor outside the plot
+bias_nbi_a1_long$year <- factor(bias_nbi_a1_long$year)
+
+p2b <- boxplot_function(bias_nbi_a1_long,  x = as.factor(year), y = value)+ visuals_function()+labs(x="Year",y="Nearest Building Index", title = "") + geom_text(data = bias_nbi_addval,
+              aes(x = years, y = y, label = added_value ),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1) +  geom_hline(yintercept = 1, color = "green") +scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+
+p2b
+
+
+### NRI
+
+## change: two-sided
+bias_nri_addval <- data.frame(
+  years = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),  
+  y = max(bias_nri_a1_long$value) * 1.15  # top of each group + small margin
+)
+## convert to factor outside the plot
+bias_nri_a1_long$year <- factor(bias_nri_a1_long$year)
+
+p3b <- boxplot_function(bias_nri_a1_long,  x = as.factor(year), y = value)+ visuals_function()+labs(x="Year",y="Nearest Road/path Index", title = "") + geom_text(data = bias_nri_addval,
+              aes(x = years, y = y, label = added_value ),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1) +  geom_hline(yintercept = 1, color = "green")+scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+
+p3b
+
+
+### Land use
+
+### Alternative = "less"
+bias_landuse_addval <- data.frame(
+  year = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),  
+  y = max(bias_a1_landuse_long$value) * 2.5  # top of each group + small margin
+)
+
+## convert to factor outside the plot
+bias_a1_landuse_long$year <- factor(bias_a1_landuse_long$year)
+
+p4b <- boxplot_function(bias_a1_landuse_long ,  x = as.factor(year), y = value)+ visuals_function()+labs(x="Year",y="MHI:land use", title = "") + geom_text(data = bias_landuse_addval  ,
+              aes(x = year, y = y, label = added_value),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1) +  geom_hline(yintercept = 1, color = "red") +  geom_hline(yintercept = 0, color = "green")+scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+
+p4b
+
+### Observer
+
+### Alternative = less
+bias_observer_addval <- data.frame(
+  year = c("2023","2024","2025"),        
+  added_value = c("A","A","A"),  
+  y = max(bias_observer_a1_long$value) * 1.6  # top of each group + small margin
+)
+## convert to factor outside the plot
+bias_observer_a1_long$year <- factor(bias_observer_a1_long$year)
+
+p5b <- boxplot_function(bias_observer_a1_long,  x = year, y = value)+ visuals_function()+labs(x="Year",y="MHI:observer", title = "") + geom_text(data = bias_observer_addval ,
+              aes(x = year, y = y, label = added_value ),
+              inherit.aes = FALSE) + theme(aspect.ratio = 1) +  geom_hline(yintercept = 1, color = "red") +  geom_hline(yintercept = 0, color = "green")+scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +scale_x_discrete(expand = expansion(mult = c(0, 0)))
+
+p5b
+
+#### Taxonomic
+
+bias_taxon_addval <- data.frame(
+  group = c("Butterflies","Butterflies","Butterflies","Bugs_cicadas_aphids","Bugs_cicadas_aphids","Bugs_cicadas_aphids","Plants","Plants","Plants",
+  "Invertebrates_other","Invertebrates_other","Invertebrates_other",
+     "Mushrooms","Mushrooms","Mushrooms",
+     "Mollusks","Mollusks","Mollusks","Mammals","Mammals","Mammals","Birds","Birds","Birds","Insects_other","Insects_other","Insects_other","Moths_micros","Moths_micros","Moths_micros","Fish","Fish","Fish","Flies_mosquitoes","Flies_mosquitoes","Flies_mosquitoes","Reptiles_amphibians","Reptiles_amphibians","Reptiles_amphibians","Grasshoppers_crickets","Grasshoppers_crickets","Grasshoppers_crickets","Beetles","Beetles","Beetles","Bees_wasps_ants","Bees_wasps_ants","Bees_wasps_ants","Arthropods_other","Arthropods_other","Arthropods_other","Mosses_lichens","Mosses_lichens","Mosses_lichens","Dragonflies","Dragonflies","Dragonflies"),
+  year = c("2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025","2023","2024", "2025"),
+  addedvalue = c("AB", "A", "B","A", "AB", "B","A", "A", "A","A","A","A","A","A","A","A","A","A","A","A","A","A","AB","B", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A", "A", "A","A")
+)
+
+## convert to factors
+bias_taxon_addval$year <- as.factor(bias_taxon_addval$year)
+bias_taxon_addval$group <- as.factor(bias_taxon_addval$group)
+
+tax_bias_results_a1_long$group <- as.factor(tax_bias_results_a1_long$group)
+
+tax_bias_results_a1_long$year <- as.factor(tax_bias_results_a1_long$year)
+
+### estimate the max calue of each plot and add the letters on top
+bias_taxon_addval_df <- bias_taxon_addval %>%
+  left_join(
+    tax_bias_results_a1_long %>%
+      group_by(group, year) %>%
+      summarise(y = max(tax_bias_results_a1_long
+                        $value, na.rm = TRUE), .groups = "drop"),
+    by = c("group", "year")
+  ) %>%
+  mutate(y = y*0.4)  # lift labels above boxes
+
+### filter for illustration purposes
+taxonomic_bias_all_filtered <- tax_bias_results_a1_long %>%
+  filter(value >0, value <= 20)
+
+taxonomic_bias_all_filtered <- taxonomic_bias_all_filtered %>%
+  filter(group != "algae")
+
+
+p6b <- boxplot_function(  taxonomic_bias_all_filtered,
+  x = group,
+  y = value,
+  fill = year
+) +
+  visuals_function() +
+  labs(
+    x = NULL,
+    y = "Calculated bias",
+    title = ""
+  ) +
+  geom_text(
+    data = bias_taxon_addval_df,
+    aes(x = group, y = y, label = addedvalue),
+    size = 2,
+    position = position_dodge(width = 0.8)
+  ) +
+  coord_flip() +
+  scale_y_continuous(limits = c(0,20)) +
+  scale_x_discrete(labels = c("Arthropods_other" = "Arthropods (other)", "Bees_wasps_ants" = "Bees,wasps,and ants", "Bugs_cicadas_aphids" = "Bugs,cicadas,and aphids","Flies_mosquitoes" = "Flies and mosquitoes","Grasshoppers_crickets" = "Grasshoppers and crickets", "Insects_other" = "Insects (other)",
+ "mosses_lichens" = "Mosses and lichens",
+    "moths_micros" = "Moths and micros",
+    "Invertebrates_other" = "Invertebrates (other)",
+    "reptiles_amphibians" = "Reptiles and amphibians"),expand = expansion(mult = c(0, 0))) + theme(legend.position = "none") + geom_hline(yintercept = 1, color = "green")
+
+p6b <- p6b + theme(axis.text.y = element_blank())
+
+p6b
+
+
+#### i exported the image using the export tool (to help view and adjust the graph dimensions first)
+patch_bias <-(p1b | p2b|p3b|p4b|p5b) 
+
+
+
+###### add titles
+
+
+add_tag <- function(p, label) {
+  p + theme(
+    plot.tag = element_text(face = "bold"),
+    plot.tag.position = c(0.02, 0.98)  # top-left inside panel
+  ) +
+  labs(tag = label)
+}
+
+p1 <- add_tag(p1, "A")
+p2 <- add_tag(p2, "B")
+p3 <- add_tag(p3, "C")
+p4 <- add_tag(p4, "D")
+p5 <- add_tag(p5, "E")
+p1b <- add_tag(p1b, "F")
+p2b <- add_tag(p2b, "G")
+p3b <- add_tag(p3b, "H")
+p4b <- add_tag(p4b, "I")
+p5b <- add_tag(p5b, "J")
+
+patch_scope <-(p1 | p2|p3|p4|p5) 
+patch_bias <-(p1b | p2b|p3b|p4b|p5b) 
+
+scope_title <- wrap_elements(
+  full = textGrob(
+    "Scope",
+    gp = gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+bias_title <- wrap_elements(
+  full = textGrob(
+    "Bias",
+    gp = gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+
+final_plot <-
+  (scope_title / patch_scope /
+   bias_title / patch_bias) +
+  plot_layout(
+    heights = c(0.1, 1, 0.1, 1)
+  )
+
+final_plot
+
+
+ggsave(
+  filename = "C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/graphs/scopebias.png",
+  plot = final_plot,
+  width = 14,
+  height = 8,
+  dpi = 600
+)
+
+### taxonomic 
+ts <- p6 +  labs(tag = "(K)")
+tb <- p6b +  labs(tag = "(L)")
+
+tsb <- (ts|tb)
+
+
+tsb
+
+ggsave(
+  filename = "C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/graphs/scopebias_tax.png",
+  plot = tsb,
+  width = 8,
+  height = 8,
+  dpi = 600
+)
