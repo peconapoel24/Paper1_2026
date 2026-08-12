@@ -1,0 +1,63 @@
+## Analysis 1: Campuses with opportunistic in 2023
+
+Observations_2023_clip_lugrouped_analysis1 <- Observations_2023_clip_lu_ng  %>%
+group_by(landuse_value2,campus) %>%
+  summarize(total = n())
+
+Observations_2024_clip_lugrouped_analysis1 <- Observations_2024_clip_lu_ng %>%
+group_by(landuse_value2,campus) %>%
+  summarize(total = n())
+
+Observations_2025_clip_lugrouped_analysis1 <- Observations_2025_clip_lu_ng %>%
+group_by(landuse_value2,campus) %>%
+  summarize(total = n())
+
+### this works when we have the same names + add a new col with mutate
+Observations_all_clip_lugrouped_analysis1 <- bind_rows(
+  Observations_2023_clip_lugrouped_analysis1 %>% mutate(year = "2023"),
+  Observations_2024_clip_lugrouped_analysis1 %>% mutate(year = "2024"),
+  Observations_2025_clip_lugrouped_analysis1 %>% mutate(year = "2025")
+)
+
+#### This is what i use for the BOXPLOT
+Observations_all_clip_lugrouped_analysis1<-st_drop_geometry(Observations_all_clip_lugrouped_analysis1)
+
+
+write.csv(Observations_all_clip_lugrouped_analysis1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Land_use3_for_boxplot_Analysis1.csv")
+
+Observations_all_clip_lugrouped_analysis1_sum <-
+  Observations_all_clip_lugrouped_analysis1 %>%
+  group_by(campus,landuse_value2, year) %>%   # replace 'species' with your ID column(s)
+  summarise(total = sum(total), .groups = "drop")
+
+## drop geom
+Observations_all_clip_lugrouped_analysis1_sum <- st_drop_geometry(Observations_all_clip_lugrouped_analysis1_sum)
+
+Observations_all_clip_lugrouped_analysis1_wide <-
+  Observations_all_clip_lugrouped_analysis1_sum %>%
+  tidyr::pivot_wider(
+    names_from = c(landuse_value2, year),
+    values_from = total,
+    names_sep = "_",
+    values_fill = 0
+  )
+
+write.csv(Observations_all_clip_lugrouped_analysis1_wide,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Land_use3_for_boxplot_Analysis1_wide.csv")
+
+write.xlsx(Observations_all_clip_lugrouped_analysis1_wide,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Land_use3_for_boxplot_Analysis1_wide.xlsx")
+
+
+## Analysis 2: Campuses with bioblitz in 2024 
+
+Observations_2024_clip_lu2_grouped <- Observations_2024_clip_lu2 %>%
+group_by(landuse_value2,campus) %>%
+  summarize(total = n())
+
+Observations_2024_clip_lu2_grouped_wide <-
+  Observations_2024_clip_lu2_grouped %>%
+  tidyr::pivot_wider(
+    names_from = c(landuse_value2),
+    values_from = total,
+    names_sep = "_",
+    values_fill = 0
+  ) %>% rename_with(~ paste0(.x, "_2024"),-campus)
