@@ -1,0 +1,518 @@
+
+## make the name easier
+totalobservations<- observations_all_summary_analysis1
+
+## 2024 ~ 2023
+## greater
+totalobservations_2423_greater <- wilcox.test(totalobservations$total_observations_24, totalobservations$total_observations_23, alternative = "greater", paired = T, na.rm = T)
+
+## less
+totalobservations_2423_less <- wilcox.test(totalobservations$total_observations_24, totalobservations$total_observations_23, alternative = "less", paired = T, na.rm = T)
+
+## both
+totalobservations_2423_twosided <- wilcox.test(totalobservations$total_observations_24, totalobservations$total_observations_23, paired = T, na.rm = T)
+
+## 2025~2023
+## greater
+totalobservations_2523_greater <- wilcox.test(totalobservations$total_observations_25, totalobservations$total_observations_23, alternative = "greater",paired = T, na.rm = T)
+
+## less
+totalobservations_2523_less <- wilcox.test(totalobservations$total_observations_25, totalobservations$total_observations_23, alternative = "less",paired = T, na.rm = T)
+
+## both
+totalobservations_2523_twosided <- wilcox.test(totalobservations$total_observations_25, totalobservations$total_observations_23,paired = T, na.rm = T)
+
+## 2025~2024
+## greater
+totalobservations_2524_greater <- wilcox.test(totalobservations$total_observations_25, totalobservations$total_observations_24, alternative = "greater",paired = T, na.rm = T)
+
+## less
+totalobservations_2524_less <- wilcox.test(totalobservations$total_observations_25, totalobservations$total_observations_24, alternative = "less",paired = T, na.rm = T)
+
+## both
+totalobservations_2524_twosided <- wilcox.test(totalobservations$total_observations_25, totalobservations$total_observations_24, paired = T, na.rm = T)
+
+results_observations <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(totalobservations_2423_greater$statistic,
+                totalobservations_2423_less$statistic,
+                totalobservations_2423_twosided$statistic,totalobservations_2523_greater$statistic,
+                totalobservations_2523_less$statistic,
+                totalobservations_2523_twosided$statistic,totalobservations_2524_greater$statistic,
+                totalobservations_2524_less$statistic,
+                totalobservations_2524_twosided$statistic),
+  
+  p.value = c(totalobservations_2423_greater$p.value,
+              totalobservations_2423_less$p.value,
+              totalobservations_2423_twosided$p.value,totalobservations_2523_greater$p.value,
+              totalobservations_2523_less$p.value,
+              totalobservations_2523_twosided$p.value,totalobservations_2524_greater$p.value,
+              totalobservations_2524_less$p.value,
+              totalobservations_2524_twosided$p.value),
+  
+  alternative = c(totalobservations_2423_greater$alternative,totalobservations_2423_less$alternative,totalobservations_2423_twosided$alternative,totalobservations_2523_greater$alternative,totalobservations_2523_less$alternative,totalobservations_2523_twosided$alternative,totalobservations_2524_greater$alternative,totalobservations_2524_less$alternative,totalobservations_2524_twosided$alternative),
+  
+  method = c(totalobservations_2423_greater$method, totalobservations_2423_less$method, totalobservations_2423_twosided$method,totalobservations_2523_greater$method, totalobservations_2523_less$method, totalobservations_2523_twosided$method,totalobservations_2524_greater$method, totalobservations_2524_less$method, totalobservations_2524_twosided$method)
+)
+
+write.csv(results_observations,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_total_observations.csv")
+
+
+```
+
+#### Scope: Buildings
+
+Statistical analysis assessing whether the median distance of observations to the nearest building  increased per campus in a following compared to an earlier year. 
+
+As complementary decrease and two-sided tests are also estimated but not discussed in the analysis
+
+
+
+```{r}
+
+
+#### Analysis 1: Campuses with opportunistic observations in 2023 and Bioblitz in 24,25
+# 
+median_buil_analysis1 <- read.csv("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Analysis1_Median_Buil23_24_25.csv", sep = ",")
+
+## 2024 ~ 2023
+## greater
+scope_buil_2423_greater <- wilcox.test(median_buil_analysis1$X2024, median_buil_analysis1$X2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_buil_2423_less <- wilcox.test(median_buil_analysis1$X2024, median_buil_analysis1$X2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_buil_2423_twosided <- wilcox.test(median_buil_analysis1$X2024, median_buil_analysis1$X2023, paired = T, na.rm = T)
+
+## 2025~2023
+## greater
+scope_buil_2523_greater <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2023, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_buil_2523_less <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2023, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_buil_2523_twosided <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2023,paired = T, na.rm = T)
+
+## 2025~2024
+## greater
+scope_buil_2524_greater <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2024, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_buil_2524_less <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2024, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_buil_2524_twosided <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2024, paired = T, na.rm = T)
+
+results_buildings_scope <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_buil_2423_greater$statistic,
+                scope_buil_2423_less$statistic,
+                 scope_buil_2423_twosided$statistic,scope_buil_2523_greater$statistic,
+                scope_buil_2523_less$statistic,
+                scope_buil_2523_twosided$statistic,scope_buil_2524_greater$statistic,
+                scope_buil_2524_less$statistic,
+                scope_buil_2524_twosided$statistic),
+  
+  p.value = c(scope_buil_2423_greater$p.value,
+              scope_buil_2423_less$p.value,
+              scope_buil_2423_twosided$p.value,scope_buil_2523_greater$p.value,
+             scope_buil_2523_less$p.value,
+              scope_buil_2523_twosided$p.value,scope_buil_2524_greater$p.value,
+              scope_buil_2524_less$p.value,
+              scope_buil_2524_twosided$p.value),
+  
+  alternative = c(scope_buil_2423_greater$alternative,scope_buil_2423_less$alternative,scope_buil_2423_twosided$alternative,scope_buil_2523_greater$alternative,scope_buil_2523_less$alternative,
+scope_buil_2523_twosided$alternative,scope_buil_2524_greater$alternative,scope_buil_2524_less$alternative,scope_buil_2524_twosided$alternative),
+  
+  method = c(scope_buil_2423_greater$method, scope_buil_2423_less$method, scope_buil_2423_twosided$method,scope_buil_2523_greater$method, scope_buil_2523_less$method, scope_buil_2523_twosided$method,scope_buil_2524_greater$method, scope_buil_2524_less$method, scope_buil_2524_twosided$method)
+)
+
+write.csv(results_buildings_scope,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_buildings.csv")
+
+
+
+```
+
+#### Scope: Roads/paths 
+
+Statistical analysis assessing whether the median distance of observations to the nearest road or path  increased per campus in a following compared to an earlier year. 
+
+As complementary decrease and two-sided tests are also estimated but not discussed in the analysis
+
+
+
+```{r}
+
+#### Analysis 1: Campuses with opportunistic observations in 2023 and Bioblitz in 24,25
+
+median_ropa_analysis1 <- read.csv("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Analysis1_Median_Roads_paths23_24_25.csv", sep = ",")
+
+
+## 2024 ~ 2023
+## greater
+scope_ropa_2423_greater <- wilcox.test(median_ropa_analysis1$X2024, median_ropa_analysis1$X2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_ropa_2423_less <- wilcox.test(median_ropa_analysis1$X2024, median_ropa_analysis1$X2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_ropa_2423_twosided <- wilcox.test(median_ropa_analysis1$X2024, median_ropa_analysis1$X2023, paired = T, na.rm = T)
+
+## 2025~2023
+## greater
+scope_ropa_2523_greater <- wilcox.test(median_ropa_analysis1$X2025, median_ropa_analysis1$X2023, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_ropa_2523_less <- wilcox.test(median_ropa_analysis1$X2025, median_ropa_analysis1$X2023, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_ropa_2523_twosided <- wilcox.test(median_ropa_analysis1$X2025, median_ropa_analysis1$X2023,paired = T, na.rm = T)
+
+## 2025~2024
+## greater
+scope_ropa_2524_greater <- wilcox.test(median_ropa_analysis1$X2025, median_ropa_analysis1$X2024, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_ropa_2524_less <- wilcox.test(median_ropa_analysis1$X2025, median_ropa_analysis1$X2024, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_ropa_2524_twosided <- wilcox.test(median_ropa_analysis1$X2025, median_ropa_analysis1$X2024, paired = T, na.rm = T)
+
+results_ropa_scope <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_ropa_2423_greater$statistic,
+                scope_ropa_2423_less$statistic,
+                 scope_ropa_2423_twosided$statistic,scope_ropa_2523_greater$statistic,
+                scope_ropa_2523_less$statistic,
+                scope_ropa_2523_twosided$statistic,scope_ropa_2524_greater$statistic,
+                scope_ropa_2524_less$statistic,
+                scope_ropa_2524_twosided$statistic),
+  
+  p.value = c(scope_ropa_2423_greater$p.value,
+              scope_ropa_2423_less$p.value,
+              scope_ropa_2423_twosided$p.value,scope_ropa_2523_greater$p.value,
+             scope_ropa_2523_less$p.value,
+              scope_ropa_2523_twosided$p.value,scope_ropa_2524_greater$p.value,
+              scope_ropa_2524_less$p.value,
+              scope_ropa_2524_twosided$p.value),
+  
+  alternative = c(scope_ropa_2423_greater$alternative,scope_ropa_2423_less$alternative,scope_ropa_2423_twosided$alternative,scope_ropa_2523_greater$alternative,scope_ropa_2523_less$alternative,
+scope_ropa_2523_twosided$alternative,scope_ropa_2524_greater$alternative,scope_ropa_2524_less$alternative,scope_ropa_2524_twosided$alternative),
+  
+  method = c(scope_ropa_2423_greater$method, scope_ropa_2423_less$method, scope_ropa_2423_twosided$method,scope_ropa_2523_greater$method, scope_ropa_2523_less$method, scope_ropa_2523_twosided$method,scope_ropa_2524_greater$method, scope_ropa_2524_less$method, scope_ropa_2524_twosided$method)
+)
+
+write.csv(results_ropa_scope,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_scope.csv")
+
+```
+
+
+
+#### Scope: Land use
+
+Statistical analysis assessing whether the total observations per land use type increased per campus in a following compared to an earlier year. 
+
+As complementary decrease and two-sided tests are also estimated but not discussed in the analysis
+
+
+
+```{r}
+
+### Added value: Increase in observations in each land use
+
+## I now read the adjusted land use file that i saved from before, edited the structure of the file to help with analysing the added value
+
+### Analysis 1: Opportunistic 2023 + Bioblitz 24,25
+## Agriculture 
+
+## 2024 ~ 2023
+## greater
+scope_agri_2423_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2024, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_agri_2423_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2024, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_agri_2423_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2024, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2023, paired = T, na.rm = T)
+
+## 2025~2023
+## greater
+scope_agri_2523_greater<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2025, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2023, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_agri_2523_less<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2025, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2023, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_agri_2523_twosided<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2025, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2023,paired = T, na.rm = T)
+
+## 2025~2024
+## greater
+scope_agri_2524_greater<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2025, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2024, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_agri_2524_less<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2025, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2024, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_agri_2524_twosided<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2025, Observations_all_clip_lugrouped_analysis1_wide$Agriculture_2024, paired = T, na.rm = T)
+
+results_agriculture <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_agri_2423_greater$statistic,
+                scope_agri_2423_less$statistic,
+                scope_agri_2423_twosided$statistic,scope_agri_2523_greater$statistic,
+                scope_agri_2523_less$statistic,
+                scope_agri_2523_twosided$statistic,scope_agri_2524_greater$statistic,
+                scope_agri_2524_less$statistic,
+              scope_agri_2524_twosided$statistic),
+  
+  p.value = c(scope_agri_2423_greater$p.value,
+              scope_agri_2423_less$p.value,
+              scope_agri_2423_twosided$p.value,scope_agri_2523_greater$p.value,
+              scope_agri_2523_less$p.value,
+              scope_agri_2523_twosided$p.value,scope_agri_2524_greater$p.value,
+              scope_agri_2524_less$p.value,
+              scope_agri_2524_twosided$p.value),
+  
+  alternative = c(scope_agri_2423_greater$alternative,scope_agri_2423_less$alternative,scope_agri_2423_twosided$alternative,scope_agri_2523_greater$alternative,scope_agri_2523_less$alternative,scope_agri_2523_twosided$alternative,scope_agri_2524_greater$alternative,scope_agri_2524_less$alternative,scope_agri_2524_twosided$alternative),
+  
+  method = c(scope_agri_2423_greater$method, scope_agri_2423_less$method, scope_agri_2423_twosided$method,scope_agri_2523_greater$method, scope_agri_2523_less$method, scope_agri_2523_twosided$method,scope_agri_2524_greater$method, scope_agri_2524_less$method, scope_agri_2524_twosided$method)
+)
+
+write.csv(results_agriculture,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_agriculture.csv")
+
+#### Natural in built 
+
+scope_natubuil_2423_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2024, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_natubuil_2423_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2024, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_natubuil_2423_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2024, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2023, paired = T, na.rm = T)
+
+## 2025~2023
+## greater
+scope_natubuil_2523_greater<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2025, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2023, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_natubuil_2523_less<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2025, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2023, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_natubuil_2523_twosided<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2025, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2023,paired = T, na.rm = T)
+
+## 2025~2024
+## greater
+scope_natubuil_2524_greater<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2025, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2024, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_natubuil_2524_less<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2025, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2024, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_natubuil_2524_twosided<-wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2025, Observations_all_clip_lugrouped_analysis1_wide$Natural_in_Built_2024, paired = T, na.rm = T)
+
+results_naturalinbuilt <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_natubuil_2423_greater$statistic,
+                scope_natubuil_2423_less$statistic,
+                scope_natubuil_2423_twosided$statistic,scope_natubuil_2523_greater$statistic,
+                scope_natubuil_2523_less$statistic,
+                scope_natubuil_2523_twosided$statistic,scope_natubuil_2524_greater$statistic,
+                scope_natubuil_2524_less$statistic,
+                scope_natubuil_2524_twosided$statistic),
+  
+  p.value = c(scope_natubuil_2423_greater$p.value,
+              scope_natubuil_2423_less$p.value,
+              scope_natubuil_2423_twosided$p.value,scope_natubuil_2523_greater$p.value,
+              scope_natubuil_2523_less$p.value,
+              scope_natubuil_2523_twosided$p.value,scope_natubuil_2524_greater$p.value,
+              scope_natubuil_2524_less$p.value,
+              scope_natubuil_2524_twosided$p.value),
+  
+  alternative = c(scope_natubuil_2423_greater$alternative,scope_natubuil_2423_less$alternative,scope_natubuil_2423_twosided$alternative,scope_natubuil_2523_greater$alternative,scope_natubuil_2523_less$alternative,scope_natubuil_2523_twosided$alternative,scope_natubuil_2524_greater$alternative,scope_natubuil_2524_less$alternative,scope_natubuil_2524_twosided$alternative),
+  
+  method = c(scope_natubuil_2423_greater$method, scope_natubuil_2423_less$method, scope_natubuil_2423_twosided$method,scope_natubuil_2523_greater$method, scope_natubuil_2523_less$method, scope_natubuil_2523_twosided$method,scope_natubuil_2524_greater$method, scope_natubuil_2524_less$method, scope_natubuil_2524_twosided$method)
+)
+
+write.csv(results_naturalinbuilt,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_natural_in_built.csv")
+
+#### Freshwater
+
+## 2024 ~ 2023
+scope_fresh_2423_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2024, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_fresh_2423_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2024, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_fresh_2423_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2024, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2023, paired = T, na.rm = T)
+
+## 2025~2023
+
+scope_fresh_2523_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2025, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_fresh_2523_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2025, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_fresh_2523_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2025, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2023, paired = T, na.rm = T)
+
+## 2025~2024
+## greater
+scope_fresh_2524_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2025, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2024, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_fresh_2524_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2025, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2024, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_fresh_2524_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2025, Observations_all_clip_lugrouped_analysis1_wide$Freshwater_2024, paired = T, na.rm = T)
+
+
+## merge
+results_fresh <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_fresh_2423_greater$statistic,
+                scope_fresh_2423_less$statistic,
+                scope_fresh_2423_twosided$statistic,scope_fresh_2523_greater$statistic,
+                scope_fresh_2523_less$statistic,
+                scope_fresh_2523_twosided$statistic,scope_fresh_2524_greater$statistic,
+                scope_fresh_2524_less$statistic,
+                scope_fresh_2524_twosided$statistic),
+  
+  p.value = c(scope_fresh_2423_greater$p.value,
+              scope_fresh_2423_less$p.value,
+              scope_fresh_2423_twosided$p.value,scope_fresh_2523_greater$p.value,
+              scope_fresh_2523_less$p.value,
+              scope_fresh_2523_twosided$p.value,scope_fresh_2524_greater$p.value,
+              scope_fresh_2524_less$p.value,
+              scope_fresh_2524_twosided$p.value),
+  
+  alternative = c(scope_fresh_2423_greater$alternative,scope_fresh_2423_less$alternative,scope_fresh_2423_twosided$alternative,scope_fresh_2523_greater$alternative,scope_fresh_2523_less$alternative,scope_fresh_2523_twosided$alternative,scope_fresh_2524_greater$alternative,scope_fresh_2524_less$alternative,scope_fresh_2524_twosided$alternative),
+  
+  method = c(scope_fresh_2423_greater$method, scope_fresh_2423_less$method, scope_fresh_2423_twosided$method,scope_fresh_2523_greater$method, scope_fresh_2523_less$method, scope_fresh_2523_twosided$method,scope_fresh_2524_greater$method, scope_fresh_2524_less$method, scope_fresh_2524_twosided$method)
+)
+
+write.csv(results_fresh,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_freshwater.csv")
+
+
+#### Built areas
+
+## 2024 ~ 2023
+scope_built_2423_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2024, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_built_2423_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2024, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_built_2423_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2024, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2023, paired = T, na.rm = T)
+
+## 2025~2023
+
+scope_built_2523_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2025, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_built_2523_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2025, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_built_2523_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2025, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2023, paired = T, na.rm = T)
+
+
+## 2025~2024
+
+scope_built_2524_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2025, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2024, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_built_2524_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2025, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2024, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_built_2524_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$built_areas_2025, Observations_all_clip_lugrouped_analysis1_wide$built_areas_2024, paired = T, na.rm = T)
+
+## merge
+results_built_areas <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_built_2423_greater$statistic,
+                scope_built_2423_less$statistic,
+                scope_built_2423_twosided$statistic,scope_built_2523_greater$statistic,
+                scope_built_2523_less$statistic,
+                scope_built_2523_twosided$statistic,scope_built_2524_greater$statistic,
+                scope_built_2524_less$statistic,
+                scope_built_2524_twosided$statistic),
+  
+  p.value = c(scope_built_2423_greater$p.value,
+              scope_built_2423_less$p.value,
+              scope_built_2423_twosided$p.value,scope_built_2523_greater$p.value,
+              scope_built_2523_less$p.value,
+              scope_built_2523_twosided$p.value,scope_built_2524_greater$p.value,
+              scope_built_2524_less$p.value,
+              scope_built_2524_twosided$p.value),
+  
+  alternative = c(scope_built_2423_greater$alternative,scope_built_2423_less$alternative,scope_built_2423_twosided$alternative,scope_built_2523_greater$alternative,scope_built_2523_less$alternative,scope_built_2523_twosided$alternative,scope_built_2524_greater$alternative,scope_built_2524_less$alternative,scope_built_2524_twosided$alternative),
+  
+  method = c(scope_built_2423_greater$method, scope_built_2423_less$method, scope_built_2423_twosided$method,scope_built_2523_greater$method, scope_built_2523_less$method, scope_built_2523_twosided$method,scope_built_2524_greater$method, scope_built_2524_less$method, scope_built_2524_twosided$method)
+)
+
+write.csv(results_built_areas,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_built_areas.csv")
+
+
+##### Terrestrial natural
+
+## 2024 ~ 2023
+scope_ternat_2423_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2024, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_ternat_2423_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2024, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_ternat_2423_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2024, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2023, paired = T, na.rm = T)
+
+## 2025~2023
+scope_ternat_2523_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2025, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_ternat_2523_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2025, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_ternat_2523_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2025, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2023, paired = T, na.rm = T)
+
+## 2025~2024
+scope_ternat_2524_greater <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2025, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2024, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_ternat_2524_less <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2025, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2024, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_ternat_2524_twosided <- wilcox.test(Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2025, Observations_all_clip_lugrouped_analysis1_wide$Terrestrial_Natural_2024, paired = T, na.rm = T)
+
+
+## merge
+results_ternat <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_ternat_2423_greater$statistic,
+                scope_ternat_2423_less$statistic,
+                scope_ternat_2423_twosided$statistic,scope_ternat_2523_greater$statistic,
+                scope_ternat_2523_less$statistic,
+                scope_ternat_2523_twosided$statistic,scope_ternat_2524_greater$statistic,
+                scope_ternat_2524_less$statistic,
+                scope_ternat_2524_twosided$statistic),
+  
+  p.value = c(scope_ternat_2423_greater$p.value,
+              scope_ternat_2423_less$p.value,
+              scope_ternat_2423_twosided$p.value,scope_ternat_2523_greater$p.value,
+              scope_ternat_2523_less$p.value,
+              scope_ternat_2523_twosided$p.value,scope_ternat_2524_greater$p.value,
+              scope_ternat_2524_less$p.value,
+              scope_ternat_2524_twosided$p.value),
+  
+  alternative = c(scope_ternat_2423_greater$alternative,scope_ternat_2423_less$alternative,scope_ternat_2423_twosided$alternative,scope_ternat_2523_greater$alternative,scope_ternat_2523_less$alternative,scope_ternat_2523_twosided$alternative,scope_ternat_2524_greater$alternative,scope_ternat_2524_less$alternative,scope_ternat_2524_twosided$alternative),
+  
+  method = c(scope_ternat_2423_greater$method, scope_ternat_2423_less$method, scope_ternat_2423_twosided$method,scope_ternat_2523_greater$method, scope_ternat_2523_less$method, scope_ternat_2523_twosided$method,scope_ternat_2524_greater$method, scope_ternat_2524_less$method, scope_ternat_2524_twosided$method)
+)
+
+write.csv(results_ternat,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_terrestrialnatural.csv")
+
+
+
+
+
+
