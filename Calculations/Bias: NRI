@@ -1,0 +1,542 @@
+
+## Clip the lines for each campus 
+##### From here starts the separate code for each campus #####
+
+## RQ1&2: Opp 2023 Biob 24-25
+
+## ---- USP --- ##
+
+## clip roads to campus boundaries
+usp_lines25 <- st_intersection(Top10NL_Roadspaths_all_campuses25, USP_boundaries)
+
+usp_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, USP_boundaries)
+
+usp_lines23 <- st_intersection(Top10NL_Roadspaths_all_campuses23, USP_boundaries)
+
+### Han Arnhem
+arn_lines25 <- st_intersection(Top10NL_Roadspaths_all_campuses25, HAN_Arnhem_boundaries)
+
+arn_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, HAN_Arnhem_boundaries)
+
+arn_lines23 <- st_intersection(Top10NL_Roadspaths_all_campuses23, HAN_Arnhem_boundaries)
+
+## Leiden Bioscience Park
+leibios_lines25 <- st_intersection(Top10NL_Roadspaths_all_campuses25, Leiden_Bioscience_Park_boundaries)
+
+leibios_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Leiden_Bioscience_Park_boundaries)
+
+leibios_lines23 <- st_intersection(Top10NL_Roadspaths_all_campuses23, Leiden_Bioscience_Park_boundaries)
+
+## Leiden Binnenstad
+leibin_lines25 <- st_intersection(Top10NL_Roadspaths_all_campuses25, Leiden_Binnenstad_boundaries)
+
+leibin_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Leiden_Binnenstad_boundaries)
+
+leibin_lines23 <- st_intersection(Top10NL_Roadspaths_all_campuses23, Leiden_Binnenstad_boundaries)
+
+## Leeuwarden
+leeu_lines25 <- st_intersection(Top10NL_Roadspaths_all_campuses25, Leeuwarden_Van_Hall_Larenstein_boundaries)
+
+leeu_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Leeuwarden_Van_Hall_Larenstein_boundaries)
+
+leeu_lines23 <- st_intersection(Top10NL_Roadspaths_all_campuses23, Leeuwarden_Van_Hall_Larenstein_boundaries)
+
+## Uva
+uva_lines25 <- st_intersection(Top10NL_Roadspaths_all_campuses25, Amsterdam_Science_Park_boundaries)
+
+uva_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Amsterdam_Science_Park_boundaries)
+
+uva_lines23 <- st_intersection(Top10NL_Roadspaths_all_campuses23, Amsterdam_Science_Park_boundaries)
+
+##-- Biob 23-25 --##
+
+## Velp 
+velp_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Velp_Van_Hall_Larenstein_boundaries)
+
+## Groningen
+gro_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Groningen_Zernike_campus_boundaries)
+
+## Nijmegen campus
+ruhan_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Nijmegen_campus_boundaries)
+
+## TUDelft
+del_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, TUDelft_boundaries)
+
+## Twente
+twe_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, Twente_university_campus_boundaries)
+
+## WUR main 
+wur_lines24 <- st_intersection(Top10NL_Roadspaths_all_campuses24, WUR_main_campus_boundaries)
+
+## USP
+
+## 2025
+mean_dists_usp25r <- lapply(seq_along(random_replicates_usp_25), function(i){
+  sublist <- random_replicates_usp_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, usp_lines25)
+    min_dists <- apply(d, 1, min) 
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_usp_25))
+  res
+})
+
+mean_dists_usp25r <- unlist(mean_dists_usp25r)
+mean_random_usp25r <- mean(mean_dists_usp25r)
+mean_dist_usp25r <- mean(USP25$distance_to_road)
+ratio_ropa_usp25r <- mean_dist_usp25r / mean_random_usp25r
+
+## 2024
+mean_dists_usp24r <- lapply(seq_along(random_replicates_usp_24), function(i){
+  sublist <- random_replicates_usp_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, usp_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_usp_24))
+  res
+})
+
+mean_dists_usp24r <- unlist(mean_dists_usp24r)
+mean_random_usp24r <- mean(mean_dists_usp24r)
+mean_dist_usp24r <- mean(USP24$distance_to_road)
+ratio_ropa_usp24r <- mean_dist_usp24r / mean_random_usp24r 
+
+# 2023
+mean_dists_usp23r <- lapply(seq_along(random_replicates_usp_23), function(i){
+  sublist <- random_replicates_usp_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, usp_lines23)
+    min_dists <- apply(d, 1, min) 
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_usp_23))
+  res
+})
+
+mean_dists_usp23r <- unlist(mean_dists_usp23r)
+mean_random_usp23r <- mean(mean_dists_usp23r)
+mean_dist_usp23r <- mean(USP23$distance_to_road)
+ratio_ropa_usp23r <- mean_dist_usp23r / mean_random_usp23r 
+
+##-- HAN Arnhem --##
+## 2025
+
+mean_dists_arn25r <- lapply(seq_along(random_replicates_hanarn_25), function(i){
+  sublist <- random_replicates_hanarn_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, arn_lines25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_hanarn_25))
+  res
+})
+
+mean_dists_arn25r <- unlist(mean_dists_arn25r)
+mean_random_arn25r <- mean(mean_dists_arn25r)
+mean_dist_arn25r <- mean(HAN_Arnhem25$distance_to_road)
+ratio_ropa_arn25r <- mean_dist_arn25r / mean_random_arn25r
+
+## 2024
+mean_dists_arn24r <- lapply(seq_along(random_replicates_hanarn_24), function(i){
+  sublist <- random_replicates_hanarn_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, arn_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_hanarn_24))
+  res
+})
+
+mean_dists_arn24r <- unlist(mean_dists_arn24r)
+mean_random_arn24r <- mean(mean_dists_arn24r)
+mean_dist_arn24r <- mean(HAN_Arnhem24$distance_to_road)
+ratio_ropa_arn24r <- mean_dist_arn24r / mean_random_arn24r 
+
+# 2023
+mean_dists_arn23r <- lapply(seq_along(random_replicates_hanarn_23), function(i){
+  sublist <- random_replicates_hanarn_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, arn_lines23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_hanarn_23))
+  res
+})
+
+mean_dists_arn23r <- unlist(mean_dists_arn23r)
+mean_random_arn23r <- mean(mean_dists_arn23r)
+mean_dist_arn23r <- mean(HAN_Arnhem23$distance_to_road)
+ratio_ropa_arn23r <- mean_dist_arn23r / mean_random_arn23r 
+
+## UVA
+## 2025
+mean_dists_uva25r <- lapply(seq_along(random_replicates_uva_25), function(i){
+  sublist <- random_replicates_uva_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, uva_lines25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_uva_25))
+  res
+})
+
+mean_dists_uva25r <- unlist(mean_dists_uva25r)
+mean_random_uva25r <- mean(mean_dists_uva25r)
+mean_dist_uva25r <- mean(UvA25$distance_to_road)
+ratio_ropa_uva25r <- mean_dist_uva25r / mean_random_uva25r
+
+## 2024
+mean_dists_uva24r <- lapply(seq_along(random_replicates_uva_24), function(i){
+  sublist <- random_replicates_uva_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, uva_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_uva_24))
+  res
+})
+
+mean_dists_uva24r <- unlist(mean_dists_uva24r)
+mean_random_uva24r <- mean(mean_dists_uva24r)
+mean_dist_uva24r <- mean(UvA24$distance_to_road)
+ratio_ropa_uva24r <- mean_dist_uva24r / mean_random_uva24r 
+
+# 2023
+mean_dists_uva23r <- lapply(seq_along(random_replicates_uva_23), function(i){
+  sublist <- random_replicates_uva_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, uva_lines23)
+    min_dists <- apply(d, 1, min)  # nearest point per point in POINT sf
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_uva_23))
+  res
+})
+
+mean_dists_uva23r <- unlist(mean_dists_uva23r)
+mean_random_uva23r <- mean(mean_dists_uva23r)
+mean_dist_uva23r <- mean(UvA23$distance_to_road)
+ratio_ropa_uva23r <- mean_dist_uva23r / mean_random_uva23r 
+
+###### Leeuwarden - Van Hall Larenstein 
+## 2025
+mean_dists_leeu25r <- lapply(seq_along(random_replicates_leeu_25), function(i){
+  sublist <- random_replicates_leeu_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leeu_lines25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leeu_25))
+  res
+})
+
+mean_dists_leeu25r <- unlist(mean_dists_leeu25r)
+mean_random_leeu25r <- mean(mean_dists_leeu25r)
+mean_dist_leeu25r <- mean(Leeuwarden_Van_Hall_Larenstein25$distance_to_road)
+ratio_ropa_leeu25r <- mean_dist_leeu25r / mean_random_leeu25r
+
+## 2024
+mean_dists_leeu24r <- lapply(seq_along(random_replicates_leeu_24), function(i){
+  sublist <- random_replicates_leeu_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leeu_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leeu_24))
+  res
+})
+
+mean_dists_leeu24r <- unlist(mean_dists_leeu24r)
+mean_random_leeu24r <- mean(mean_dists_leeu24r)
+mean_dist_leeu24r <- mean(Leeuwarden_Van_Hall_Larenstein24$distance_to_road)
+ratio_ropa_leeu24r <- mean_dist_leeu24r / mean_random_leeu24r
+
+## 2023
+mean_dists_leeu23r <- lapply(seq_along(random_replicates_leeu_23), function(i){
+  sublist <- random_replicates_leeu_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leeu_lines23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leeu_23))
+  res
+})
+
+mean_dists_leeu23r <- unlist(mean_dists_leeu23r)
+mean_random_leeu23r <- mean(mean_dists_leeu23r)
+mean_dist_leeu23r <- mean(Leeuwarden_Van_Hall_Larenstein23$distance_to_road)
+ratio_ropa_leeu23r <- mean_dist_leeu23r / mean_random_leeu23r
+
+#######  Leiden Bioscience Park
+## 2025
+mean_dists_leibios25r <- lapply(seq_along(random_replicates_leidenbiosc_25), function(i){
+  sublist <- random_replicates_leidenbiosc_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leibios_lines25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenbiosc_25))
+  res
+})
+
+mean_dists_leibios25r <- unlist(mean_dists_leibios25r)
+mean_random_leibios25r <- mean(mean_dists_leibios25r)
+mean_dist_leibios25r <- mean(Leiden_Biosc25$distance_to_road)
+ratio_ropa_leibios25r <- mean_dist_leibios25r / mean_random_leibios25r
+
+## 2024
+mean_dists_leibios24r <- lapply(seq_along(random_replicates_leidenbiosc_24), function(i){
+  sublist <- random_replicates_leidenbiosc_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leibios_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenbiosc_24))
+  res
+})
+
+mean_dists_leibios24r <- unlist(mean_dists_leibios24r)
+mean_random_leibios24r <- mean(mean_dists_leibios24r)
+mean_dist_leibios24r <- mean(Leiden_Biosc24$distance_to_road)
+ratio_ropa_leibios24r <- mean_dist_leibios24r / mean_random_leibios24r
+
+## 2023
+mean_dists_leibios23r <- lapply(seq_along(random_replicates_leidenbiosc_23), function(i){
+  sublist <- random_replicates_leidenbiosc_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leibios_lines23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenbiosc_23))
+  res
+})
+
+mean_dists_leibios23r <- unlist(mean_dists_leibios23r)
+mean_random_leibios23r <- mean(mean_dists_leibios23r)
+mean_dist_leibios23r <- mean(Leiden_Biosc23$distance_to_road)
+ratio_ropa_leibios23r <- mean_dist_leibios23r / mean_random_leibios23r
+
+###### Leiden_Binnenstad
+## 2025
+mean_dists_leibin25r <- lapply(seq_along(random_replicates_leidenstad_25), function(i){
+  sublist <- random_replicates_leidenstad_25[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leibin_lines25)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenstad_25))
+  res
+})
+
+mean_dists_leibin25r <- unlist(mean_dists_leibin25r)
+mean_random_leibin25r <- mean(mean_dists_leibin25r)
+mean_dist_leibin25r <- mean(Leiden_Bin25$distance_to_road)
+ratio_ropa_leibin25r <- mean_dist_leibin25r / mean_random_leibin25r
+
+## 2024
+mean_dists_leibin24r <- lapply(seq_along(random_replicates_leidenstad_24), function(i){
+  sublist <- random_replicates_leidenstad_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leibin_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenstad_24))
+  res
+})
+
+mean_dists_leibin24r <- unlist(mean_dists_leibin24r)
+mean_random_leibin24r <- mean(mean_dists_leibin24r)
+mean_dist_leibin24r <- mean(Leiden_Bin24$distance_to_road)
+ratio_ropa_leibin24r <- mean_dist_leibin24r / mean_random_leibin24r
+
+## 2023
+mean_dists_leibin23r <- lapply(seq_along(random_replicates_leidenstad_23), function(i){
+  sublist <- random_replicates_leidenstad_23[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, leibin_lines23)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_leidenstad_23))
+  res
+})
+
+mean_dists_leibin23r <- unlist(mean_dists_leibin23r)
+mean_random_leibin23r <- mean(mean_dists_leibin23r)
+mean_dist_leibin23r <- mean(Leiden_Bin23$distance_to_road)
+ratio_ropa_leibin23r <- mean_dist_leibin23r / mean_random_leibin23r
+
+### join as a table
+bias_a1_nri <- tibble(
+  campus = c("USP", "UvA", "Leiden_Bioscience","Leiden_Binnenstad","Leeuwarden_Van_Hall_Larenstein","HAN_Arnhem"),
+  "X2023" = c(ratio_ropa_usp23r, ratio_ropa_uva23r, ratio_ropa_leibios23r,ratio_ropa_leibin23r,ratio_ropa_leeu23r,ratio_ropa_arn23r),
+  "X2024" = c(ratio_ropa_usp24r, ratio_ropa_uva24r, ratio_ropa_leibios24r,ratio_ropa_leibin24r,ratio_ropa_leeu24r,ratio_ropa_arn24r),
+  "X2025" = c(ratio_ropa_usp25r, ratio_ropa_uva25r, ratio_ropa_leibios25r,ratio_ropa_leibin25r,ratio_ropa_leeu25r,ratio_ropa_arn25r)
+)
+
+write.csv(bias_a1_nri,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NRI_a1.csv")
+
+write.xlsx(bias_a1_nri,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NRI_a1.xlsx")
+
+### for boxplot
+
+bias_nri_a1_long <- bias_a1_nri %>%
+    rename(
+      "2023" = `X2023`,
+      "2024" = `X2024`,
+      "2025" = `X2025`
+    )
+
+bias_nri_a1_long <- bias_nri_a1_long %>%
+  tidyr::pivot_longer(
+    cols = "2023":"2025",
+    names_to = "year",
+    values_to = "value"
+  )
+write.csv(bias_nri_a1_long,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NRI_a1_box.csv")
+
+
+
+
+#######  RQ2 only -- Biob 23-25 -- ####
+## WUR 
+
+## 2024
+mean_dists_wur24r <- lapply(seq_along(random_replicates_wur_24), function(i){
+  sublist <- random_replicates_wur_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, wur_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_wur_24))
+  res
+})
+
+mean_dists_wur24r <- unlist(mean_dists_wur24r)
+mean_random_wur24r <- mean(mean_dists_wur24r)
+mean_dist_wur24r <- mean(WUR_main_campus24$distance_to_road)
+ratio_ropa_wur24r <- mean_dist_wur24r / mean_random_wur24r 
+
+## Nijmegen campus
+
+## 2024
+mean_dists_ruhan24r <- lapply(seq_along(random_replicates_ruhan_24), function(i){
+  sublist <- random_replicates_ruhan_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, ruhan_lines24)
+    min_dists <- apply(d, 1, min)  # nearest point per point in POINT sf
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_ruhan_24))
+  res
+})
+
+mean_dists_ruhan24r <- unlist(mean_dists_ruhan24r)
+mean_random_ruhan24r <- mean(mean_dists_ruhan24r)
+mean_dist_ruhan24r <- mean(Radboud_University_and_HAN_Nijmegen24$distance_to_road)
+ratio_ropa_ruhan24r <- mean_dist_ruhan24r / mean_random_ruhan24r 
+
+## Twente uni
+## 2024
+mean_dists_twe24r <- lapply(seq_along(random_replicates_twente_24), function(i){
+  sublist <- random_replicates_twente_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, twe_lines24)
+    min_dists <- apply(d, 1, min)  # nearest point per point in POINT sf
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_twente_24))
+  res
+})
+
+mean_dists_twe24r <- unlist(mean_dists_twe24r)
+mean_random_twe24r <- mean(mean_dists_twe24r)
+mean_dist_twe24r <- mean(Twente_university_campus24$distance_to_road)
+ratio_ropa_twe24r <- mean_dist_twe24r / mean_random_twe24r 
+
+##### Groningen - Zernike
+
+## 2024
+mean_dists_gro24r <- lapply(seq_along(random_replicates_gro_24), function(i){
+  sublist <- random_replicates_gro_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, gro_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_gro_24))
+  res
+})
+
+mean_dists_gro24r <- unlist(mean_dists_gro24r)
+mean_random_gro24r <- mean(mean_dists_gro24r)
+mean_dist_gro24r <- mean(Groningen_Zernike_campus24$distance_to_road)
+ratio_ropa_gro24r <- mean_dist_gro24r / mean_random_gro24r
+
+####### Velp - Landgoed Larenstein 
+
+## 2024
+mean_dists_velp24r <- lapply(seq_along(random_replicates_velp_24), function(i){
+  sublist <- random_replicates_velp_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, velp_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_velp_24))
+  res
+})
+
+mean_dists_velp24r <- unlist(mean_dists_velp24r)
+mean_random_velp24r <- mean(mean_dists_velp24r)
+mean_dist_velp24r <- mean(Velp_Van_Hall_Larenstein24$distance_to_road)
+ratio_ropa_velp24r <- mean_dist_velp24r / mean_random_velp24r
+
+## TUDelft
+
+## 2024
+mean_dists_del24r <- lapply(seq_along(random_replicates_delft_24), function(i){
+  sublist <- random_replicates_delft_24[[i]]
+  res <- sapply(sublist, function(points_sf){
+    d <- st_distance(points_sf, del_lines24)
+    min_dists <- apply(d, 1, min)  
+    mean(as.numeric(min_dists))
+  })
+  message("Finished sublist ", i, " / ", length(random_replicates_delft_24))
+  res
+})
+
+mean_dists_del24r <- unlist(mean_dists_del24r)
+mean_random_del24r <- mean(mean_dists_del24r)
+mean_dist_del24r <- mean(TUDelft24$distance_to_road)
+ratio_ropa_del24r <- mean_dist_del24r / mean_random_del24r 
+
+
+#####
+### join as a table
+bias_a2_nri <- tibble(
+  dataset = c("WUR", "Nijmegen_campus", "TU_Delft","Twente","Groningen_Zernike_campus","Velp_Van_Hall_Larenstein"),
+    "X2024" = c(ratio_ropa_wur24r, ratio_ropa_ruhan24r, ratio_ropa_del24r,ratio_ropa_twe24r,ratio_ropa_gro24r,ratio_ropa_velp24r),
+  
+)
+
+write.csv(bias_a2_nri,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NRI_a2.csv")
+
+write.xlsx(bias_a2_nri,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NRI_a2.xlsx")
