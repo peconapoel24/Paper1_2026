@@ -1,0 +1,124 @@
+
+
+##### ------------ 2023 --------------- ###########
+# Split by location
+campuses_2023_split <- split(Observations_2023_clip_filtered, Observations_2023_clip_filtered$campus)
+
+unique(Observations_2023_clip_filtered$campus)
+
+HAN_Arnhem23 <- campuses_2023_split[["HAN_arnhem"]]
+
+Leiden_Biosc23 <- campuses_2023_split[["Leiden_Bioscience_Park"]]
+
+Leiden_Bin23 <- campuses_2023_split[["Leiden_Binnenstad"]]
+
+Leeuwarden_Van_Hall_Larenstein23 <- campuses_2023_split[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP23 <- campuses_2023_split[["USP"]]
+
+UvA23 <- campuses_2023_split[["Amsterdam_Science_Park"]]
+
+##### ------------ 2024 --------------- ###########
+# Split by location
+campuses_2024_split <- split(Observations_2024_clip_filtered, Observations_2024_clip_filtered$campus)
+
+unique(Observations_2024_clip_filtered$campus)
+
+# Extract each location 
+
+### RQ1+RQ2 only
+HAN_Arnhem24 <- campuses_2024_split[["HAN_arnhem"]]
+
+Leiden_Biosc24 <- campuses_2024_split[["Leiden_Bioscience_Park"]]
+
+Leiden_Bin24 <- campuses_2024_split[["Leiden_Binnenstad"]]
+
+Leeuwarden_Van_Hall_Larenstein24 <- campuses_2024_split[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP24 <- campuses_2024_split[["USP"]]
+
+UvA24 <- campuses_2024_split[["Amsterdam_Science_Park"]]
+
+## RQ2 only
+
+Velp_Van_Hall_Larenstein24 <- campuses_2024_split[["Velp_Landgoed_Larenstein"]]
+
+Groningen_Zernike_campus24 <- campuses_2024_split[["Groningen_Zernike"]]
+
+Radboud_University_and_HAN_Nijmegen24 <- campuses_2024_split[["Nijmegen_campus"]]
+
+TUDelft24 <- campuses_2024_split[["Delft_TU_Campus"]]
+
+Twente_university_campus24 <- campuses_2024_split[["UT_campus"]]
+
+WUR_main_campus24 <- campuses_2024_split[["WUR_main_campus"]]
+
+##### ------------ 2025 --------------- ###########
+
+# Split by location
+campuses_2025_split <- split(Observations_2025_clip_filtered, Observations_2025_clip_filtered$campus)
+
+# Extract each location 
+
+HAN_Arnhem25 <- campuses_2025_split[["HAN_arnhem"]]
+
+Leiden_Biosc25 <- campuses_2025_split[["Leiden_Bioscience_Park"]]
+
+Leiden_Bin25 <- campuses_2025_split[["Leiden_Binnenstad"]]
+
+Leeuwarden_Van_Hall_Larenstein25 <- campuses_2025_split[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP25 <- campuses_2025_split[["USP"]]
+
+UvA25 <- campuses_2025_split[["Amsterdam_Science_Park"]]
+
+
+
+## Run bias for each campus separately and each year.
+##### This is the same code for splitting universities as earlier but because it takes space to keep it i rerun it
+
+campuses_boundaries_split <- split(campus_boundaries_merged_filtered, campus_boundaries_merged_filtered$campus)
+
+unique(campus_boundaries_merged_filtered$campus)
+
+###### campus boundaries
+
+### With opportunistic 2023 + Bioblitz 2024-2025
+
+HAN_Arnhem_boundaries <- 
+campuses_boundaries_split$HAN_arnhem
+
+Leeuwarden_Van_Hall_Larenstein_boundaries <- 
+campuses_boundaries_split$Leeuwarden_Van_Hall_Larenstein
+
+Leiden_Bioscience_Park_boundaries <- 
+campuses_boundaries_split$Leiden_Bioscience_Park
+
+Leiden_Binnenstad_boundaries <- 
+campuses_boundaries_split$Leiden_Binnenstad
+
+Amsterdam_Science_Park_boundaries <- 
+campuses_boundaries_split$Amsterdam_Science_Park
+
+USP_boundaries <- 
+campuses_boundaries_split$USP
+
+###  Bioblitz 2023-2025
+
+Nijmegen_campus_boundaries <- 
+campuses_boundaries_split$Nijmegen_campus
+
+Velp_Van_Hall_Larenstein_boundaries <- 
+campuses_boundaries_split$Velp_Landgoed_Larenstein
+
+Twente_university_campus_boundaries <- 
+campuses_boundaries_split$UT_campus
+
+TUDelft_boundaries <- 
+campuses_boundaries_split$Delft_TU_Campus
+
+WUR_main_campus_boundaries <- 
+campuses_boundaries_split$WUR_main_campus
+
+Groningen_Zernike_campus_boundaries <- 
+campuses_boundaries_split$Groningen_Zernike
