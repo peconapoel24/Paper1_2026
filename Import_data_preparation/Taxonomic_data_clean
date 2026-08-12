@@ -1,0 +1,282 @@
+
+############## Analysis 1: Campuses with opportunistic observations in 2023 and a Bioblitz in 2024
+
+
+######## Pre-processing: Translate names to english. Also remove special characters( space comma parenthesis) for clarity ###### 
+
+### 2023 ###
+#unique(Observations_2023_filtered$species.group)
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Sprinkhanen en krekels"] <- "Grasshoppers_crickets"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Wantsen, cicaden en plantenluizen"] <- "Bugs_cicadas_aphids"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Bijen, wespen en mieren"] <- "Bees_wasps_ants"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Geleedpotigen (overig)"] <- "Arthropods_other"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Nachtvlinders en micro's"] <- "Moths_micros"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Mossen en korstmossen"] <- "Mosses_lichens"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Vliegen en muggen"] <- "Flies_mosquitoes"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Insecten (overig)"] <- "Insects_other"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Reptielen en amfibieën"] <- "Reptiles_amphibians"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Overige ongewervelden"] <- "Invertebrates_other"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "AAlgen, wieren en eencelligen"] <- "Algae_weeds_unicellular"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Dagvlinders"] <- "Butterflies"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Kevers"] <- "Beetles"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Libellen"] <- "Dragonflies"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Paddenstoelen"] <- "Mushrooms"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Planten"] <- "Plants"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Vissen"] <- "Fish"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Vogels"] <- "Birds"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Weekdieren"] <- "Mollusks"
+
+Observations_2023_clip_filtered_analysis1$species.group[Observations_2023_clip_filtered_analysis1$species.group == "Zoogdieren"] <- "Mammals"
+
+
+# 
+# # Organize species groups into 4 categories for each campus (remove the name utrecht to generalize)
+# Observations_2023_clip_filtered_analysis1 <- Observations_2023_clip_filtered_analysis1 %>%
+#   mutate(
+#     group_category = case_when(
+#       species.group == "Plants" ~ "Plants_and_Fungi",
+#       species.group == "Birds" ~ "Vertebrates",
+#       species.group == "Bugs_cicadas_aphids" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Bees_wasps_ants" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Beetles" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Molluscs" ~ "Other_invertebrates",
+#       species.group == "Arthropods_other" ~ "Other_invertebrates",
+#       species.group == "Mushrooms" ~ "Plants_and_Fungi",
+#       species.group == "Moths_micros" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Mosses_lichens" ~ "Plants_and_Fungi",
+#       species.group == "Flies_mosquitoes" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Mammals" ~ "Vertebrates",
+#       species.group == "Insects_other" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Reptiles_amphibians" ~ "Vertebrates",
+#       species.group == "Dragonflies" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Butterflies" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Grasshoppers_crickets" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Other_invertebrates" ~ "Other_invertebrates",
+#       species.group == "Fish" ~ "Vertebrates",
+#       species.group == "Algae_weeds_unicellular" ~ "Plants_and_Fungi",
+#                   TRUE ~ "Other"))
+
+
+# Bioblitz2024_dist_comb2<-Bioblitz2024_dist_comb
+# 
+# unique(Bioblitz2024_dist_comb2$species.group)
+
+###---- 2024 ---##
+
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Sprinkhanen en krekels"] <- "Grasshoppers_crickets"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Wantsen, cicaden en plantenluizen"] <- "Bugs_cicadas_aphids"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Bijen, wespen en mieren"] <- "Bees_wasps_ants"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Geleedpotigen (overig)"] <- "Arthropods_other"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Nachtvlinders en micro's"] <- "Moths_micros"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Mossen en korstmossen"] <- "Mosses_lichens"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Vliegen en muggen"] <- "Flies_mosquitoes"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Insecten (overig)"] <- "Insects_other"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Reptielen en amfibieën"] <- "Reptiles_amphibians"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Overige ongewervelden"] <- "Invertebrates_other"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Algen, wieren en eencelligen"] <- "Algae_weeds_unicellular"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Dagvlinders"] <- "Butterflies"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Kevers"] <- "Beetles"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Libellen"] <- "Dragonflies"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Paddenstoelen"] <- "Mushrooms"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Planten"] <- "Plants"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Vissen"] <- "Fish"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Vogels"] <- "Birds"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Weekdieren"] <- "Mollusks"
+
+Observations_2024_clip_filtered_analysis1$species.group[Observations_2024_clip_filtered_analysis1$species.group == "Zoogdieren"] <- "Mammals"
+
+
+# 
+# # Organize species groups into 4 categories for each campus (remove the name utrecht to generalize)
+# Observations_2024_clip_filtered_analysis1 <- Observations_2024_clip_filtered_analysis1 %>%
+#   mutate(
+#     group_category = case_when(
+#       species.group == "Plants" ~ "Plants_and_Fungi",
+#       species.group == "Birds" ~ "Vertebrates",
+#       species.group == "Bugs_cicadas_aphids" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Bees_wasps_ants" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Beetles" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Molluscs" ~ "Other_invertebrates",
+#       species.group == "Arthropods_other" ~ "Other_invertebrates",
+#       species.group == "Mushrooms" ~ "Plants_and_Fungi",
+#       species.group == "Moths_micros" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Mosses_lichens" ~ "Plants_and_Fungi",
+#       species.group == "Flies_mosquitoes" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Mammals" ~ "Vertebrates",
+#       species.group == "Insects_other" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Reptiles_amphibians" ~ "Vertebrates",
+#       species.group == "Dragonflies" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Butterflies" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Grasshoppers_crickets" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Other_invertebrates" ~ "Other_invertebrates",
+#       species.group == "Fish" ~ "Vertebrates",
+#       species.group == "Algae_weeds_unicellular" ~ "Plants_and_Fungi",
+#                   TRUE ~ "Other"))
+# 
+## Remove "Verstoringen category : the data represents a dog entry !!
+Observations_2024_clip_filtered_analysis1 <- Observations_2024_clip_filtered_analysis1[Observations_2024_clip_filtered_analysis1$species.group != "Verstoringen", ]
+
+#### --- 2025 --- ###
+
+
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Sprinkhanen en krekels"] <- "Grasshoppers_crickets"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Wantsen, cicaden en plantenluizen"] <- "Bugs_cicadas_aphids"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Bijen, wespen en mieren"] <- "Bees_wasps_ants"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Geleedpotigen (overig)"] <- "Arthropods_other"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Nachtvlinders en micro's"] <- "Moths_micros"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Mossen en korstmossen"] <- "Mosses_lichens"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Vliegen en muggen"] <- "Flies_mosquitoes"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Insecten (overig)"] <- "Insects_other"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Reptielen en amfibieën"] <- "Reptiles_amphibians"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Overige ongewervelden"] <- "Invertebrates_other"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Algen, wieren en eencelligen"] <- "Algae_weeds_unicellular"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Dagvlinders"] <- "Butterflies"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Kevers"] <- "Beetles"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Libellen"] <- "Dragonflies"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Paddenstoelen"] <- "Mushrooms"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Planten"] <- "Plants"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Vissen"] <- "Fish"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Vogels"] <- "Birds"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Mollusca (Weekdieren)"] <- "Mollusks"
+
+Observations_2025_clip_filtered_analysis1$species.group[Observations_2025_clip_filtered_analysis1$species.group == "Zoogdieren"] <- "Mammals"
+
+
+# Organize species groups into 4 categories for each campus (remove the name utrecht to generalize)
+# Observations_2025_clip_filtered_analysis1 <- Observations_2025_clip_filtered_analysis1 %>%
+#   mutate(
+#     group_category = case_when(
+#       species.group == "Plants" ~ "Plants_and_Fungi",
+#       species.group == "Birds" ~ "Vertebrates",
+#       species.group == "Bugs_cicadas_aphids" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Bees_wasps_ants" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Beetles" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Molluscs" ~ "Other_invertebrates",
+#       species.group == "Arthropods_other" ~ "Other_invertebrates",
+#       species.group == "Mushrooms" ~ "Plants_and_Fungi",
+#       species.group == "Moths_micros" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Mosses_lichens" ~ "Plants_and_Fungi",
+#       species.group == "Flies_mosquitoes" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Mammals" ~ "Vertebrates",
+#       species.group == "Insects_other" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Reptiles_amphibians" ~ "Vertebrates",
+#       species.group == "Dragonflies" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Butterflies" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Grasshoppers_crickets" ~ "Insects_&_Other_Arthropods",
+#       species.group == "Other_invertebrates" ~ "Other_invertebrates",
+#       species.group == "Fish" ~ "Vertebrates",
+#       species.group == "Algae_weeds_unicellular" ~ "Plants_and_Fungi",
+#                   TRUE ~ "Other"))
+
+
+## Remove "Verstoringen category : the data represents a dog entry !!
+Observations_2025_clip_filtered_analysis1 <- Observations_2025_clip_filtered_analysis1[Observations_2025_clip_filtered_analysis1$species.group != "Verstoringen", ]
+
+
+
+###- Analysis 2 ---- ###
+
+
+###---- 2024 ---##
+
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Sprinkhanen en krekels"] <- "Grasshoppers_crickets"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Wantsen, cicaden en plantenluizen"] <- "Bugs_cicadas_aphids"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Bijen, wespen en mieren"] <- "Bees_wasps_ants"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Geleedpotigen (overig)"] <- "Arthropods_other"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Nachtvlinders en micro's"] <- "Moths_micros"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Mossen en korstmossen"] <- "Mosses_lichens"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Vliegen en muggen"] <- "Flies_mosquitoes"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Insecten (overig)"] <- "Insects_other"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Reptielen en amfibieën"] <- "Reptiles_amphibians"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Overige ongewervelden"] <- "Invertebrates_other"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Algen, wieren en eencelligen"] <- "Algae_weeds_unicellular"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Dagvlinders"] <- "Butterflies"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Kevers"] <- "Beetles"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Libellen"] <- "Dragonflies"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Paddenstoelen"] <- "Mushrooms"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Planten"] <- "Plants"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Vissen"] <- "Fish"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Vogels"] <- "Birds"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Weekdieren"] <- "Mollusks"
+
+Observations_2024_clip_filtered_analysis2$species.group[Observations_2024_clip_filtered_analysis2$species.group == "Zoogdieren"] <- "Mammals"
+
+ 
+## Remove "Verstoringen category : the data represents a dog entry !!
+Observations_2024_clip_filtered_analysis2 <- Observations_2024_clip_filtered_analysis2[Observations_2024_clip_filtered_analysis2$species.group != "Verstoringen", ]
