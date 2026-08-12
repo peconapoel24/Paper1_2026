@@ -1,0 +1,149 @@
+
+```
+
+
+#### Scope: Join and save 
+
+Join all wilcoxon test results as one table and save them. Use for SI
+
+```{r}
+
+library(openxlsx)
+
+## For this paper and these graphs i only focus on "greater"
+Wilcoxon_test_joined_results_scope_greater <- bind_rows(
+  results_observations %>% filter(alternative == "greater") %>% mutate(Metric = "Observations"),
+  results_buildings_scope %>% filter(alternative == "greater") %>% mutate(Metric = "Distance_to_nearest_building"),
+  results_ropa_scope %>% filter(alternative == "greater")  %>% mutate(Metric = "Distance_to_nearest_road_or_path") ,
+  results_agriculture %>% filter(alternative == "greater")  %>% mutate(Metric = "Agriculture")  ,
+  results_built_areas %>% filter(alternative == "greater")  %>% mutate(Metric = "Built_areas")  ,
+  results_fresh %>% filter(alternative == "greater")  %>% mutate(Metric = "Freshwater")  ,
+  results_naturalinbuilt %>% filter(alternative == "greater")  %>% mutate(Metric = "Natural_in_built")  ,
+  results_ternat %>% filter(alternative == "greater")  %>% mutate(Metric = "Terrestrial_natural")  ,
+  results_ob %>% filter(alternative == "greater")  %>% mutate(Metric = "Observer")  ,
+  results_algae %>% filter(alternative == "greater")  %>% mutate(Metric = "Algae_weeds_unicellular"),
+  results_arthoth %>% filter(alternative == "greater")  %>% mutate(Metric = "Arthropods_other")  ,
+  results_bwa %>% filter(alternative == "greater")  %>% mutate(Metric = "Bees_wasps_ants")  ,
+  results_beet %>% filter(alternative == "greater")  %>% mutate(Metric = "Beetles")  ,
+  results_bi %>% filter(alternative == "greater")  %>% mutate(Metric = "Birds")  ,
+  results_bu %>% filter(alternative == "greater")  %>% mutate(Metric = "Bugs_cicadas_aphids") ,
+  results_butt %>% filter(alternative == "greater")  %>% mutate(Metric = "Butterflies") ,
+  results_drag %>% filter(alternative == "greater")  %>% mutate(Metric = "Dragonflies") ,
+  results_fi %>% filter(alternative == "greater")  %>% mutate(Metric = "Fish") ,
+  results_flie %>% filter(alternative == "greater")  %>% mutate(Metric = "Flies_mosquitoes") ,
+  results_gra %>% filter(alternative == "greater")  %>% mutate(Metric = "Grasshoppers_crickets") ,
+  results_insoth %>% filter(alternative == "greater")  %>% mutate(Metric = "Insects_other") ,
+  results_ma %>% filter(alternative == "greater")  %>% mutate(Metric = "Mammals") ,
+  results_mol %>% filter(alternative == "greater")  %>% mutate(Metric = "Mollusks")  ,
+  results_mos %>% filter(alternative == "greater")  %>% mutate(Metric = "Mosses_lichens") ,
+  results_moth %>% filter(alternative == "greater")  %>% mutate(Metric = "Moths_micros") ,
+  results_mush %>% filter(alternative == "greater")  %>% mutate(Metric = "Mushrooms") ,
+  results_invoth %>% filter(alternative == "greater")  %>% mutate(Metric = "Invertebrates_other") ,
+  results_pla %>% filter(alternative == "greater")  %>% mutate(Metric = "Plants") ,
+  results_rep %>% filter(alternative == "greater")  %>% mutate(Metric = "Reptiles_amphibians"))
+
+
+## round decimals for SI table
+Wilcoxon_test_joined_results_scope_greater_SI <- Wilcoxon_test_joined_results_scope_greater %>%
+  mutate(
+    p_value = round(p.value, 3), 
+    )
+
+## as csv
+write.csv(Wilcoxon_test_joined_results_scope_greater,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_greater.csv")
+
+## as excel
+
+write.xlsx(Wilcoxon_test_joined_results_scope_greater,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_greater.xlsx")
+
+
+## this is complementary 
+
+Wilcoxon_test_joined_results_scope_less <- bind_rows(
+  results_observations %>% filter(alternative == "less") %>% mutate(Metric = "Observations"),
+  results_buildings_scope %>% filter(alternative == "less") %>% mutate(Metric = "Distance_to_nearest_building"),
+  results_ropa_scope %>% filter(alternative == "less")  %>% mutate(Metric = "Distance_to_nearest_road_or_path") ,
+  results_agriculture %>% filter(alternative == "less")  %>% mutate(Metric = "Agriculture")  ,
+  results_built_areas %>% filter(alternative == "less")  %>% mutate(Metric = "Built_areas")  ,
+  results_fresh %>% filter(alternative == "less")  %>% mutate(Metric = "Freshwater")  ,
+  results_naturalinbuilt %>% filter(alternative == "less")  %>% mutate(Metric = "Natural_in_built")  ,
+  results_ternat %>% filter(alternative == "less")  %>% mutate(Metric = "Terrestrial_natural")  ,
+  results_ob %>% filter(alternative == "less")  %>% mutate(Metric = "Observer")  ,
+  results_algae %>% filter(alternative == "less")  %>% mutate(Metric = "Algae_weeds_unicellular"),
+  results_arthoth %>% filter(alternative == "less")  %>% mutate(Metric = "Arthropods_other")  ,
+  results_bwa %>% filter(alternative == "less")  %>% mutate(Metric = "Bees_wasps_ants")  ,
+  results_beet %>% filter(alternative == "less")  %>% mutate(Metric = "Beetles")  ,
+  results_bi %>% filter(alternative == "less")  %>% mutate(Metric = "Birds")  ,
+  results_bu %>% filter(alternative == "less")  %>% mutate(Metric = "Bugs_cicadas_aphids") ,
+  results_butt %>% filter(alternative == "less")  %>% mutate(Metric = "Butterflies") ,
+  results_drag %>% filter(alternative == "less")  %>% mutate(Metric = "Dragonflies") ,
+  results_fi %>% filter(alternative == "less")  %>% mutate(Metric = "Fish") ,
+  results_flie %>% filter(alternative == "less")  %>% mutate(Metric = "Flies_mosquitoes") ,
+  results_gra %>% filter(alternative == "less")  %>% mutate(Metric = "Grasshoppers_crickets") ,
+  results_insoth %>% filter(alternative == "less")  %>% mutate(Metric = "Insects_other") ,
+  results_ma %>% filter(alternative == "less")  %>% mutate(Metric = "Mammals") ,
+  results_mol %>% filter(alternative == "less")  %>% mutate(Metric = "Mollusks")  ,
+  results_mos %>% filter(alternative == "less")  %>% mutate(Metric = "Mosses_lichens") ,
+  results_moth %>% filter(alternative == "less")  %>% mutate(Metric = "Moths_micros") ,
+  results_mush %>% filter(alternative == "less")  %>% mutate(Metric = "Mushrooms") ,
+  results_invoth %>% filter(alternative == "less")  %>% mutate(Metric = "Invertebrates_other") ,
+  results_pla %>% filter(alternative == "less")  %>% mutate(Metric = "Plants") ,
+  results_rep %>% filter(alternative == "less")  %>% mutate(Metric = "Reptiles_amphibians"))
+
+## round decimals for SI table
+Wilcoxon_test_joined_results_scope_less_SI <- Wilcoxon_test_joined_results_scope_less %>%
+  mutate(
+    p_value = round(p.value, 3), 
+    )
+
+# csv
+write.csv(Wilcoxon_test_joined_results_scope_less,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_less.csv")
+
+# xlsx
+write.xlsx(Wilcoxon_test_joined_results_scope_less,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_less.xlsx")
+
+
+## twosided
+
+Wilcoxon_test_joined_results_scope_twosided <- bind_rows(
+  results_observations %>% filter(alternative == "two.sided") %>% mutate(Metric = "Observations"),
+  results_buildings_scope %>% filter(alternative == "two.sided") %>% mutate(Metric = "Distance_to_nearest_building"),
+  results_ropa_scope %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Distance_to_nearest_road_or_path") ,
+  results_agriculture %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Agriculture")  ,
+  results_built_areas %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Built_areas")  ,
+  results_fresh %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Freshwater")  ,
+  results_naturalinbuilt %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Natural_in_built")  ,
+  results_ternat %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Terrestrial_natural")  ,
+  results_ob %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Observer")  ,
+  results_algae %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Algae_weeds_unicellular"),
+  results_arthoth %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Arthropods_other")  ,
+  results_bwa %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Bees_wasps_ants")  ,
+  results_beet %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Beetles")  ,
+  results_bi %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Birds")  ,
+  results_bu %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Bugs_cicadas_aphids") ,
+  results_butt %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Butterflies") ,
+  results_drag %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Dragonflies") ,
+  results_fi %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Fish") ,
+  results_flie %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Flies_mosquitoes") ,
+  results_gra %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Grasshoppers_crickets") ,
+  results_insoth %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Insects_other") ,
+  results_ma %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mammals") ,
+  results_mol %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mollusks")  ,
+  results_mos %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mosses_lichens") ,
+  results_moth %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Moths_micros") ,
+  results_mush %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mushrooms") ,
+  results_invoth %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Invertebrates_other") ,
+  results_pla %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Plants") ,
+  results_rep %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Reptiles_amphibians"))
+
+## round decimals for SI table
+Wilcoxon_test_joined_results_scope_twosided_SI <- Wilcoxon_test_joined_results_scope_twosided %>%
+  mutate(
+    p_value = round(p.value, 3), 
+    )
+
+# csv
+write.csv(Wilcoxon_test_joined_results_scope_twosided,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_twosided.csv")
+
+# xlsx
+write.xlsx(Wilcoxon_test_joined_results_scope_twosided,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_twosided.xlsx")
