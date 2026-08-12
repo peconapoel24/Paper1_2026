@@ -1,0 +1,36 @@
+
+## common libraries
+library(dplyr)
+library(sf)
+
+## join campus polygons
+library(nngeo)
+library(igraph) ## read https://r.igraph.org/reference/  https://r.igraph.org/reference/graph.adjlist.html?q=graph_from_adj_list#null 
+
+## land use analysis
+library(terra)
+citation("terra")
+library(raster)
+
+# Bias assessment packages -- based on base R
+library(spatstat.geom)
+library(spatstat.random)
+### use this for estimating average neighbor distace for random bias estimations. read more here: https://github.com/spatstat/spatstat.geom 
+
+## plots
+library(ggplot2)
+library(tidyr)
+library(tibble)
+library(patchwork)
+library(grid)
+library(stringr)
+
+## tidy data
+library(broom)
+
+#maps
+# library(tmap)
+
+# regression
+library(car)
+library(betareg)
