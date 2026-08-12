@@ -1,0 +1,40 @@
+#### -------------- Buildings -------------- ####
+
+Top10NL_Buildings_allcampuses_23 <- st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/July_analysis/Top10NL/Buildings_clipped_campuses_Version_01.09.23.shp")
+
+Top10NL_Buildings_allcampuses_24 <- st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/July_analysis/Top10NL/Buildings_clipped_campuses_Version_01.11.24.shp")
+
+Top10NL_Buildings_allcampuses_25 <- st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/July_analysis/Top10NL/Buildings_clipped_campuses_Version_19.11.25.shp")
+
+
+
+### --------------  Roads or paths------------------ ###### 
+
+## 2023
+#Top10NL
+Top10NL_Roadspaths_all_campuses23 <- st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/July_analysis/Top10NL/Wegdeel_hartlijn_clipped_campuses_Version_01.09.23.shp")
+
+# Convert geometry to LINESTRING
+Top10NL_Roadspaths_line23 <- st_cast(Top10NL_Roadspaths_all_campuses23, "LINESTRING")
+
+roads_paths_filtered23 <- st_intersection(Top10NL_Roadspaths_line23,campus_boundaries_merged_filtered)
+
+## 2024
+#Top10NL
+Top10NL_Roadspaths_all_campuses24 <- st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/July_analysis/Top10NL/Wegdeel_hartlijn_clipped_campuses_Version_01.11.24.shp")
+
+# Convert geometry to LINESTRING
+Top10NL_Roadspaths_line24 <- st_cast(Top10NL_Roadspaths_all_campuses24, "LINESTRING")
+
+roads_paths_filtered24 <- st_intersection(Top10NL_Roadspaths_line24,campus_boundaries_merged_filtered)
+
+## 2025
+#Top10NL
+Top10NL_Roadspaths_all_campuses25 <- st_read("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/Bioblitz_2024/For_analysis_copy_Bioblitz_2024_ 4.2.25/July_analysis/Top10NL/Wegdeel_hartlijn_clipped_campuses_Version_19.11.25.shp")
+
+# Convert geometry to LINESTRING
+Top10NL_Roadspaths_line25 <- st_cast(Top10NL_Roadspaths_all_campuses25, "LINESTRING")
+
+roads_paths_filtered25 <- st_intersection(Top10NL_Roadspaths_line25,campus_boundaries_merged_filtered)
+
+
