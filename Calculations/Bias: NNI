@@ -1,0 +1,268 @@
+
+######### --- This function will be used for all campuses and for all years. 
+
+#### Function to calculate neighbor distance
+calculate_mean_nnd <- function(sf_obs) {
+  coords <- st_coordinates(sf_obs)  # get matrix of x,y
+  
+  win <- owin(xrange = range(coords[,1]), yrange = range(coords[,2]))
+  ppp_obj <- ppp(coords[,1], coords[,2], window = win)
+  
+  mean(nndist(ppp_obj)) #### This is the function that estimates the Nearest Neighbor Distance (NND). It is ideal for my study because it uses the Euclidean distance between each point to its nearest neighbor and works great for distances between points. This is the same logic we use for estimating distances of observations to roads, buildings. Read more here: https://search.r-project.org/CRAN/refmans/spatstat.geom/html/nndist.html  
+} 
+
+# get the mean neighbor distance for bioblitz data
+
+
+####### Analysis 1: Opport 23 - Bioblitz 24-25
+
+###### -------- USP ---------- ##### 
+and_usp_25 <- calculate_mean_nnd(USP25)
+and_usp_24 <- calculate_mean_nnd(USP24) # Biob 24
+and_usp_23 <- calculate_mean_nnd(USP23) # Opport 2023
+
+# get the mean neighbor distance for random data
+and_usp_rand_25 <- sapply(random_replicates_usp_25, calculate_mean_nnd) # Biob 24
+
+and_usp_rand_24 <- sapply(random_replicates_usp_24, calculate_mean_nnd) # Biob 24
+
+and_usp_rand_23 <- sapply(random_replicates_usp_23, calculate_mean_nnd) ## opport 23
+
+# Calculate ratio of observed to expected (random) mean NND
+ratio_usp_25 <- and_usp_25 / and_usp_rand_25 ## Biob 24
+mean_ratio_usp_25 <- mean(ratio_usp_25) 
+
+ratio_usp_24 <- and_usp_24 / and_usp_rand_24 ## Biob 24
+mean_ratio_usp_24 <- mean(ratio_usp_24) 
+
+ratio_usp_23 <- and_usp_23 / and_usp_rand_23 ## Opport 23
+mean_ratio_usp_23 <- mean(ratio_usp_23)
+
+###### -------- UvA campus ---------- ##### 
+and_uva_25 <- calculate_mean_nnd(UvA25) 
+and_uva_24 <- calculate_mean_nnd(UvA24) 
+and_uva_23 <- calculate_mean_nnd(UvA24)  
+
+# get the mean neighbor distance for random data
+and_uva_rand_25 <- sapply(random_replicates_uva_25, calculate_mean_nnd) 
+
+and_uva_rand_24 <- sapply(random_replicates_uva_24, calculate_mean_nnd) 
+
+and_uva_rand_23 <- sapply(random_replicates_uva_23, calculate_mean_nnd)
+
+ratio_uva_25 <- and_uva_25 / and_uva_rand_25 
+mean_ratio_uva_25 <- mean(ratio_uva_25) 
+
+options(scipen = 999)
+mean_ratio_uva_25
+
+ratio_uva_24 <- and_uva_24 / and_uva_rand_24 
+mean_ratio_uva_24 <- mean(ratio_uva_24) 
+
+ratio_uva_23 <- and_uva_23 / and_uva_rand_23 
+mean_ratio_uva_23 <- mean(ratio_uva_23)
+
+###### -------- Leiden Bioscience park ---------- ##### 
+
+# not i cant see any data for 2023 so i run only for 2024 until i confirm it
+
+and_leidenbiosc_25 <- calculate_mean_nnd(Leiden_Biosc25)
+
+and_leidenbiosc_24 <- calculate_mean_nnd(Leiden_Biosc24) 
+
+and_leidenbiosc_23 <- calculate_mean_nnd(Leiden_Biosc23)
+
+# get the mean neighbor distance for random data
+and_leidenbiosc_rand_25 <- sapply(random_replicates_leidenbiosc_25, calculate_mean_nnd) 
+
+and_leidenbiosc_rand_24 <- sapply(random_replicates_leidenbiosc_24, calculate_mean_nnd) 
+
+and_leidenbiosc_rand_23 <- sapply(random_replicates_leidenbiosc_23, calculate_mean_nnd) 
+
+# Calculate ratio of observed to expected (random) mean NND
+ratio_leidenbiosc_25 <- and_leidenbiosc_25 / and_leidenbiosc_rand_25 
+
+mean_ratio_leidenbiosc_25 <- mean(ratio_leidenbiosc_25) 
+
+ratio_leidenbiosc_24 <- and_leidenbiosc_24 / and_leidenbiosc_rand_24 
+
+mean_ratio_leidenbiosc_24 <- mean(ratio_leidenbiosc_24) 
+
+ratio_leidenbiosc_23 <- and_leidenbiosc_23 / and_leidenbiosc_rand_23 
+
+mean_ratio_leidenbiosc_23 <- mean(ratio_leidenbiosc_23) 
+
+##### -------- Leiden Binnestad ---------- ##### 
+
+# not i cant see any data for 2023 so i run only for 2024 until i confirm it
+
+and_leidenstad_25 <- calculate_mean_nnd(Leiden_Bin25)
+
+and_leidenstad_24 <- calculate_mean_nnd(Leiden_Bin24) 
+
+and_leidenstad_23 <- calculate_mean_nnd(Leiden_Bin23)
+
+# get the mean neighbor distance for random data
+and_leidenstad_rand_25 <- sapply(random_replicates_leidenstad_25, calculate_mean_nnd) 
+
+and_leidenstad_rand_24 <- sapply(random_replicates_leidenstad_24, calculate_mean_nnd) 
+
+and_leidenstad_rand_23 <- sapply(random_replicates_leidenstad_23, calculate_mean_nnd) 
+
+# Calculate ratio of observed to expected (random) mean NND
+ratio_leidenstad_25 <- and_leidenstad_25 / and_leidenstad_rand_25 
+
+mean_ratio_leidenstad_25 <- mean(ratio_leidenstad_25) 
+
+ratio_leidenstad_24 <- and_leidenstad_24 / and_leidenstad_rand_24 
+
+mean_ratio_leidenstad_24 <- mean(ratio_leidenstad_24) 
+
+ratio_leidenstad_23 <- and_leidenstad_23 / and_leidenstad_rand_23 
+
+mean_ratio_leidenstad_23 <- mean(ratio_leidenstad_23) 
+
+###### -------- Leewarden (van Hall Lerenstein) ---------- ##### 
+
+# not i cant see any data for 2023 so i run only for 2024 until i confirm it
+
+and_leeu_25 <- calculate_mean_nnd(Leeuwarden_Van_Hall_Larenstein25)
+
+and_leeu_24 <- calculate_mean_nnd(Leeuwarden_Van_Hall_Larenstein24) 
+
+and_leeu_23 <- calculate_mean_nnd(Leeuwarden_Van_Hall_Larenstein23)
+
+# get the mean neighbor distance for random data
+and_leeu_rand_25 <- sapply(random_replicates_leeu_25, calculate_mean_nnd) 
+
+and_leeu_rand_24 <- sapply(random_replicates_leeu_24, calculate_mean_nnd) 
+
+and_leeu_rand_23 <- sapply(random_replicates_leeu_23, calculate_mean_nnd) 
+
+# Calculate ratio of observed to expected (random) mean NND
+ratio_leeu_25 <- and_leeu_25 / and_leeu_rand_25 
+mean_ratio_leeu_25 <- mean(ratio_leeu_25) 
+
+ratio_leeu_24 <- and_leeu_24 / and_leeu_rand_24 
+mean_ratio_leeu_24 <- mean(ratio_leeu_24) 
+
+ratio_leeu_23 <- and_leeu_23 / and_leeu_rand_23 
+mean_ratio_leeu_23 <- mean(ratio_leeu_23) 
+
+
+###### -------- HAN Arnhem ---------- ##### 
+
+and_arn_25 <- calculate_mean_nnd(HAN_Arnhem25)
+and_arn_24 <- calculate_mean_nnd(HAN_Arnhem24) 
+and_arn_23 <- calculate_mean_nnd(HAN_Arnhem23)
+
+# get the mean neighbor distance for random data
+
+and_arn_rand_25 <- sapply(random_replicates_hanarn_25, calculate_mean_nnd) 
+
+and_arn_rand_24 <- sapply(random_replicates_hanarn_24, calculate_mean_nnd) 
+
+and_arn_rand_23 <- sapply(random_replicates_hanarn_23, calculate_mean_nnd)
+
+# Calculate ratio of observed to expected (random) mean NND
+
+ratio_arn_25 <- and_arn_25 / and_arn_rand_25 
+mean_ratio_arn_25 <- mean(ratio_arn_25) 
+
+ratio_arn_24 <- and_arn_24 / and_arn_rand_24 
+mean_ratio_arn_24 <- mean(ratio_arn_24) 
+
+ratio_arn_23 <- and_arn_23 / and_arn_rand_23 
+mean_ratio_arn_23 <- mean(ratio_arn_23) 
+
+### join as a table
+bias_a1_nni <- tibble(
+  campus = c("USP", "UvA", "Leiden_Bioscience","Leiden_Binnenstad","Leeuwarden_Van_Hall_Larenstein","HAN_Arnhem"),
+  "X2023" = c(mean_ratio_usp_23, mean_ratio_uva_23, mean_ratio_leidenbiosc_23,mean_ratio_leidenstad_23,mean_ratio_leeu_23,mean_ratio_arn_23),
+  "X2024" = c(mean_ratio_usp_24, mean_ratio_uva_24, mean_ratio_leidenbiosc_24,mean_ratio_leidenstad_24,mean_ratio_leeu_24,mean_ratio_arn_24),
+  "X2025" = c(mean_ratio_usp_25, mean_ratio_uva_25, mean_ratio_leidenbiosc_25,mean_ratio_leidenstad_25,mean_ratio_leeu_25,mean_ratio_arn_25)
+)
+
+write.csv(bias_a1_nni,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NNI_a1.csv")
+
+write.xlsx(bias_a1_nni,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NNI_a1.xlsx")
+
+### for boxplot
+
+bias_nni_a1_long <- bias_a1_nni %>%
+  rename(
+    "2023" = `X2023`,
+    "2024" = `X2024`,
+    "2025" = `X2025`
+  )
+
+bias_nni_a1_long <- bias_nni_a1_long %>%
+  tidyr::pivot_longer(
+    cols = "2023":"2025",
+    names_to = "year",
+    values_to = "value"
+  )
+
+
+write.csv(bias_nni_a1_long,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NNI_a1_box.csv")
+
+
+
+### Analysis 2 2024 only
+
+###### -------- WUR main campus ---------- ##### 
+
+and_wur_24 <- calculate_mean_nnd(WUR_main_campus24) 
+
+# get the mean neighbor distance for random data
+and_wur_rand_24 <- sapply(random_replicates_wur_24, calculate_mean_nnd) # Biob 24
+options(scipen = 999)
+
+ratio_wur_24 <- and_wur_24 / and_wur_rand_24 ## Biob 24
+mean_ratio_wur_24 <- mean(ratio_wur_24) 
+
+###### -------- Nijmegen campus ---------- ##### 
+and_ruhan_24 <- calculate_mean_nnd(Radboud_University_and_HAN_Nijmegen24) 
+and_ruhan_rand_24 <- sapply(random_replicates_ruhan_24, calculate_mean_nnd) 
+options(scipen = 999)
+ratio_ruhan_24 <- and_ruhan_24 / and_ruhan_rand_24 
+mean_ratio_ruhan_24 <- mean(ratio_ruhan_24) 
+
+###### -------- TUDelft campus ---------- ##### 
+and_delft_24 <- calculate_mean_nnd(TUDelft24) 
+and_delft_rand_24 <- sapply(random_replicates_delft_24, calculate_mean_nnd) 
+# Calculate ratio of observed to expected (random) mean NND
+ratio_delft_24 <- and_delft_24 / and_delft_rand_24 
+mean_ratio_delft_24 <- mean(ratio_delft_24) 
+
+###### -------- Twente campus ---------- ##### 
+and_twente_24 <- calculate_mean_nnd(Twente_university_campus24) 
+and_twente_rand_24 <- sapply(random_replicates_twente_24, calculate_mean_nnd) 
+options(scipen = 999)
+ratio_twente_24 <- and_twente_24 / and_twente_rand_24 
+mean_ratio_twente_24 <- mean(ratio_twente_24) 
+
+
+###### -------- Groningen Zernike campus ---------- ##### 
+and_gro_24 <- calculate_mean_nnd(Groningen_Zernike_campus24)
+and_gro_rand_24 <- sapply(random_replicates_gro_24, calculate_mean_nnd) 
+ratio_gro_24 <- and_gro_24 / and_gro_rand_24 
+mean_ratio_gro_24 <- mean(ratio_gro_24) 
+
+###### -------- Velp Van Hall Larensten ---------- ##### 
+and_velp_24 <- calculate_mean_nnd(Velp_Van_Hall_Larenstein24)
+and_velp_rand_24 <- sapply(random_replicates_velp_24, calculate_mean_nnd) 
+ratio_velp_24 <- and_velp_24 / and_velp_rand_24 
+mean_ratio_velp_24 <- mean(ratio_velp_24) 
+
+### join as a table
+bias_a2_nni <- tibble(
+  dataset = c("WUR", "Nijmegen_campus", "TU_Delft","Twente","Groningen_Zernike_campus","Velp_Van_Hall_Larenstein"),
+    "nni_bias_2024" = c(mean_ratio_wur_24, mean_ratio_ruhan_24, mean_ratio_delft_24,mean_ratio_twente_24,mean_ratio_gro_24,mean_ratio_velp_24),
+  
+)
+
+write.csv(bias_a2_nni,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NNI_a2.csv")
+
+write.xlsx(bias_a2_nni,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/NNI_a2.xlsx")
+
