@@ -1,0 +1,155 @@
+
+# #### -------------------- Buildings -------------- 
+
+# ##### Analysis 1: Campuses with opportunistic observations 2023 , Bioblitz 24,25
+# 
+# ##### ------------ 2023 --------------- ###########
+# 
+
+campuses_2023_split_analysis1_buil <- split(Observations_2023_clip_lu_buil_analysis1, Observations_2023_clip_lu_buil_analysis1$campus)
+# 
+
+unique(Observations_2023_clip_lu_buil_analysis1$campus)
+
+# ## Separate per campus
+
+HAN_arnhem23_b <- campuses_2023_split_analysis1_buil[["HAN_arnhem"]]
+
+Leeuwarden_Van_Hall_Larenstein23_b <- campuses_2023_split_analysis1_buil[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP23_b <- campuses_2023_split_analysis1_buil[["USP"]]
+#
+Leiden_Bioscience_Park23_b <- campuses_2023_split_analysis1_buil[["Leiden_Bioscience_Park"]]
+#
+Amsterdam_Science_Park23_b <- campuses_2023_split_analysis1_buil[["Amsterdam_Science_Park"]]
+#
+Leiden_Binnenstad23_b <- campuses_2023_split_analysis1_buil[["Leiden_Binnenstad"]]
+#
+
+# ##### ------------ 2024 --------------- ###########
+
+campuses_2024_split_analysis1_buil <- split(Observations_2024_clip_lu_buil_analysis1, Observations_2024_clip_lu_buil_analysis1$campus)
+
+# ## Separate per campus
+
+HAN_arnhem24_b <- campuses_2024_split_analysis1_buil[["HAN_arnhem"]]
+
+Leeuwarden_Van_Hall_Larenstein24_b <- campuses_2024_split_analysis1_buil[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP24_b <- campuses_2024_split_analysis1_buil[["USP"]]
+#
+Leiden_Bioscience_Park24_b <- campuses_2024_split_analysis1_buil[["Leiden_Bioscience_Park"]]
+#
+Amsterdam_Science_Park24_b <- campuses_2024_split_analysis1_buil[["Amsterdam_Science_Park"]]
+#
+Leiden_Binnenstad24_b <- campuses_2024_split_analysis1_buil[["Leiden_Binnenstad"]]
+
+# 
+# ##### ------------ 2025 --------------- ###########
+# ##### Analysis 1: Campuses with opportunistic observations 2023 , Bioblitz 24,25
+
+campuses_2025_split_analysis1_buil <- split(Observations_2025_clip_lu_buil_analysis1, Observations_2025_clip_lu_buil_analysis1$campus)
+
+
+# ## Separate per campus
+
+HAN_arnhem25_b <- campuses_2024_split_analysis1_buil[["HAN_arnhem"]]
+
+Leeuwarden_Van_Hall_Larenstein25_b <- campuses_2025_split_analysis1_buil[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP25_b <- campuses_2025_split_analysis1_buil[["USP"]]
+#
+Leiden_Bioscience_Park25_b <- campuses_2025_split_analysis1_buil[["Leiden_Bioscience_Park"]]
+#
+Amsterdam_Science_Park25_b <- campuses_2025_split_analysis1_buil[["Amsterdam_Science_Park"]]
+#
+Leiden_Binnenstad25_b <- campuses_2025_split_analysis1_buil[["Leiden_Binnenstad"]]
+
+
+#### -------- Analysis 2 -------- ##########
+
+campuses_2024_split_analysis2_buil <- split(scope_buil_a2, scope_buil_a2$campus)
+
+Nijmegen_campus24_b <- campuses_2024_split_analysis2_buil[["Nijmegen_campus"]]
+
+WUR_main_campus24_b <- campuses_2024_split_analysis2_buil[["WUR_main_campus"]]
+
+TUDelft24_b <- campuses_2024_split_analysis2_buil[["Delft_TU_Campus"]]
+
+Twente_university_campus24_b <- campuses_2024_split_analysis2_buil[["UT_campus"]]
+
+Velp_Landgoed_Larenstein24_b <- campuses_2024_split_analysis2_buil[["Velp_Landgoed_Larenstein"]]
+
+Groningen_Zernike_campus24_b <- campuses_2024_split_analysis2_buil[["Groningen_Zernike"]]
+
+
+
+# #### -------------------- Road/paths  -------------- 
+# 
+
+### Note: Because of the large computational space, i try to break the data -- import.save in chunks depending the analysis i want to do. For example,  you can do it directly after finishing the analysis. What i did is finish buildings ("Observations_year_clip_filtered" and then removed it and imported the data again with the estimated road path distances -- maybe needs adjustment), and then import -- finish buildings, the load again the data just with the info for roads/paths. or maybe i can even join them as one file, think about it
+
+#### I want to save space. So what i do is. First i run for the buildings. Then i delete everything (after i finish all the bias analysis and saved the results). And then run again for the roads/paths.
+
+campuses_2023_split_analysis1_ropa <- split(Observations_2023_clip_lu_ropa_analysis1, Observations_2023_clip_lu_ropa_analysis1$campus)
+
+# ## Separate per campus
+Leeuwarden_Van_Hall_Larenstein23_r <- campuses_2023_split_analysis1_ropa[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP23_r <- campuses_2023_split_analysis1_ropa[["USP"]]
+#
+Leiden_Bioscience_Park23_r <- campuses_2023_split_analysis1_ropa[["Leiden_Bioscience_Park"]]
+#
+Amsterdam_Science_Park23_r <- campuses_2023_split_analysis1_ropa[["Amsterdam_Science_Park"]]
+#
+Leiden_Binnenstad23_r <- campuses_2023_split_analysis1_ropa[["Leiden_Binnenstad"]]
+#
+
+# ##### ------------ 2024 --------------- ###########
+
+campuses_2024_split_analysis1_ropa <- split(Observations_2024_clip_lu_ropa_analysis1 , Observations_2024_clip_lu_ropa_analysis1 $campus)
+
+# ## Separate per campus
+Leeuwarden_Van_Hall_Larenstein24_r <- campuses_2024_split_analysis1_ropa[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP24_r <- campuses_2024_split_analysis1_ropa[["USP"]]
+#
+Leiden_Bioscience_Park24_r <- campuses_2024_split_analysis1_ropa[["Leiden_Bioscience_Park"]]
+#
+Amsterdam_Science_Park24_r <- campuses_2024_split_analysis1_ropa[["Amsterdam_Science_Park"]]
+#
+Leiden_Binnenstad24_r <- campuses_2024_split_analysis1_ropa[["Leiden_Binnenstad"]]
+
+# 
+# ##### ------------ 2025 --------------- ###########
+# ##### Analysis 1: Campuses with opportunistic observations 2023 , Bioblitz 24,25
+campuses_2025_split_analysis1_ropa <- split(Observations_2025_clip_lu_ropa_analysis1, Observations_2025_clip_lu_ropa_analysis1$campus)
+
+# ## Separate per campus
+Leeuwarden_Van_Hall_Larenstein25_r <- campuses_2025_split_analysis1_ropa[["Leeuwarden_Van_Hall_Larenstein"]]
+
+USP25_r <- campuses_2025_split_analysis1_ropa[["USP"]]
+#
+Leiden_Bioscience_Park25_r <- campuses_2025_split_analysis1_ropa[["Leiden_Bioscience_Park"]]
+#
+Amsterdam_Science_Park25_r <- campuses_2025_split_analysis1_ropa[["Amsterdam_Science_Park"]]
+#
+Leiden_Binnenstad24_r <- campuses_2025_split_analysis1_ropa[["Leiden_Binnenstad"]]
+
+#### -------- Analysis 2 -------- ##########
+
+campuses_2024_split_analysis2_ropa <- split(scope_ropa_a2, scope_ropa_a2$campus)
+
+Nijmegen_campus24_r <- campuses_2024_split_analysis2_ropa[["Nijmegen_campus"]]
+
+WUR_main_campus24_r <- campuses_2024_split_analysis2_ropa[["WUR_main_campus"]]
+
+TUDelft24_r <- campuses_2024_split_analysis2_ropa[["Delft_TU_Campus"]]
+
+Twente_university_campus24_r <- campuses_2024_split_analysis2_ropa[["UT_campus"]]
+
+Velp_Landgoed_Larenstein24_r <- campuses_2024_split_analysis2_ropa[["Velp_Landgoed_Larenstein"]]
+
+Groningen_Zernike_campus24_r <- campuses_2024_split_analysis2_ropa[["Groningen_Zernike"]]
+
+
