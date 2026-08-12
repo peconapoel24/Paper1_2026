@@ -1,0 +1,516 @@
+
+## --------------------- Land use ------------- ##
+
+#Import land use
+lgn24 <- rast("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/4.Datasets/LGN2024/LGN2024.tif")
+
+# Then project
+lgn24 <- terra::project(lgn24, "EPSG:28992")
+crs(lgn24)
+
+## note: i tried to save it the new crs to avoid running again all the code (is too long) but the crs was not maintained ... 
+
+# ## Estimate area per campus based on boundaries ---- this is to give us the total area per campus. maybe not necessary it can be estimated also based on land use but is useful to have
+campus_boundaries_merged_filtered$area_m2 <- st_area(campus_boundaries_merged_filtered)
+
+campus_boundaries_merged_filtered$area_ha <- as.numeric(campus_boundaries_merged_filtered$area_m2)/10000
+
+campus_boundaries_sum <- campus_boundaries_merged_filtered %>%
+  group_by(campus) %>%
+  summarise(
+    area_m2 = sum(area_m2, na.rm = TRUE),
+    area_ha = sum(area_ha, na.rm = TRUE)
+  )
+
+#### Estimate land use cover per campus
+
+# Loop over each campus and count land use in each (note: this part of the code is a bit computationally intensive: can take ~ 10 minutes)
+
+####### I want 2 things: 1 to estimate the land use per campus (and adjust the classifications) + 2 to create the land use maps 
+
+# Ideally i would have 1 code that does both. But it doesnt work. So i split into 2 actions
+
+#1.Estimate land use --- this code also includes area ha estimation: this is estimated by : area_ha = count * prod(res(masked)) --- count = pixel count + prod(res(cliped lgn)) --- this is the resolution of each raster cell x * y per cell ---> in the end we multiply the area ha per raster cell X all raster cells for each land use ----- the land use is already encoded in each raster. so we just get the area per cell and multiply to find the area --> when clipping, if most of a cell is inside the campus boudndary then all the value is kept. otherwise is removed. it cannot keep partial values. 
+
+results <- list()
+
+## note: change "description" into a more meaningful name to simplify the code !!! ---- here i sum up the land use areas BUT in the previous code i sum up the polygon areas -- this is DIFFERENT because land use includes also raster cells outside the polygons if more than half area is included
+
+for (i in 1:nrow(campus_boundaries_sum)) {
+  loc_name <- campus_boundaries_sum$campus[i] 
+  loc_geom <- campus_boundaries_sum[i, ] 
+  masked <- terra::mask(terra::crop(lgn24, loc_geom), loc_geom) 
+  freq_table <- as.data.frame(freq(masked)) %>%
+    mutate(
+      area_ha = count * prod(res(masked)) / 10000, 
+      campus = loc_name
+    ) 
+  results[[i]] <- freq_table 
+}
+
+# Combine all results into one table
+landuse_per_campus <- bind_rows(results)
+sort(unique(landuse_per_campus$value))
+
+## here i keep the original names except for buildings that i add everything as built up areas + joined freshwater with freshwater vegetation because is too detailed for my needs. akso grouped heathland together
+
+landuse_area_table_1 <- landuse_per_campus %>%
+  mutate(
+    value = case_when(
+      value == 1 ~ "Agricultural_grass",
+      value == 2 ~ "Corn",
+      value == 3 ~ "Potatoes",
+      value == 5 ~ "Grains",
+      value == 6 ~ "Other_agriculture",
+      value == 8 ~ "Greenhouse_horticulture",
+      value == 9 ~ "Orchard",
+      value == 10 ~ "Flower_bulbs",
+      value == 11 ~ "Deciduous_forest",
+      value == 12 ~ "Coniferous_forest",
+      value == 16 ~ "Freshwater",
+      value == 18 ~ "buildings_in_primary_built_areas",
+      value == 19 ~ "buildings_in_secondary_built_areas",
+      value == 20 ~ "forest_in_primary_built_areas",
+      value == 22 ~ "forest_in_secondary_built_areas",
+      value == 23 ~ "Grass_in_builtup_areas",
+      value == 26 ~ "buildings_in_rural_areas",
+      value == 27 ~ "other",
+      value == 28 ~ "Grass_in_primary_builtup_areas",
+      value == 29 ~ "Solar_parks", 
+      value == 36 ~ "Heath",
+      value == 42 ~ "reed_vegetation",
+      value == 43 ~ "Forest_in_swamp",
+      value == 45 ~ "naturally_managed_agricultural_grassland",
+      value == 47 ~ "Other_grass",
+      value == 61 ~ "Tree_nurseries",
+      value == 62 ~ "Fruit_farms",
+      value == 251 ~ "main_infrastructure_railway_bodies",
+      value == 252 ~ "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure",
+      value == 253 ~ "small_roads",
+      value == 323 ~ "shrub_vegetation_swamp_area_(low)",
+      value == 333 ~ "Other_shrub_vegetation_(high)",
+      TRUE ~ as.character(value)
+           ))
+
+unique(landuse_area_table_1$value)
+
+
+landuse_area_table_2 <- landuse_area_table_1 %>%
+  mutate(
+    landuse_values = case_when(
+      value == "Agricultural_grass" ~ "Agriculture",
+      value == "Corn" ~ "Agriculture" ,
+      value == "Potatoes" ~ "Agriculture",
+      value == "Grains" ~ "Agriculture",
+      value == "Other_agriculture" ~ "Agriculture",
+      value == "Greenhouse_horticulture" ~ "Agriculture",
+      value == "Orchard" ~ "Agriculture",
+      value == "Deciduous_forest" ~ "Terrestrial_Natural",
+      value == "Coniferous_forest" ~ "Terrestrial_Natural",
+      value == "Heath" ~ "Terrestrial_Natural",
+      value == "Agricultural_grass" ~ "Agriculture",
+      value == "Fruit_farms" ~ "Agriculture",
+      value == "Flower_bulbs" ~ "Agriculture",
+      value == "shrub_vegetation" ~ "Terrestrial_Natural",
+      value == "Other_shrub_vegetation" ~ "other",
+      value ==  "reed_vegetation" ~ "Freshwater",
+      value == "Solar_parks" ~ "built_areas",
+      value == "buildings_in_primary_built_areas" ~ "built_areas",
+      value == "buildings_in_secondary_built_areas" ~ "built_areas",
+      value == "forest_in_primary_built_areas" ~ "Natural_in_Built",
+      value == "Grass_in_builtup_areas" ~ "Natural_in_Built",
+      value == "Grass_in_primary_builtup_areas" ~ "Natural_in_Built",
+      value == "Other_grass" ~ "other",
+      value == "Tree_nurseries" ~ "Agriculture",
+      value == "main_infrastructure_railway_bodies" ~ "built_areas",
+      value == "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure" ~ "built_areas",
+      value == "small_roads" ~ "built_areas",
+      value == "shrub_vegetation_swamp_area_(low)" ~ "Terrestrial_Natural",
+      value == "Other_shrub_vegetation_(high)" ~ "other",
+      value == "forest_in_secondary_built_areas" ~ "Natural_in_Built",
+      value == "naturally_managed_agricultural_grassland" ~ "Agriculture",
+      value == "buildings_in_rural_areas" ~ "built_areas",
+      value == "Forest_in_swamp" ~ "Terrestrial_Natural" ,
+      TRUE ~ as.character(value)
+           ))
+
+
+##### estimate land use % cover per campus --> use this for Bias analysis & rq2
+
+landuse_rearranged_all <- landuse_area_table_2 %>% group_by(campus) %>% 
+mutate(
+    total_area = sum(area_ha)) %>%
+  ungroup()
+
+## sum % per area
+landuse_rearranged_all <- landuse_rearranged_all %>%
+  group_by(campus, landuse_values,area_ha)%>%
+  mutate(perc_area = (area_ha / total_area) * 100, perc_area = round(perc_area,4))
+
+landuse_rearranged_all <- landuse_rearranged_all %>%
+  group_by(campus,landuse_values)
+
+
+landuse_rearranged_all <- landuse_rearranged_all %>%
+  group_by(campus, landuse_values) %>%
+  summarize(
+    area_ha = sum(area_ha),
+    count = sum(count),
+    .groups = "drop"
+  )
+
+landuse_rearranged_all <- landuse_rearranged_all %>%
+  group_by(campus) %>%
+  mutate(
+    total_area = sum(area_ha),
+    perc_area = round(area_ha / total_area * 100, 4)
+  ) %>%
+  ungroup()
+
+#### Save this for rq2 as well!
+write.csv(landuse_rearranged_all,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Land_use_perc.csv")
+
+
+
+###--------- Extract land use per observation ------- ########
+
+#### since i converted lgn24 to terra before to extract land use areas now i need to convert back to raster to use raster:: extract
+
+lgn24_raster <- raster(lgn24)
+
+
+#2023
+Observations_2023_sp <- as(Observations_2023_clip_filtered_analysis1, "Spatial")  # convert SpatVector 
+
+Observations_2023_clip_filtered_analysis1$landuse_value <- raster::extract(lgn24_raster, Observations_2023_sp)
+
+#2024
+Observations_2024_sp <- as(Observations_2024_clip_filtered_analysis1, "Spatial")  # convert SpatVector 
+
+Observations_2024_clip_filtered_analysis1$landuse_value <- raster::extract(lgn24_raster, Observations_2024_sp)
+
+#2024 RQ2 onyl campuses
+Observations_2024_sp_a2 <- as(Observations_2024_clip_filtered_analysis2, "Spatial")  # convert SpatVector 
+
+Observations_2024_clip_filtered_analysis2$landuse_value <- raster::extract(lgn24_raster, Observations_2024_sp_a2)
+
+#2025
+Observations_2025_sp <- as(Observations_2025_clip_filtered_analysis1, "Spatial")  # convert SpatVector 
+
+Observations_2025_clip_filtered_analysis1$landuse_value <- raster::extract(lgn24_raster, Observations_2025_sp)
+
+# campus_boundaries_sum_dg <- st_drop_geometry(campus_boundaries_sum)
+# 
+# write.csv(campus_boundaries_sum_dg,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Campus_area_ha.csv")
+
+## Change the names on each year observations for land use. Create 3 df 1 for each approach used and see what works best
+
+#---------- Observations 2023 ------------- # Note: Adjust the names to match the original ones (definetely need to show this for the analysis) -- Create a table on the new names 
+
+sort(unique(Observations_2023_clip_filtered_analysis1$landuse_value))
+
+
+########## Just repeat the same code as before. this is the extensive code so any category not present will just be skipped
+Observations_2023_clip_lu <- Observations_2023_clip_filtered_analysis1 %>%
+   mutate(
+    landuse_value1 = case_when(
+      landuse_value == 1 ~ "Agricultural_grass",
+      landuse_value == 3 ~ "Potatoes",
+      landuse_value == 5 ~ "Grains",
+      landuse_value == 6 ~ "Other_agriculture",
+      landuse_value == 8 ~ "Greenhouse_horticulture",
+      landuse_value == 9 ~ "Orchard",
+      landuse_value == 10 ~ "Flower_bulbs",
+      landuse_value == 11 ~ "Deciduous_forest",
+      landuse_value == 16 ~ "Freshwater",
+      landuse_value == 18 ~ "buildings_in_primary_built_areas",
+      landuse_value == 19 ~ "buildings_in_secondary_built_areas",
+      landuse_value == 20 ~ "forest_in_primary_built_areas",
+      landuse_value == 22 ~ "forest_in_secondary_built_areas",
+      landuse_value == 23 ~ "Grass_in_builtup_areas",
+      landuse_value == 27 ~ "other",
+      landuse_value == 28 ~ "Grass_in_primary_builtup_areas",
+      landuse_value == 29 ~ "Solar_parks", 
+      landuse_value == 61 ~ "Tree_nurseries",
+        landuse_value == 251 ~ "main_infrastructure_railway_bodies",
+      landuse_value == 252 ~ "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure",
+      landuse_value == 253 ~ "small_roads",
+      TRUE ~ as.character(landuse_value)
+           ))
+
+unique(Observations_2023_clip_lu$landuse_value1)
+
+
+Observations_2023_clip_lu <- Observations_2023_clip_lu %>%
+  mutate(
+    landuse_value2 = case_when(
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "Potatoes" ~ "Agriculture",
+      landuse_value1 == "Grains" ~ "Agriculture",
+      landuse_value1 == "Other_agriculture" ~ "Agriculture",
+      landuse_value1 == "Greenhouse_horticulture" ~ "Agriculture",
+      landuse_value1 == "Orchard" ~ "Agriculture", 
+      landuse_value1 == "Flower_bulbs" ~ "Agriculture",
+      landuse_value1 == "Deciduous_forest" ~ "Terrestrial_Natural",
+      landuse_value1 == "Tree_nurseries" ~ "Agriculture",
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "shrub_vegetation" ~ "Terrestrial_Natural",
+                  landuse_value1 == "buildings_in_primary_built_areas" ~ "built_areas",
+      landuse_value1 == "buildings_in_secondary_built_areas" ~ "built_areas",
+      landuse_value1 == "forest_in_primary_built_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_primary_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Other_grass" ~ "other",
+      landuse_value1 == "Solar_parks" ~ "built_areas",
+      landuse_value1 == "main_infrastructure_railway_bodies" ~ "built_areas",
+      landuse_value1 == "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure" ~ "built_areas",
+      landuse_value1 == "small_roads" ~ "built_areas",
+      landuse_value1 == "shrub_vegetation_swamp_area_(low)" ~ "Terrestrial_Natural",
+      landuse_value1 == "Other_shrub_vegetation_(high)" ~ "other",
+      landuse_value1 == "forest_in_secondary_built_areas" ~ "Natural_in_Built",
+    landuse_value1 == "Heath" ~ "Terrestrial_Natural" ,  
+          landuse_value1 == "Forest_in_swamp" ~ "Terrestrial_Natural" ,
+      TRUE ~ as.character(landuse_value1)
+           ))
+
+unique(Observations_2023_clip_lu$landuse_value2)
+
+
+Observations_2023_clip_lu_ng <- st_drop_geometry(Observations_2023_clip_lu)
+
+Observations_2023_clip_lu_ng$merged_values <- NULL
+
+unique(Observations_2023_clip_lu_ng$campus)
+
+write.csv(Observations_2023_clip_lu_ng,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/Observations_23_landuse.csv")
+
+#---------- Observations 2024 ------------- #
+
+sort(unique(Observations_2024_clip_filtered_analysis1$landuse_value))
+
+Observations_2024_clip_lu <- Observations_2024_clip_filtered_analysis1 %>%
+   mutate(
+    landuse_value1 = case_when(
+      landuse_value == 1 ~ "Agricultural_grass",
+      landuse_value == 2 ~ "Corn",
+      landuse_value == 5 ~ "Grains",
+      landuse_value == 6 ~ "Other_agriculture",
+      landuse_value == 8 ~ "Greenhouse_horticulture",
+      landuse_value == 9 ~ "Orchard",
+      landuse_value == 11 ~ "Deciduous_forest",
+      landuse_value == 12 ~ "Coniferous_forest",
+      landuse_value == 16 ~ "Freshwater",
+      landuse_value == 18 ~ "buildings_in_primary_built_areas",
+      landuse_value == 19 ~ "buildings_in_secondary_built_areas",
+      landuse_value == 20 ~ "forest_in_primary_built_areas",
+      landuse_value == 22 ~ "forest_in_secondary_built_areas",
+      landuse_value == 23 ~ "Grass_in_builtup_areas",
+      landuse_value == 26 ~ "buildings_in_rural_areas",
+      landuse_value == 27 ~ "other",
+      landuse_value == 28 ~ "Grass_in_primary_builtup_areas",
+      landuse_value == 45 ~ "naturally_managed_agricultural_grassland",
+      landuse_value == 47 ~ "Other_grass",
+      landuse_value == 61 ~ "Tree_nurseries",
+      landuse_value == 251 ~ "main_infrastructure_railway_bodies",
+      landuse_value == 252 ~ "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure",
+      landuse_value == 253 ~ "small_roads",
+      landuse_value == 323 ~ "shrub_vegetation_swamp_area_(low)",
+      TRUE ~ as.character(landuse_value)
+           ))
+
+unique(Observations_2024_clip_lu$landuse_value1)
+
+Observations_2024_clip_lu <- Observations_2024_clip_lu %>%
+  mutate(
+    landuse_value2 = case_when(
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "Corn" ~ "Agriculture" ,
+      landuse_value1 == "Grains" ~ "Agriculture",
+      landuse_value1 == "Other_agriculture" ~ "Agriculture",
+      landuse_value1 == "Greenhouse_horticulture" ~ "Agriculture",
+      landuse_value1 == "Orchard" ~ "Agriculture",
+      landuse_value1 == "Deciduous_forest" ~ "Terrestrial_Natural",
+      landuse_value1 == "Coniferous_forest" ~ "Terrestrial_Natural",
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "Tree_nurseries" ~ "Agriculture",
+      landuse_value1 == "shrub_vegetation" ~ "Terrestrial_Natural",
+      landuse_value1 == "buildings_in_primary_built_areas" ~ "built_areas",
+      landuse_value1 == "buildings_in_secondary_built_areas" ~ "built_areas",
+      landuse_value1 == "forest_in_primary_built_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_primary_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Other_grass" ~ "other",
+      landuse_value1 == "main_infrastructure_railway_bodies" ~ "built_areas",
+      landuse_value1 == "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure" ~ "built_areas",
+      landuse_value1 == "small_roads" ~ "built_areas",
+      landuse_value1 == "shrub_vegetation_swamp_area_(low)" ~ "Terrestrial_Natural",
+      landuse_value1 == "forest_in_secondary_built_areas" ~ "Natural_in_Built",
+      landuse_value1 == "naturally_managed_agricultural_grassland" ~ "Agriculture",
+      landuse_value1 == "solar_parks" ~ "built_areas",
+      landuse_value1 == "buildings_in_rural_areas" ~ "built_areas",
+      TRUE ~ as.character(landuse_value1)
+           ))
+
+unique(Observations_2024_clip_lu$landuse_value2)
+
+Observations_2024_clip_lu_ng <- st_drop_geometry(Observations_2024_clip_lu)
+
+Observations_2024_clip_lu_ng$merged_values <- NULL
+
+write.csv(Observations_2024_clip_lu_ng,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/Observations_24_landuse.csv")
+
+
+###### -------- Observations 2025 ------------- #####
+
+sort(unique(Observations_2025_clip_filtered_analysis1$landuse_value))
+
+########## Just repeat the same code as before. this is the extensive code so any category not present will just be skipped
+Observations_2025_clip_lu <- Observations_2025_clip_filtered_analysis1 %>%
+   mutate(
+    landuse_value1 = case_when(
+      landuse_value == 1 ~ "Agricultural_grass",
+      landuse_value == 2 ~ "Corn",
+      landuse_value == 5 ~ "Grains",
+      landuse_value == 6 ~ "Other_agriculture",
+      landuse_value == 8 ~ "Greenhouse_horticulture",
+      landuse_value == 9 ~ "Orchard",
+     landuse_value == 11 ~ "Deciduous_forest",
+      landuse_value == 12 ~ "Coniferous_forest",
+      landuse_value == 16 ~ "Freshwater",
+      landuse_value == 18 ~ "buildings_in_primary_built_areas",
+      landuse_value == 19 ~ "buildings_in_secondary_built_areas",
+      landuse_value == 20 ~ "forest_in_primary_built_areas",
+      landuse_value == 22 ~ "forest_in_secondary_built_areas",
+      landuse_value == 23 ~ "Grass_in_builtup_areas",
+      landuse_value == 26 ~ "buildings_in_rural_areas",
+      landuse_value == 27 ~ "other",
+      landuse_value == 28 ~ "Grass_in_primary_builtup_areas",
+      landuse_value == 45 ~ "naturally_managed_agricultural_grassland",
+      landuse_value == 47 ~ "Other_grass",
+      landuse_value == 251 ~ "main_infrastructure_railway_bodies",
+      landuse_value == 252 ~ "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure",
+      landuse_value == 253 ~ "small_roads",
+      landuse_value == 333 ~ "Other_shrub_vegetation_(high)",
+      TRUE ~ as.character(landuse_value)
+           ))
+
+unique(Observations_2025_clip_lu$landuse_value1)
+
+
+
+Observations_2025_clip_lu <- Observations_2025_clip_lu %>%
+  mutate(
+    landuse_value2 = case_when(
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "Corn" ~ "Agriculture" ,
+      landuse_value1 == "Grains" ~ "Agriculture",
+      landuse_value1 == "Other_agriculture" ~ "Agriculture",
+      landuse_value1 == "Greenhouse_horticulture" ~ "Agriculture",
+      landuse_value1 == "Orchard" ~ "Agriculture",
+      landuse_value1 == "Deciduous_forest" ~ "Terrestrial_Natural",
+      landuse_value1 == "Coniferous_forest" ~ "Terrestrial_Natural",
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "shrub_vegetation" ~ "Terrestrial_Natural",
+      landuse_value1 == "Other_shrub_vegetation" ~ "other",
+      landuse_value1 == "buildings_in_primary_built_areas" ~ "built_areas",
+      landuse_value1 == "buildings_in_secondary_built_areas" ~ "built_areas",
+      landuse_value1 == "forest_in_primary_built_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_primary_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Other_grass" ~ "other",
+      landuse_value1 == "main_infrastructure_railway_bodies" ~ "built_areas",
+      landuse_value1 == "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure" ~ "built_areas",
+      landuse_value1 == "small_roads" ~ "built_areas",
+      landuse_value1 == "Other_shrub_vegetation_(high)" ~ "other",
+      landuse_value1 == "forest_in_secondary_built_areas" ~ "Natural_in_Built",
+      landuse_value1 == "naturally_managed_agricultural_grassland" ~ "Agriculture",
+      landuse_value1 == "buildings_in_rural_areas" ~ "built_areas",
+        TRUE ~ as.character(landuse_value1)
+           ))
+
+unique(Observations_2025_clip_lu$landuse_value2)
+
+Observations_2025_clip_lu_ng <- st_drop_geometry(Observations_2025_clip_lu)
+
+Observations_2025_clip_lu_ng$merged_values <- NULL
+
+write.csv(Observations_2025_clip_lu_ng,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/Observations_25_landuse.csv")
+
+#### Analysis 2
+
+Observations_2024_clip_lu2 <- Observations_2024_clip_filtered_analysis2 %>%
+   mutate(
+    landuse_value1 = case_when(
+      landuse_value == 1 ~ "Agricultural_grass",
+      landuse_value == 2 ~ "Corn",
+      landuse_value == 3 ~ "Potatoes",
+      landuse_value == 5 ~ "Grains",
+      landuse_value == 6 ~ "Other_agriculture",
+      landuse_value == 8 ~ "Greenhouse_horticulture",
+      landuse_value == 9 ~ "Orchard",
+      landuse_value == 11 ~ "Deciduous_forest",
+      landuse_value == 12 ~ "Coniferous_forest",
+      landuse_value == 16 ~ "Freshwater",
+      landuse_value == 18 ~ "buildings_in_primary_built_areas",
+      landuse_value == 19 ~ "buildings_in_secondary_built_areas",
+      landuse_value == 20 ~ "forest_in_primary_built_areas",
+      landuse_value == 22 ~ "forest_in_secondary_built_areas",
+      landuse_value == 23 ~ "Grass_in_builtup_areas",
+      landuse_value == 26 ~ "buildings_in_rural_areas",
+      landuse_value == 27 ~ "other",
+      landuse_value == 28 ~ "Grass_in_primary_builtup_areas",
+      landuse_value == 42 ~ "Reed vegetation",
+      landuse_value == 45 ~ "naturally_managed_agricultural_grassland",
+      landuse_value == 47 ~ "Other_grass",
+      landuse_value == 61 ~ "Tree_farms",
+      landuse_value == 251 ~ "main_infrastructure_railway_bodies",
+      landuse_value == 252 ~ "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure",
+      landuse_value == 253 ~ "small_roads",
+      landuse_value == 323 ~ "shrub_vegetation_swamp_area_(low)",
+      landuse_value == 333 ~ "shrub_vegetation_swamp_area_(high)",
+      TRUE ~ as.character(landuse_value)
+           ))
+
+unique(Observations_2024_clip_lu$landuse_value1)
+
+Observations_2024_clip_lu2 <- Observations_2024_clip_lu2 %>%
+  mutate(
+    landuse_value2 = case_when(
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "Corn" ~ "Agriculture" ,
+       landuse_value1 == "Potatoes" ~ "Agriculture" ,
+      landuse_value1 == "Grains" ~ "Agriculture",
+      landuse_value1 == "Other_agriculture" ~ "Agriculture",
+      landuse_value1 == "Greenhouse_horticulture" ~ "Agriculture",
+      landuse_value1 == "Orchard" ~ "Agriculture",
+      landuse_value1 == "Deciduous_forest" ~ "Terrestrial_Natural",
+      landuse_value1 == "Coniferous_forest" ~ "Terrestrial_Natural",
+      landuse_value1 == "Agricultural_grass" ~ "Agriculture",
+      landuse_value1 == "Tree_farms" ~ "Agriculture",
+      landuse_value1 == "shrub_vegetation" ~ "Terrestrial_Natural",
+      landuse_value1 == "buildings_in_primary_built_areas" ~ "built_areas",
+      landuse_value1 == "buildings_in_secondary_built_areas" ~ "built_areas",
+      landuse_value1 == "forest_in_primary_built_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Grass_in_primary_builtup_areas" ~ "Natural_in_Built",
+      landuse_value1 == "Reed vegetation" ~ "Freshwater",
+      landuse_value1 == "Other_grass" ~ "other",
+      landuse_value1 == "main_infrastructure_railway_bodies" ~ "built_areas",
+      landuse_value1 == "semi-paved_roads_slowtraffic _infrastructure_other_infrastructure" ~ "built_areas",
+      landuse_value1 == "small_roads" ~ "built_areas",
+      landuse_value1 == "shrub_vegetation_swamp_area_(low)" ~ "Terrestrial_Natural",
+       landuse_value1 == "shrub_vegetation_swamp_area_(high)" ~ "Terrestrial_Natural",
+      landuse_value1 == "forest_in_secondary_built_areas" ~ "Natural_in_Built",
+      landuse_value1 == "naturally_managed_agricultural_grassland" ~ "Agriculture",
+      landuse_value1 == "solar_parks" ~ "built_areas",
+      landuse_value1 == "buildings_in_rural_areas" ~ "built_areas",
+      TRUE ~ as.character(landuse_value1)
+           ))
+
+unique(Observations_2024_clip_lu2$landuse_value2)
+
+Observations_2024_clip_lu2 <- st_drop_geometry(Observations_2024_clip_lu2)
+
+Observations_2024_clip_lu2$merged_values <- NULL
+
+write.csv(Observations_2024_clip_lu2,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/produced_datasets/Observations_24_landuse_analysis2.csv")
