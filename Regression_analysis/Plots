@@ -1,0 +1,263 @@
+coef_table_scope_copy <- coef_table_scope
+
+coef_table_scope_copy <- coef_table_scope_copy %>%
+  filter(term != "(Intercept)")
+
+coef_table_bias_copy <- coef_table_bias
+
+coef_table_bias_copy <- coef_table_bias_copy %>%
+  filter(term != "(Intercept)")
+
+coef_table_bias_copy <- coef_table_bias_copy %>%
+  filter(term != "(phi)")
+
+## rename predictors
+coef_table_scope_copy <- coef_table_scope_copy %>%
+  mutate(
+    predictor = dplyr::recode(
+      term,
+      total_area = "Total area",
+      natural_urban_green_area = "Urban green area",
+      Total_BSc_MSc_programs_2024 = "BSc/MSc programmes",
+      Total_BSc_MSc_students_2024 = "BSc/MSc students",
+      Total_Env_BSc_MSc_programs_2024 = "Environmental BSc/MSc programmes",
+      inhabitants = "Neighborhood inhabitants"
+    )
+  )
+
+coef_table_bias_copy <- coef_table_bias_copy %>%
+  mutate(
+    predictor = dplyr::recode(
+      term,
+      total_area = "Total area",
+      natural_urban_green_area = "Urban green area",
+      Total_BSc_MSc_programs_2024 = "BSc/MSc programmes",
+      Total_BSc_MSc_students_2024 = "BSc/MSc students",
+      Total_Env_BSc_MSc_programs_2024 = "Environmental BSc/MSc programmes",
+      inhabitants = "Neighborhood inhabitants"
+    )
+  )
+
+## remove any duplicate entries
+coef_table_scope_copy <- coef_table_scope_copy %>%
+  distinct(dataset, term, .keep_all = TRUE)
+
+coef_table_bias_copy <- coef_table_bias_copy %>%
+  distinct(dataset, term, .keep_all = TRUE)
+
+coef_table_scope_copy <- coef_table_scope_copy %>%
+  mutate(
+    Significance = if_else(
+      p.value < 0.05,
+      "Significant",
+      "Not significant"
+    )
+  )
+
+coef_table_bias_copy <- coef_table_bias_copy %>%
+  mutate(
+    Significance = if_else(
+      p.value < 0.05,
+      "Significant",
+      "Not significant"
+    )
+  )
+
+# Coefficient forest plot: We plot the estimate value, add confidence intervals and assess if the effect of each predictor on each scope/bias response
+
+#Scope
+## all data
+
+
+### remove and spaces or _ that may have remained
+coef_table_scope_copy <- coef_table_scope_copy %>%
+  mutate(
+    dataset_clean = dataset %>%
+      stringr::str_replace_all("_", " ") %>%
+      stringr::str_to_sentence()
+  )
+
+## reorder alphabeticaly 
+coef_table_scope_copy <- coef_table_scope_copy %>%
+  mutate(
+    dataset_clean = factor(
+      dataset_clean,
+      levels = sort(unique(dataset_clean))
+    )
+  )
+
+#plot
+coef_table_scope_copy_plot <- ggplot(
+  coef_table_scope_copy,
+  aes(
+    x = estimate,
+    y = dataset_clean,
+    colour = predictor, shape = Significance
+  )
+) +
+geom_vline(
+  xintercept = 0,
+  linetype = "dashed",
+  colour = "grey60"
+) +
+
+geom_errorbarh(
+  aes(
+    xmin = conf.low,
+    xmax = conf.high
+  ),
+  height = 0.2,
+  linewidth = 0.4
+) +
+
+geom_point(
+    size = 2.5
+) +
+
+scale_alpha_manual(
+  values = c(
+    "TRUE" = 1,
+    "FALSE" = 0.25
+  ),
+  guide = "none"
+) +
+
+theme_classic(base_size = 12)+
+labs(
+  x = "Estimated regression coefficient",
+  y = "Response variables for scope",
+  colour = "Predictor"
+) + scale_colour_viridis_d(option = "D")
+
+
+
+#Bias
+
+### remove and spaces or _ that may have remained
+coef_table_bias_copy <- coef_table_bias_copy %>%
+  mutate(
+    dataset_clean = dataset %>%
+      stringr::str_replace_all("_", " ") %>%
+      stringr::str_to_sentence()
+  )
+
+## reorder alphabeticaly 
+coef_table_bias_copy <- coef_table_bias_copy %>%
+  mutate(
+    dataset_clean = factor(
+      dataset_clean,
+      levels = sort(unique(dataset_clean))
+    )
+  )
+
+#plot
+coef_table_bias_copy_plot <- ggplot(
+  coef_table_bias_copy,
+  aes(
+    x = estimate,
+    y = dataset_clean,
+    colour = predictor,shape = Significance
+  )
+) +
+
+geom_vline(
+  xintercept = 0,
+  linetype = "dashed",
+  colour = "grey60"
+) +
+
+geom_errorbarh(
+  aes(
+    xmin = conf.low,
+    xmax = conf.high
+  ),
+  height = 0.2,
+  linewidth = 0.4
+) +
+
+geom_point(
+    size = 2.5
+) +
+
+scale_alpha_manual(
+  values = c(
+    "TRUE" = 1,
+    "FALSE" = 0.25
+  ),
+  guide = "none"
+) +
+
+theme_classic(base_size = 12)  + labs(
+  x = "Estimated regression coefficient",
+  y = "Response variables for bias",
+  colour = "Predictor"
+) + scale_colour_viridis_d(option = "D")
+
+
+### All 
+
+coefficient_forest_plot_scope <- coef_table_scope_copy_plot +  labs(tag = "(A)")
+
+coefficient_forest_plot_bias <- coef_table_bias_copy_plot +  labs(tag = "(B)")
+
+
+
+coefficient_forest_plot_all <- (coefficient_forest_plot_scope|coefficient_forest_plot_bias)   +
+  plot_layout(guides = "collect") &
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical"
+  )
+
+regression_title <- wrap_elements(
+  full = textGrob(
+    "Associations between organizational and landscape predictors with the analyzed scope and bias response variables",
+    gp = gpar(fontsize = 14, fontface = "bold")
+  )
+)
+
+
+final_regression_plot <-
+  (regression_title / coefficient_forest_plot_all) +
+  plot_layout(
+    heights = c(0.1, 1)
+  )
+
+ggsave(
+  filename = "C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/graphs/regression_all.png",
+  plot = final_regression_plot,
+  width = 12,
+  height = 10,
+  dpi = 600
+)
+
+
+#### export the tables by rounding the values after producing the forest plots
+
+coef_table_scope_SI <- coef_table_scope_copy %>%
+  mutate(
+    estimate = round(estimate, 5),
+    std.error = round(std.error, 5),
+    statistic = round(statistic, 2),
+    p.value = round(p.value, 3), 
+    conf.low = round(conf.low, 2),
+    conf.high = round(conf.high, 2)
+  )
+
+write.csv(coef_table_scope_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/RQ2_output_scope_dataset.csv")
+
+write.xlsx(coef_table_scope_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/RQ2_output_scope_dataset.xlsx")
+
+coef_table_bias_SI <- coef_table_bias_copy %>%
+  mutate(
+    estimate = round(estimate, 5),
+    std.error = round(std.error, 5),
+    statistic = round(statistic, 2),
+    p_value = round(p.value, 3), 
+    conf.low = round(conf.low, 2),
+    conf.high = round(conf.high, 2)
+  )
+
+write.csv(coef_table_bias_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/RQ2_output_bias_dataset.csv")
+
+write.xlsx(coef_table_bias_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/RQ2_output_bias_dataset.xlsx")
