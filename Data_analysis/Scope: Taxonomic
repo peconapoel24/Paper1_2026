@@ -1,0 +1,1202 @@
+
+####### Analysis 1: campuses with opportunistic observations in 2023 and a bioblitz in 2024, 25
+
+######## ------  Algae_weeds_unicellular ------ ########
+## some years have 0 observations so i exclude them from the analysis but still keep the code
+# 2024 ~ 2023
+## greater
+
+
+scope_algae_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2024, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2023, alternative = "g", paired = T, na.rm = drop)
+
+# ## less
+scope_algae_2423_less <-wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2024, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2023, alternative = "l", paired = T, na.rm = drop)
+
+# ## both
+scope_algae_2423_twosided <-wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2024, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2023, paired = T, na.rm = drop)
+
+# ##2025 ~ 2023:
+# ## greater
+scope_algae_2523_greater <-wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2025, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2023, alternative = "g", paired = T, na.rm = drop)
+
+# ## less
+scope_algae_2523_less <-wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2025, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2023, alternative = "l", paired = T, na.rm = drop)
+
+# ## both
+scope_algae_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2025, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2023, paired = T, na.rm = drop)
+
+# ## 2025 ~ 2024
+
+# ## greater
+scope_algae_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2025, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2024, alternative = "g", paired = T)
+
+# ## less
+scope_algae_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2025, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2024, alternative = "l", paired = T, na.rm = drop)
+
+# ## both
+scope_algae_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2025, Observations_all_clip_filtered_group_a1_wide$Algae_weeds_unicellular_2024, paired = T, na.rm = drop)
+
+results_algae <- data.frame(
+   comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+   statistic = c(scope_algae_2423_greater$statistic,
+                 scope_algae_2423_less$statistic,
+                 scope_algae_2423_twosided$statistic,scope_algae_2523_greater$statistic,
+                 scope_algae_2523_less$statistic,
+                 scope_algae_2523_twosided$statistic,scope_algae_2524_greater$statistic,
+                 scope_algae_2524_less$statistic,
+                 scope_algae_2524_twosided$statistic),
+
+   p.value = c(scope_algae_2423_greater$p.value,
+               scope_algae_2423_less$p.value,
+               scope_algae_2423_twosided$p.value,scope_algae_2523_greater$p.value,
+               scope_algae_2523_less$p.value,
+               scope_algae_2523_twosided$p.value,scope_algae_2524_greater$p.value,
+               scope_algae_2524_less$p.value,
+               scope_algae_2524_twosided$p.value),
+
+   alternative = c(scope_algae_2423_greater$alternative,scope_algae_2423_less$alternative,scope_algae_2423_twosided$alternative,scope_algae_2523_greater$alternative,scope_algae_2523_less$alternative,scope_algae_2523_twosided$alternative,scope_algae_2524_greater$alternative,scope_algae_2524_less$alternative,scope_algae_2524_twosided$alternative),
+
+   method = c(scope_algae_2423_greater$method, scope_algae_2423_less$method, scope_algae_2423_twosided$method,scope_algae_2523_greater$method, scope_algae_2523_less$method, scope_algae_2523_twosided$method,scope_algae_2524_greater$method, scope_algae_2524_less$method, scope_algae_2524_twosided$method)
+ )
+
+write.csv(results_algae,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_algae.csv")
+
+
+
+######## ------ Bees_wasps_ants ------ ########
+
+# 2024 ~ 2023
+## greater
+scope_bwa_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2024, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bwa_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2024, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bwa_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2024, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+## greater
+scope_bwa_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2025, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bwa_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2025, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bwa_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2025, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+## greater
+scope_bwa_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2025, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bwa_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2025, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bwa_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2025, Observations_all_clip_filtered_group_a1_wide$Bees_wasps_ants_2024, paired = T, na.rm = drop)
+
+
+results_bwa <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_bwa_2423_greater$statistic,
+                scope_bwa_2423_less$statistic,
+                scope_bwa_2423_twosided$statistic,scope_bwa_2523_greater$statistic,
+                scope_bwa_2523_less$statistic,
+                scope_bwa_2523_twosided$statistic,scope_bwa_2524_greater$statistic,
+                scope_bwa_2524_less$statistic,
+                scope_bwa_2524_twosided$statistic),
+
+  p.value = c(scope_bwa_2423_greater$p.value,
+              scope_bwa_2423_less$p.value,
+              scope_bwa_2423_twosided$p.value,scope_bwa_2523_greater$p.value,
+              scope_bwa_2523_less$p.value,
+              scope_bwa_2523_twosided$p.value,scope_bwa_2524_greater$p.value,
+              scope_bwa_2524_less$p.value,
+              scope_bwa_2524_twosided$p.value),
+
+  alternative = c(scope_bwa_2423_greater$alternative,scope_bwa_2423_less$alternative,scope_bwa_2423_twosided$alternative,scope_bwa_2523_greater$alternative,scope_bwa_2523_less$alternative,scope_bwa_2523_twosided$alternative,scope_bwa_2524_greater$alternative,scope_bwa_2524_less$alternative,scope_bwa_2524_twosided$alternative),
+
+  method = c(scope_bwa_2423_greater$method, scope_bwa_2423_less$method, scope_bwa_2423_twosided$method,scope_bwa_2523_greater$method, scope_bwa_2523_less$method, scope_bwa_2523_twosided$method,scope_bwa_2524_greater$method, scope_bwa_2524_less$method, scope_bwa_2524_twosided$method)
+)
+
+write.csv(results_bwa,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_beeswaspsants.csv")
+
+
+######## ------ Butterflies ------ ########
+
+# 2024 ~ 2023
+## greater
+scope_butt_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2024, Observations_all_clip_filtered_group_a1_wide$Butterflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_butt_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2024, Observations_all_clip_filtered_group_a1_wide$Butterflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_butt_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2024, Observations_all_clip_filtered_group_a1_wide$Butterflies_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+## greater
+scope_butt_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2025, Observations_all_clip_filtered_group_a1_wide$Butterflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_butt_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2025, Observations_all_clip_filtered_group_a1_wide$Butterflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_butt_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2025, Observations_all_clip_filtered_group_a1_wide$Butterflies_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+## greater
+scope_butt_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2025, Observations_all_clip_filtered_group_a1_wide$Butterflies_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_butt_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2025, Observations_all_clip_filtered_group_a1_wide$Butterflies_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_butt_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Butterflies_2025, Observations_all_clip_filtered_group_a1_wide$Butterflies_2024, paired = T, na.rm = drop)
+
+#merged
+results_butt <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_butt_2423_greater$statistic,
+                scope_butt_2423_less$statistic,
+                scope_butt_2423_twosided$statistic,scope_butt_2523_greater$statistic,
+                scope_butt_2523_less$statistic,
+                scope_butt_2523_twosided$statistic,scope_butt_2524_greater$statistic,
+                scope_butt_2524_less$statistic,
+                scope_butt_2524_twosided$statistic),
+
+  p.value = c(scope_butt_2423_greater$p.value,
+              scope_butt_2423_less$p.value,
+              scope_butt_2423_twosided$p.value,scope_butt_2523_greater$p.value,
+              scope_butt_2523_less$p.value,
+              scope_butt_2523_twosided$p.value,scope_butt_2524_greater$p.value,
+              scope_butt_2524_less$p.value,
+              scope_butt_2524_twosided$p.value),
+
+  alternative = c(scope_butt_2423_greater$alternative,scope_butt_2423_less$alternative,scope_butt_2423_twosided$alternative,scope_butt_2523_greater$alternative,scope_butt_2523_less$alternative,scope_butt_2523_twosided$alternative,scope_butt_2524_greater$alternative,scope_butt_2524_less$alternative,scope_butt_2524_twosided$alternative),
+
+  method = c(scope_butt_2423_greater$method, scope_butt_2423_less$method, scope_butt_2423_twosided$method,scope_butt_2523_greater$method, scope_butt_2523_less$method, scope_butt_2523_twosided$method,scope_butt_2524_greater$method, scope_butt_2524_less$method, scope_butt_2524_twosided$method)
+)
+
+write.csv(results_butt,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_butterflies.csv")
+
+
+
+######## ------ Arthropods other ------ ########
+
+# 2024 ~ 2023
+## greater
+
+scope_arthoth_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2024, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_arthoth_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2024, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_arthoth_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2024, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+#greater
+scope_arthoth_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2025, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_arthoth_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2025, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_arthoth_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2025, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+#greater
+scope_arthoth_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2025, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_arthoth_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2025, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_arthoth_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2025, Observations_all_clip_filtered_group_a1_wide$Arthropods_other_2024, paired = T, na.rm = drop)
+
+
+
+#merged
+results_arthoth <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_arthoth_2423_greater$statistic,
+                scope_arthoth_2423_less$statistic,
+                scope_arthoth_2423_twosided$statistic,scope_arthoth_2523_greater$statistic,
+                scope_arthoth_2523_less$statistic,
+                scope_arthoth_2523_twosided$statistic,scope_arthoth_2524_greater$statistic,
+                scope_arthoth_2524_less$statistic,
+                scope_arthoth_2524_twosided$statistic),
+
+  p.value = c(scope_arthoth_2423_greater$p.value,
+              scope_arthoth_2423_less$p.value,
+              scope_arthoth_2423_twosided$p.value,scope_arthoth_2523_greater$p.value,
+              scope_arthoth_2523_less$p.value,
+              scope_arthoth_2523_twosided$p.value,scope_arthoth_2524_greater$p.value,
+              scope_arthoth_2524_less$p.value,
+              scope_arthoth_2524_twosided$p.value),
+
+  alternative = c(scope_arthoth_2423_greater$alternative,scope_arthoth_2423_less$alternative,scope_arthoth_2423_twosided$alternative,scope_arthoth_2523_greater$alternative,scope_arthoth_2523_less$alternative,scope_arthoth_2523_twosided$alternative,scope_arthoth_2524_greater$alternative,scope_arthoth_2524_less$alternative,scope_arthoth_2524_twosided$alternative),
+
+  method = c(scope_arthoth_2423_greater$method, scope_arthoth_2423_less$method, scope_arthoth_2423_twosided$method,scope_arthoth_2523_greater$method, scope_arthoth_2523_less$method, scope_arthoth_2523_twosided$method,scope_arthoth_2524_greater$method, scope_arthoth_2524_less$method, scope_arthoth_2524_twosided$method)
+)
+
+write.csv(results_arthoth,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_athropodsother.csv")
+
+
+######## ------ Insects other ------ ########
+
+scope_insoth_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2024, Observations_all_clip_filtered_group_a1_wide$Insects_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_insoth_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2024, Observations_all_clip_filtered_group_a1_wide$Insects_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_insoth_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2024, Observations_all_clip_filtered_group_a1_wide$Insects_other_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+scope_insoth_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2025, Observations_all_clip_filtered_group_a1_wide$Insects_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_insoth_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2025, Observations_all_clip_filtered_group_a1_wide$Insects_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_insoth_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2025, Observations_all_clip_filtered_group_a1_wide$Insects_other_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+#greater
+scope_insoth_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2025, Observations_all_clip_filtered_group_a1_wide$Insects_other_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_insoth_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2025, Observations_all_clip_filtered_group_a1_wide$Insects_other_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_insoth_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Insects_other_2025, Observations_all_clip_filtered_group_a1_wide$Insects_other_2024, paired = T, na.rm = drop)
+
+
+
+#merged
+results_insoth <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_insoth_2423_greater$statistic,
+                scope_insoth_2423_less$statistic,
+                scope_insoth_2423_twosided$statistic,scope_insoth_2523_greater$statistic,
+                scope_insoth_2523_less$statistic,
+                scope_insoth_2523_twosided$statistic,scope_insoth_2524_greater$statistic,
+                scope_insoth_2524_less$statistic,
+                scope_insoth_2524_twosided$statistic),
+
+  p.value = c(scope_insoth_2423_greater$p.value,
+              scope_insoth_2423_less$p.value,
+              scope_insoth_2423_twosided$p.value,scope_insoth_2523_greater$p.value,
+              scope_insoth_2523_less$p.value,
+              scope_insoth_2523_twosided$p.value,scope_insoth_2524_greater$p.value,
+              scope_insoth_2524_less$p.value,
+              scope_insoth_2524_twosided$p.value),
+
+  alternative = c(scope_insoth_2423_greater$alternative,scope_insoth_2423_less$alternative,scope_insoth_2423_twosided$alternative,scope_insoth_2523_greater$alternative,scope_insoth_2523_less$alternative,scope_insoth_2523_twosided$alternative,scope_insoth_2524_greater$alternative,scope_insoth_2524_less$alternative,scope_insoth_2524_twosided$alternative),
+
+  method = c(scope_insoth_2423_greater$method, scope_insoth_2423_less$method, scope_insoth_2423_twosided$method,scope_insoth_2523_greater$method, scope_insoth_2523_less$method, scope_insoth_2523_twosided$method,scope_insoth_2524_greater$method, scope_insoth_2524_less$method, scope_insoth_2524_twosided$method)
+)
+
+write.csv(results_insoth,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_insectsother.csv")
+
+######## ------ Beetles ------ ########
+
+scope_beet_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2024, Observations_all_clip_filtered_group_a1_wide$Beetles_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_beet_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2024, Observations_all_clip_filtered_group_a1_wide$Beetles_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_beet_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2024, Observations_all_clip_filtered_group_a1_wide$Beetles_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+scope_beet_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2025, Observations_all_clip_filtered_group_a1_wide$Beetles_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_beet_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2025, Observations_all_clip_filtered_group_a1_wide$Beetles_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_beet_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2025, Observations_all_clip_filtered_group_a1_wide$Beetles_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+#greater
+scope_beet_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2025, Observations_all_clip_filtered_group_a1_wide$Beetles_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_beet_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2025, Observations_all_clip_filtered_group_a1_wide$Beetles_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_beet_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Beetles_2025, Observations_all_clip_filtered_group_a1_wide$Beetles_2024, paired = T, na.rm = drop)
+
+#merged
+results_beet <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_beet_2423_greater$statistic,
+                scope_beet_2423_less$statistic,
+                scope_beet_2423_twosided$statistic,scope_beet_2523_greater$statistic,
+                scope_beet_2523_less$statistic,
+                scope_beet_2523_twosided$statistic,scope_beet_2524_greater$statistic,
+                scope_beet_2524_less$statistic,
+                scope_beet_2524_twosided$statistic),
+
+  p.value = c(scope_beet_2423_greater$p.value,
+              scope_beet_2423_less$p.value,
+              scope_beet_2423_twosided$p.value,scope_beet_2523_greater$p.value,
+              scope_beet_2523_less$p.value,
+              scope_beet_2523_twosided$p.value,scope_beet_2524_greater$p.value,
+              scope_beet_2524_less$p.value,
+              scope_beet_2524_twosided$p.value),
+
+  alternative = c(scope_beet_2423_greater$alternative,scope_beet_2423_less$alternative,scope_beet_2423_twosided$alternative,scope_beet_2523_greater$alternative,scope_beet_2523_less$alternative,scope_beet_2523_twosided$alternative,scope_beet_2524_greater$alternative,scope_beet_2524_less$alternative,scope_beet_2524_twosided$alternative),
+
+  method = c(scope_beet_2423_greater$method, scope_beet_2423_less$method, scope_beet_2423_twosided$method,scope_beet_2523_greater$method, scope_beet_2523_less$method, scope_beet_2523_twosided$method,scope_beet_2524_greater$method, scope_beet_2524_less$method, scope_beet_2524_twosided$method)
+)
+
+write.csv(results_beet,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_beetles.csv")
+
+
+
+######## ------ Dragonflies ------ ########
+
+scope_drag_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2024, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_drag_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2024, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_drag_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2025, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+scope_drag_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2025, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_drag_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2025, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_drag_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2025, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+scope_drag_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2025, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_drag_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2025, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_drag_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Dragonflies_2025, Observations_all_clip_filtered_group_a1_wide$Dragonflies_2024, paired = T, na.rm = drop)
+
+#merged
+results_drag <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_drag_2423_greater$statistic,
+                scope_drag_2423_less$statistic,
+                scope_drag_2423_twosided$statistic,scope_drag_2523_greater$statistic,
+                scope_drag_2523_less$statistic,
+                scope_drag_2523_twosided$statistic,scope_drag_2524_greater$statistic,
+                scope_drag_2524_less$statistic,
+                scope_drag_2524_twosided$statistic),
+
+  p.value = c(scope_drag_2423_greater$p.value,
+              scope_drag_2423_less$p.value,
+              scope_drag_2423_twosided$p.value,scope_drag_2523_greater$p.value,
+              scope_drag_2523_less$p.value,
+              scope_drag_2523_twosided$p.value,scope_drag_2524_greater$p.value,
+              scope_drag_2524_less$p.value,
+              scope_drag_2524_twosided$p.value),
+
+  alternative = c(scope_drag_2423_greater$alternative,scope_drag_2423_less$alternative,scope_drag_2423_twosided$alternative,scope_drag_2523_greater$alternative,scope_drag_2523_less$alternative,scope_drag_2523_twosided$alternative,scope_drag_2524_greater$alternative,scope_drag_2524_less$alternative,scope_drag_2524_twosided$alternative),
+
+  method = c(scope_drag_2423_greater$method, scope_drag_2423_less$method, scope_drag_2423_twosided$method,scope_drag_2523_greater$method, scope_drag_2523_less$method, scope_drag_2523_twosided$method,scope_drag_2524_greater$method, scope_drag_2524_less$method, scope_drag_2524_twosided$method)
+)
+
+write.csv(results_drag,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_dragonflies.csv")
+
+
+
+######## ------ Mosses_lichens ------ ########
+
+# 2024 ~ 2023
+## greater
+
+scope_mos_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2024, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mos_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2024, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mos_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2024, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+scope_mos_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2025, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mos_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2025, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mos_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2025, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+scope_mos_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2025, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mos_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2025, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mos_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2025, Observations_all_clip_filtered_group_a1_wide$Mosses_lichens_2024, paired = T, na.rm = drop)
+
+#merged
+results_mos <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_mos_2423_greater$statistic,
+                scope_mos_2423_less$statistic,
+                scope_mos_2423_twosided$statistic,scope_mos_2523_greater$statistic,
+                scope_mos_2523_less$statistic,
+                scope_mos_2523_twosided$statistic,scope_mos_2524_greater$statistic,
+                scope_mos_2524_less$statistic,
+                scope_mos_2524_twosided$statistic),
+
+  p.value = c(scope_mos_2423_greater$p.value,
+              scope_mos_2423_less$p.value,
+              scope_mos_2423_twosided$p.value,scope_mos_2523_greater$p.value,
+              scope_mos_2523_less$p.value,
+              scope_mos_2523_twosided$p.value,scope_mos_2524_greater$p.value,
+              scope_mos_2524_less$p.value,
+              scope_mos_2524_twosided$p.value),
+
+  alternative = c(scope_mos_2423_greater$alternative,scope_mos_2423_less$alternative,scope_mos_2423_twosided$alternative,scope_mos_2523_greater$alternative,scope_mos_2523_less$alternative,scope_mos_2523_twosided$alternative,scope_mos_2524_greater$alternative,scope_mos_2524_less$alternative,scope_mos_2524_twosided$alternative),
+
+  method = c(scope_mos_2423_greater$method, scope_mos_2423_less$method, scope_mos_2423_twosided$method,scope_mos_2523_greater$method, scope_mos_2523_less$method, scope_mos_2523_twosided$method,scope_mos_2524_greater$method, scope_mos_2524_less$method, scope_mos_2524_twosided$method)
+)
+
+write.csv(results_mos,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_mosslichen.csv")
+
+######## ------ Moths_micros ------ ########
+
+scope_moth_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2024, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_moth_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2024, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_moth_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2024, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+scope_moth_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2025, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_moth_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2025, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_moth_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2025, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+scope_moth_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2025, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_moth_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2025, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_moth_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Moths_micros_2025, Observations_all_clip_filtered_group_a1_wide$Moths_micros_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_moth <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_moth_2423_greater$statistic,
+                scope_moth_2423_less$statistic,
+                scope_moth_2423_twosided$statistic,scope_moth_2523_greater$statistic,
+                scope_moth_2523_less$statistic,
+                scope_moth_2523_twosided$statistic,scope_moth_2524_greater$statistic,
+                scope_moth_2524_less$statistic,
+                scope_moth_2524_twosided$statistic),
+
+  p.value = c(scope_moth_2423_greater$p.value,
+              scope_moth_2423_less$p.value,
+              scope_moth_2423_twosided$p.value,scope_moth_2523_greater$p.value,
+              scope_moth_2523_less$p.value,
+              scope_moth_2523_twosided$p.value,scope_moth_2524_greater$p.value,
+              scope_moth_2524_less$p.value,
+              scope_moth_2524_twosided$p.value),
+
+  alternative = c(scope_moth_2423_greater$alternative,scope_moth_2423_less$alternative,scope_moth_2423_twosided$alternative,scope_moth_2523_greater$alternative,scope_moth_2523_less$alternative,scope_moth_2523_twosided$alternative,scope_moth_2524_greater$alternative,scope_moth_2524_less$alternative,scope_moth_2524_twosided$alternative),
+
+  method = c(scope_moth_2423_greater$method, scope_moth_2423_less$method, scope_moth_2423_twosided$method,scope_moth_2523_greater$method, scope_moth_2523_less$method, scope_moth_2523_twosided$method,scope_moth_2524_greater$method, scope_moth_2524_less$method, scope_moth_2524_twosided$method)
+)
+
+write.csv(results_moth,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_mothmicros.csv")
+
+######## ------ Other_Invertebrates ------ ########
+
+### 2023 observations = 0 -- add a column with 0 or remove it completely because of insufficient data to compare
+
+scope_invoth_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2024, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_invoth_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2024, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_invoth_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2024, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+scope_invoth_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2025, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_invoth_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2025, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_invoth_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2025, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+scope_invoth_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2025, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_invoth_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2025, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_invoth_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2025, Observations_all_clip_filtered_group_a1_wide$Invertebrates_other_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_invoth <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_invoth_2423_greater$statistic,
+                scope_invoth_2423_less$statistic,
+                scope_invoth_2423_twosided$statistic,scope_invoth_2523_greater$statistic,
+                scope_invoth_2523_less$statistic,
+                scope_invoth_2523_twosided$statistic,scope_invoth_2524_greater$statistic,
+                scope_invoth_2524_less$statistic,
+                scope_invoth_2524_twosided$statistic),
+
+  p.value = c(scope_invoth_2423_greater$p.value,
+              scope_invoth_2423_less$p.value,
+              scope_invoth_2423_twosided$p.value,scope_invoth_2523_greater$p.value,
+              scope_invoth_2523_less$p.value,
+              scope_invoth_2523_twosided$p.value,scope_invoth_2524_greater$p.value,
+              scope_invoth_2524_less$p.value,
+              scope_invoth_2524_twosided$p.value),
+
+  alternative = c(scope_invoth_2423_greater$alternative,scope_invoth_2423_less$alternative,scope_invoth_2423_twosided$alternative,scope_invoth_2523_greater$alternative,scope_invoth_2523_less$alternative,scope_invoth_2523_twosided$alternative,scope_invoth_2524_greater$alternative,scope_invoth_2524_less$alternative,scope_invoth_2524_twosided$alternative),
+
+  method = c(scope_invoth_2423_greater$method, scope_invoth_2423_less$method, scope_invoth_2423_twosided$method,scope_invoth_2523_greater$method, scope_invoth_2523_less$method, scope_invoth_2523_twosided$method,scope_invoth_2524_greater$method, scope_invoth_2524_less$method, scope_invoth_2524_twosided$method)
+)
+
+write.csv(results_invoth,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_invertother.csv")
+
+######## ------ Mushrooms ------ ########
+# 24~23
+# greater
+scope_mush_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2024, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mush_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2024, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mush_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2024, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_mush_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2025, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mush_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2025, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mush_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2025, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+scope_mush_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2025, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mush_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2025, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mush_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mushrooms_2025, Observations_all_clip_filtered_group_a1_wide$Mushrooms_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_mush <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_mush_2423_greater$statistic,
+                scope_mush_2423_less$statistic,
+                scope_mush_2423_twosided$statistic,scope_mush_2523_greater$statistic,
+                scope_mush_2523_less$statistic,
+                scope_mush_2523_twosided$statistic,scope_mush_2524_greater$statistic,
+                scope_mush_2524_less$statistic,
+                scope_mush_2524_twosided$statistic),
+
+  p.value = c(scope_mush_2423_greater$p.value,
+              scope_mush_2423_less$p.value,
+              scope_mush_2423_twosided$p.value,scope_mush_2523_greater$p.value,
+              scope_mush_2523_less$p.value,
+              scope_mush_2523_twosided$p.value,scope_mush_2524_greater$p.value,
+              scope_mush_2524_less$p.value,
+              scope_mush_2524_twosided$p.value),
+
+  alternative = c(scope_mush_2423_greater$alternative,scope_mush_2423_less$alternative,scope_mush_2423_twosided$alternative,scope_mush_2523_greater$alternative,scope_mush_2523_less$alternative,scope_mush_2523_twosided$alternative,scope_mush_2524_greater$alternative,scope_mush_2524_less$alternative,scope_mush_2524_twosided$alternative),
+
+  method = c(scope_mush_2423_greater$method, scope_mush_2423_less$method, scope_mush_2423_twosided$method,scope_mush_2523_greater$method, scope_mush_2523_less$method, scope_mush_2523_twosided$method,scope_mush_2524_greater$method, scope_mush_2524_less$method, scope_mush_2524_twosided$method)
+)
+
+write.csv(results_mush,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_mushrooms.csv")
+
+######## ------ Plants ------ ########
+
+# 24~23
+# greater
+scope_pla_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2024, Observations_all_clip_filtered_group_a1_wide$Plants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_pla_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2024, Observations_all_clip_filtered_group_a1_wide$Plants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_pla_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2024, Observations_all_clip_filtered_group_a1_wide$Plants_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_pla_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2025, Observations_all_clip_filtered_group_a1_wide$Plants_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_pla_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2025, Observations_all_clip_filtered_group_a1_wide$Plants_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_pla_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2025, Observations_all_clip_filtered_group_a1_wide$Plants_2023, paired = T, na.rm = drop)
+
+
+
+## 2025 ~ 2024
+
+scope_pla_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2025, Observations_all_clip_filtered_group_a1_wide$Plants_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_pla_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2025, Observations_all_clip_filtered_group_a1_wide$Plants_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_pla_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Plants_2025, Observations_all_clip_filtered_group_a1_wide$Plants_2024, paired = T, na.rm = drop)
+
+#merged
+results_pla <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_pla_2423_greater$statistic,
+                scope_pla_2423_less$statistic,
+                scope_pla_2423_twosided$statistic,scope_pla_2523_greater$statistic,
+                scope_pla_2523_less$statistic,
+                scope_pla_2523_twosided$statistic,scope_pla_2524_greater$statistic,
+                scope_pla_2524_less$statistic,
+                scope_pla_2524_twosided$statistic),
+
+  p.value = c(scope_pla_2423_greater$p.value,
+              scope_pla_2423_less$p.value,
+              scope_pla_2423_twosided$p.value,scope_pla_2523_greater$p.value,
+              scope_pla_2523_less$p.value,
+              scope_pla_2523_twosided$p.value,scope_pla_2524_greater$p.value,
+              scope_pla_2524_less$p.value,
+              scope_pla_2524_twosided$p.value),
+
+  alternative = c(scope_pla_2423_greater$alternative,scope_pla_2423_less$alternative,scope_pla_2423_twosided$alternative,scope_pla_2523_greater$alternative,scope_pla_2523_less$alternative,scope_pla_2523_twosided$alternative,scope_pla_2524_greater$alternative,scope_pla_2524_less$alternative,scope_pla_2524_twosided$alternative),
+
+  method = c(scope_pla_2423_greater$method, scope_pla_2423_less$method, scope_pla_2423_twosided$method,scope_pla_2523_greater$method, scope_pla_2523_less$method, scope_pla_2523_twosided$method,scope_pla_2524_greater$method, scope_pla_2524_less$method, scope_pla_2524_twosided$method)
+)
+
+write.csv(results_pla,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_plants.csv")
+
+######## ------ Reptiles_amphibians ------ ########
+
+# 24~23
+# greater
+scope_rep_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2024, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_rep_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2024, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_rep_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2024, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_rep_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2025, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_rep_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2025, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_rep_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2025, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+
+scope_rep_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2025, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_rep_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2025, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_rep_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2025, Observations_all_clip_filtered_group_a1_wide$Reptiles_amphibians_2024, paired = T, na.rm = drop)
+
+
+
+#merged
+results_rep <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_rep_2423_greater$statistic,
+                scope_rep_2423_less$statistic,
+                scope_rep_2423_twosided$statistic,scope_rep_2523_greater$statistic,
+                scope_rep_2523_less$statistic,
+                scope_rep_2523_twosided$statistic,scope_rep_2524_greater$statistic,
+                scope_rep_2524_less$statistic,
+                scope_rep_2524_twosided$statistic),
+
+  p.value = c(scope_rep_2423_greater$p.value,
+              scope_rep_2423_less$p.value,
+              scope_rep_2423_twosided$p.value,scope_rep_2523_greater$p.value,
+              scope_rep_2523_less$p.value,
+              scope_rep_2523_twosided$p.value,scope_rep_2524_greater$p.value,
+              scope_rep_2524_less$p.value,
+              scope_rep_2524_twosided$p.value),
+
+  alternative = c(scope_rep_2423_greater$alternative,scope_rep_2423_less$alternative,scope_rep_2423_twosided$alternative,scope_rep_2523_greater$alternative,scope_rep_2523_less$alternative,scope_rep_2523_twosided$alternative,scope_rep_2524_greater$alternative,scope_rep_2524_less$alternative,scope_rep_2524_twosided$alternative),
+
+  method = c(scope_rep_2423_greater$method, scope_rep_2423_less$method, scope_rep_2423_twosided$method,scope_rep_2523_greater$method, scope_rep_2523_less$method, scope_rep_2523_twosided$method,scope_rep_2524_greater$method, scope_rep_2524_less$method, scope_rep_2524_twosided$method)
+)
+
+write.csv(results_rep,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_reptileamphibians.csv")
+
+
+######## ------ Grasshoppers_crickets ------ ########
+
+scope_gra_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2024, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_gra_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2024, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_gra_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2024, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_gra_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2025, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_gra_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2025, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_gra_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2025, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2023, paired = T, na.rm = drop)
+
+
+
+## 2025 ~ 2024
+
+scope_gra_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2025, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_gra_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2025, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_gra_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2025, Observations_all_clip_filtered_group_a1_wide$Grasshoppers_crickets_2024, paired = T, na.rm = drop)
+
+#merged
+results_gra <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_gra_2423_greater$statistic,
+                scope_gra_2423_less$statistic,
+                scope_gra_2423_twosided$statistic,scope_gra_2523_greater$statistic,
+                scope_gra_2523_less$statistic,
+                scope_gra_2523_twosided$statistic,scope_gra_2524_greater$statistic,
+                scope_gra_2524_less$statistic,
+                scope_gra_2524_twosided$statistic),
+
+  p.value = c(scope_gra_2423_greater$p.value,
+              scope_gra_2423_less$p.value,
+              scope_gra_2423_twosided$p.value,scope_gra_2523_greater$p.value,
+              scope_gra_2523_less$p.value,
+              scope_gra_2523_twosided$p.value,scope_gra_2524_greater$p.value,
+              scope_gra_2524_less$p.value,
+              scope_gra_2524_twosided$p.value),
+
+  alternative = c(scope_gra_2423_greater$alternative,scope_gra_2423_less$alternative,scope_gra_2423_twosided$alternative,scope_gra_2523_greater$alternative,scope_gra_2523_less$alternative,scope_gra_2523_twosided$alternative,scope_gra_2524_greater$alternative,scope_gra_2524_less$alternative,scope_gra_2524_twosided$alternative),
+
+  method = c(scope_gra_2423_greater$method, scope_gra_2423_less$method, scope_gra_2423_twosided$method,scope_gra_2523_greater$method, scope_gra_2523_less$method, scope_gra_2523_twosided$method,scope_gra_2524_greater$method, scope_gra_2524_less$method, scope_gra_2524_twosided$method)
+)
+
+write.csv(results_gra,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_grasshoperscrickets.csv")
+
+
+
+######## ------ Fish ------ ########
+
+# 2024 ~ 2023
+## greater
+scope_fi_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2024, Observations_all_clip_filtered_group_a1_wide$Fish_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_fi_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2024, Observations_all_clip_filtered_group_a1_wide$Fish_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_fi_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2024, Observations_all_clip_filtered_group_a1_wide$Fish_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_fi_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2025, Observations_all_clip_filtered_group_a1_wide$Fish_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_fi_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2025, Observations_all_clip_filtered_group_a1_wide$Fish_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_fi_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2025, Observations_all_clip_filtered_group_a1_wide$Fish_2023, paired = T, na.rm = drop)
+
+
+## 2025 ~ 2024
+scope_fi_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2025, Observations_all_clip_filtered_group_a1_wide$Fish_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_fi_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2025, Observations_all_clip_filtered_group_a1_wide$Fish_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_fi_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Fish_2025, Observations_all_clip_filtered_group_a1_wide$Fish_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_fi <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_fi_2423_greater$statistic,
+                scope_fi_2423_less$statistic,
+                scope_fi_2423_twosided$statistic,scope_fi_2523_greater$statistic,
+                scope_fi_2523_less$statistic,
+                scope_fi_2523_twosided$statistic,scope_fi_2524_greater$statistic,
+                scope_fi_2524_less$statistic,
+                scope_fi_2524_twosided$statistic),
+
+  p.value = c(scope_fi_2423_greater$p.value,
+              scope_fi_2423_less$p.value,
+              scope_fi_2423_twosided$p.value,scope_fi_2523_greater$p.value,
+              scope_fi_2523_less$p.value,
+              scope_fi_2523_twosided$p.value,scope_fi_2524_greater$p.value,
+              scope_fi_2524_less$p.value,
+              scope_fi_2524_twosided$p.value),
+
+  alternative = c(scope_fi_2423_greater$alternative,scope_fi_2423_less$alternative,scope_fi_2423_twosided$alternative,scope_fi_2523_greater$alternative,scope_fi_2523_less$alternative,scope_fi_2523_twosided$alternative,scope_fi_2524_greater$alternative,scope_fi_2524_less$alternative,scope_fi_2524_twosided$alternative),
+
+  method = c(scope_fi_2423_greater$method, scope_fi_2423_less$method, scope_fi_2423_twosided$method,scope_fi_2523_greater$method, scope_fi_2523_less$method, scope_fi_2523_twosided$method,scope_fi_2524_greater$method, scope_fi_2524_less$method, scope_fi_2524_twosided$method)
+)
+
+write.csv(results_fi,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_fish.csv")
+
+
+######## ------ Flies_mosquitoes ------ ########
+
+
+# 2024 ~ 2023
+## greater
+scope_flie_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2024, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_flie_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2024, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_flie_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2024, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_flie_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2025, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_flie_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2025, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_flie_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2025, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+scope_flie_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2025, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_flie_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2025, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_flie_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2025, Observations_all_clip_filtered_group_a1_wide$Flies_mosquitoes_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_flie <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_flie_2423_greater$statistic,
+                scope_flie_2423_less$statistic,
+                scope_flie_2423_twosided$statistic,scope_flie_2523_greater$statistic,
+                scope_flie_2523_less$statistic,
+                scope_flie_2523_twosided$statistic,scope_flie_2524_greater$statistic,
+                scope_flie_2524_less$statistic,
+                scope_flie_2524_twosided$statistic),
+
+  p.value = c(scope_flie_2423_greater$p.value,
+              scope_flie_2423_less$p.value,
+              scope_flie_2423_twosided$p.value,scope_flie_2523_greater$p.value,
+              scope_flie_2523_less$p.value,
+              scope_flie_2523_twosided$p.value,scope_flie_2524_greater$p.value,
+              scope_flie_2524_less$p.value,
+              scope_flie_2524_twosided$p.value),
+
+  alternative = c(scope_flie_2423_greater$alternative,scope_flie_2423_less$alternative,scope_flie_2423_twosided$alternative,scope_flie_2523_greater$alternative,scope_flie_2523_less$alternative,scope_flie_2523_twosided$alternative,scope_flie_2524_greater$alternative,scope_flie_2524_less$alternative,scope_flie_2524_twosided$alternative),
+
+  method = c(scope_flie_2423_greater$method, scope_flie_2423_less$method, scope_flie_2423_twosided$method,scope_flie_2523_greater$method, scope_flie_2523_less$method, scope_flie_2523_twosided$method,scope_flie_2524_greater$method, scope_flie_2524_less$method, scope_flie_2524_twosided$method)
+)
+
+write.csv(results_flie,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_fliesmosquitoes.csv")
+
+
+######## ------ Birds ------ ########
+
+# 2024 ~ 2023
+## greater
+
+scope_bi_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2024, Observations_all_clip_filtered_group_a1_wide$Birds_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bi_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2024, Observations_all_clip_filtered_group_a1_wide$Birds_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bi_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2024, Observations_all_clip_filtered_group_a1_wide$Birds_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+scope_bi_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2025, Observations_all_clip_filtered_group_a1_wide$Birds_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bi_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2025, Observations_all_clip_filtered_group_a1_wide$Birds_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bi_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2025, Observations_all_clip_filtered_group_a1_wide$Birds_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+scope_bi_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2025, Observations_all_clip_filtered_group_a1_wide$Birds_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bi_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2025, Observations_all_clip_filtered_group_a1_wide$Birds_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bi_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Birds_2025, Observations_all_clip_filtered_group_a1_wide$Birds_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_bi <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_bi_2423_greater$statistic,
+                scope_bi_2423_less$statistic,
+                scope_bi_2423_twosided$statistic,scope_bi_2523_greater$statistic,
+                scope_bi_2523_less$statistic,
+                scope_bi_2523_twosided$statistic,scope_bi_2524_greater$statistic,
+                scope_bi_2524_less$statistic,
+                scope_bi_2524_twosided$statistic),
+
+  p.value = c(scope_bi_2423_greater$p.value,
+              scope_bi_2423_less$p.value,
+              scope_bi_2423_twosided$p.value,scope_bi_2523_greater$p.value,
+              scope_bi_2523_less$p.value,
+              scope_bi_2523_twosided$p.value,scope_bi_2524_greater$p.value,
+              scope_bi_2524_less$p.value,
+              scope_bi_2524_twosided$p.value),
+
+  alternative = c(scope_bi_2423_greater$alternative,scope_bi_2423_less$alternative,scope_bi_2423_twosided$alternative,scope_bi_2523_greater$alternative,scope_bi_2523_less$alternative,scope_bi_2523_twosided$alternative,scope_bi_2524_greater$alternative,scope_bi_2524_less$alternative,scope_bi_2524_twosided$alternative),
+
+  method = c(scope_bi_2423_greater$method, scope_bi_2423_less$method, scope_bi_2423_twosided$method,scope_bi_2523_greater$method, scope_bi_2523_less$method, scope_bi_2523_twosided$method,scope_bi_2524_greater$method, scope_bi_2524_less$method, scope_bi_2524_twosided$method)
+)
+
+write.csv(results_bi,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_birds.csv")
+
+
+
+######## ------ Bugs_cicadas_aphids ------ ########
+
+# 2024 ~ 2023
+## greater
+
+scope_bu_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2024, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bu_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2024, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bu_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2024, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_bu_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2025, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bu_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2025, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bu_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2025, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+scope_bu_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2025, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_bu_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2025, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_bu_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2025, Observations_all_clip_filtered_group_a1_wide$Bugs_cicadas_aphids_2024, paired = T, na.rm = drop)
+
+#merged
+results_bu <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_bu_2423_greater$statistic,
+                scope_bu_2423_less$statistic,
+                scope_bu_2423_twosided$statistic,scope_bu_2523_greater$statistic,
+                scope_bu_2523_less$statistic,
+                scope_bu_2523_twosided$statistic,scope_bu_2524_greater$statistic,
+                scope_bu_2524_less$statistic,
+                scope_bu_2524_twosided$statistic),
+
+  p.value = c(scope_bu_2423_greater$p.value,
+              scope_bu_2423_less$p.value,
+              scope_bu_2423_twosided$p.value,scope_bu_2523_greater$p.value,
+              scope_bu_2523_less$p.value,
+              scope_bu_2523_twosided$p.value,scope_bu_2524_greater$p.value,
+              scope_bu_2524_less$p.value,
+              scope_bu_2524_twosided$p.value),
+
+  alternative = c(scope_bu_2423_greater$alternative,scope_bu_2423_less$alternative,scope_bu_2423_twosided$alternative,scope_bu_2523_greater$alternative,scope_bu_2523_less$alternative,scope_bu_2523_twosided$alternative,scope_bu_2524_greater$alternative,scope_bu_2524_less$alternative,scope_bu_2524_twosided$alternative),
+
+  method = c(scope_bu_2423_greater$method, scope_bu_2423_less$method, scope_bu_2423_twosided$method,scope_bu_2523_greater$method, scope_bu_2523_less$method, scope_bu_2523_twosided$method,scope_bu_2524_greater$method, scope_bu_2524_less$method, scope_bu_2524_twosided$method)
+)
+
+write.csv(results_bu,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_bugscicadasaphids.csv")
+
+
+
+
+######## ------ Molluscs ------ ########
+
+# 2024 ~ 2023
+## greater
+
+scope_mol_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2024, Observations_all_clip_filtered_group_a1_wide$Mollusks_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mol_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2024, Observations_all_clip_filtered_group_a1_wide$Mollusks_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mol_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2024, Observations_all_clip_filtered_group_a1_wide$Mollusks_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_mol_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2025, Observations_all_clip_filtered_group_a1_wide$Mollusks_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mol_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2025, Observations_all_clip_filtered_group_a1_wide$Mollusks_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mol_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2025, Observations_all_clip_filtered_group_a1_wide$Mollusks_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+scope_mol_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2025, Observations_all_clip_filtered_group_a1_wide$Mollusks_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_mol_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2025, Observations_all_clip_filtered_group_a1_wide$Mollusks_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_mol_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mollusks_2025, Observations_all_clip_filtered_group_a1_wide$Mollusks_2024, paired = T, na.rm = drop)
+
+#merged
+results_mol <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_mol_2423_greater$statistic,
+                scope_mol_2423_less$statistic,
+                scope_mol_2423_twosided$statistic,scope_mol_2523_greater$statistic,
+                scope_mol_2523_less$statistic,
+                scope_mol_2523_twosided$statistic,scope_mol_2524_greater$statistic,
+                scope_mol_2524_less$statistic,
+                scope_mol_2524_twosided$statistic),
+
+  p.value = c(scope_mol_2423_greater$p.value,
+              scope_mol_2423_less$p.value,
+              scope_mol_2423_twosided$p.value,scope_mol_2523_greater$p.value,
+              scope_mol_2523_less$p.value,
+              scope_mol_2523_twosided$p.value,scope_mol_2524_greater$p.value,
+              scope_mol_2524_less$p.value,
+              scope_mol_2524_twosided$p.value),
+
+  alternative = c(scope_mol_2423_greater$alternative,scope_mol_2423_less$alternative,scope_mol_2423_twosided$alternative,scope_mol_2523_greater$alternative,scope_mol_2523_less$alternative,scope_mol_2523_twosided$alternative,scope_mol_2524_greater$alternative,scope_mol_2524_less$alternative,scope_mol_2524_twosided$alternative),
+
+  method = c(scope_mol_2423_greater$method, scope_mol_2423_less$method, scope_mol_2423_twosided$method,scope_mol_2523_greater$method, scope_mol_2523_less$method, scope_mol_2523_twosided$method,scope_mol_2524_greater$method, scope_mol_2524_less$method, scope_mol_2524_twosided$method)
+)
+
+write.csv(results_mol,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_mollusks.csv")
+
+
+######## ------ Mammals ------ ########
+
+
+# 2024 ~ 2023
+## greater
+
+scope_ma_2423_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2024, Observations_all_clip_filtered_group_a1_wide$Mammals_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_ma_2423_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2024, Observations_all_clip_filtered_group_a1_wide$Mammals_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_ma_2423_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2024, Observations_all_clip_filtered_group_a1_wide$Mammals_2023, paired = T, na.rm = drop)
+
+##2025 ~ 2023:
+
+scope_ma_2523_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2025, Observations_all_clip_filtered_group_a1_wide$Mammals_2023, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_ma_2523_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2025, Observations_all_clip_filtered_group_a1_wide$Mammals_2023, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_ma_2523_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2025, Observations_all_clip_filtered_group_a1_wide$Mammals_2023, paired = T, na.rm = drop)
+
+## 2025 ~ 2024
+
+scope_ma_2524_greater <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2025, Observations_all_clip_filtered_group_a1_wide$Mammals_2024, alternative = "greater", paired = T, na.rm = drop)
+
+## less
+scope_ma_2524_less <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2025, Observations_all_clip_filtered_group_a1_wide$Mammals_2024, alternative = "less", paired = T, na.rm = drop)
+
+## both
+scope_ma_2524_twosided <- wilcox.test(Observations_all_clip_filtered_group_a1_wide$Mammals_2025, Observations_all_clip_filtered_group_a1_wide$Mammals_2024, paired = T, na.rm = drop)
+
+
+#merged
+results_ma <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_ma_2423_greater$statistic,
+                scope_ma_2423_less$statistic,
+                scope_ma_2423_twosided$statistic,scope_ma_2523_greater$statistic,
+                scope_ma_2523_less$statistic,
+                scope_ma_2523_twosided$statistic,scope_ma_2524_greater$statistic,
+                scope_ma_2524_less$statistic,
+                scope_ma_2524_twosided$statistic),
+
+  p.value = c(scope_ma_2423_greater$p.value,
+              scope_ma_2423_less$p.value,
+              scope_ma_2423_twosided$p.value,scope_ma_2523_greater$p.value,
+              scope_ma_2523_less$p.value,
+              scope_ma_2523_twosided$p.value,scope_ma_2524_greater$p.value,
+              scope_ma_2524_less$p.value,
+              scope_ma_2524_twosided$p.value),
+
+  alternative = c(scope_ma_2423_greater$alternative,scope_ma_2423_less$alternative,scope_ma_2423_twosided$alternative,scope_ma_2523_greater$alternative,scope_ma_2523_less$alternative,scope_ma_2523_twosided$alternative,scope_ma_2524_greater$alternative,scope_ma_2524_less$alternative,scope_ma_2524_twosided$alternative),
+
+  method = c(scope_mol_2423_greater$method, scope_ma_2423_less$method, scope_ma_2423_twosided$method,scope_ma_2523_greater$method, scope_ma_2523_less$method, scope_ma_2523_twosided$method,scope_ma_2524_greater$method, scope_ma_2524_less$method, scope_ma_2524_twosided$method)
+)
+
+write.csv(results_ma,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_mammals.csv")
