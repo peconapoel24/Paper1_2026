@@ -1,0 +1,61 @@
+
+
+#### Analysis 1: Campuses with opportunistic observations in 2023 and Bioblitz in 24,25
+# 
+median_buil_analysis1 <- read.csv("C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Analysis1_Median_Buil23_24_25.csv", sep = ",")
+
+## 2024 ~ 2023
+## greater
+scope_buil_2423_greater <- wilcox.test(median_buil_analysis1$X2024, median_buil_analysis1$X2023, alternative = "greater", paired = T, na.rm = T)
+
+## less
+scope_buil_2423_less <- wilcox.test(median_buil_analysis1$X2024, median_buil_analysis1$X2023, alternative = "less", paired = T, na.rm = T)
+
+## both
+scope_buil_2423_twosided <- wilcox.test(median_buil_analysis1$X2024, median_buil_analysis1$X2023, paired = T, na.rm = T)
+
+## 2025~2023
+## greater
+scope_buil_2523_greater <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2023, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_buil_2523_less <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2023, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_buil_2523_twosided <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2023,paired = T, na.rm = T)
+
+## 2025~2024
+## greater
+scope_buil_2524_greater <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2024, alternative = "greater",paired = T, na.rm = T)
+
+## less
+scope_buil_2524_less <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2024, alternative = "less",paired = T, na.rm = T)
+
+## both
+scope_buil_2524_twosided <- wilcox.test(median_buil_analysis1$X2025, median_buil_analysis1$X2024, paired = T, na.rm = T)
+
+results_buildings_scope <- data.frame(
+  comparison = c("2024~2023","2024~2023","2024~2023","2025~2023","2025~2023","2025~2023","2025~2024","2025~2024","2025~2024"),
+  statistic = c(scope_buil_2423_greater$statistic,
+                scope_buil_2423_less$statistic,
+                 scope_buil_2423_twosided$statistic,scope_buil_2523_greater$statistic,
+                scope_buil_2523_less$statistic,
+                scope_buil_2523_twosided$statistic,scope_buil_2524_greater$statistic,
+                scope_buil_2524_less$statistic,
+                scope_buil_2524_twosided$statistic),
+  
+  p.value = c(scope_buil_2423_greater$p.value,
+              scope_buil_2423_less$p.value,
+              scope_buil_2423_twosided$p.value,scope_buil_2523_greater$p.value,
+             scope_buil_2523_less$p.value,
+              scope_buil_2523_twosided$p.value,scope_buil_2524_greater$p.value,
+              scope_buil_2524_less$p.value,
+              scope_buil_2524_twosided$p.value),
+  
+  alternative = c(scope_buil_2423_greater$alternative,scope_buil_2423_less$alternative,scope_buil_2423_twosided$alternative,scope_buil_2523_greater$alternative,scope_buil_2523_less$alternative,
+scope_buil_2523_twosided$alternative,scope_buil_2524_greater$alternative,scope_buil_2524_less$alternative,scope_buil_2524_twosided$alternative),
+  
+  method = c(scope_buil_2423_greater$method, scope_buil_2423_less$method, scope_buil_2423_twosided$method,scope_buil_2523_greater$method, scope_buil_2523_less$method, scope_buil_2523_twosided$method,scope_buil_2524_greater$method, scope_buil_2524_less$method, scope_buil_2524_twosided$method)
+)
+
+write.csv(results_buildings_scope,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_scope_buildings.csv")
