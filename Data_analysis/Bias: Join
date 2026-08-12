@@ -1,0 +1,163 @@
+
+## For this paper and these graphs i only focus on two-sided for nni nbi nri and bi and on less for land use and observer bias. but i show everything here 
+
+
+Wilcoxon_test_joined_results_bias_greater <- bind_rows(
+  results_bias_nni %>% filter(alternative == "greater") %>% mutate(Metric = "Nearest_Neighbor_Index"),
+  results_bias_nbi %>% filter(alternative == "greater") %>% mutate(Metric = "Nearest_Building_Index"),
+  results_bias_nri %>% filter(alternative == "greater")  %>% mutate(Metric = "Nearest_Road/path_Index") ,
+  results_bias_landuse %>% filter(alternative == "greater")  %>% mutate(Metric = "Land_use")  ,
+  results_bias_observer %>% filter(alternative == "greater")  %>% mutate(Metric = "Observer")  ,
+  results_arthoth_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Arthropods_other")  ,
+  results_bwa_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Bees_wasps_ants")  ,
+  results_beet_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Beetles")  ,
+  results_bi_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Birds")  ,
+  results_bu_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Bugs_cicadas_aphids") ,
+  results_butt_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Butterflies") ,
+  results_drag_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Dragonflies") ,
+  results_fi_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Fish") ,
+  results_flie_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Flies_mosquitoes") ,
+  results_gra_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Grasshoppers_crickets") ,
+  results_insoth_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Insects_other") ,
+  results_ma_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Mammals") ,
+  results_mol_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Mollusks")  ,
+  results_mos_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Mosses_lichens") ,
+  results_moth_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Moths_micros") ,
+  results_mush_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Mushrooms") ,
+  results_invoth_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Invertebrates_other") ,
+  results_pla_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Plants") ,
+  results_rep_bias %>% filter(alternative == "greater")  %>% mutate(Metric = "Reptiles_amphibians"))
+
+## round decimals for SI table
+Wilcoxon_test_joined_results_bias_greater_SI <- Wilcoxon_test_joined_results_bias_greater %>%
+  mutate(
+    p_value = round(p.value, 3), 
+    )
+
+#csv
+write.csv(Wilcoxon_test_joined_results_bias_greater_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_greater.csv")
+
+#xlsx
+write.xlsx(Wilcoxon_test_joined_results_bias_greater_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_greater.xlsx")
+
+
+Wilcoxon_test_joined_results_bias_less <- bind_rows(
+  results_bias_nni %>% filter(alternative == "less") %>% mutate(Metric = "Nearest_Neighbor_Index"),
+  results_bias_nbi %>% filter(alternative == "less") %>% mutate(Metric = "Nearest_Building_Index"),
+  results_bias_nri %>% filter(alternative == "less")  %>% mutate(Metric = "Nearest_Road/path_Index") ,
+  results_bias_landuse %>% filter(alternative == "less")  %>% mutate(Metric = "Land_use")  ,
+  results_bias_observer %>% filter(alternative == "less")  %>% mutate(Metric = "Observer")  ,
+  results_arthoth_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Arthropods_other")  ,
+  results_bwa_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Bees_wasps_ants")  ,
+  results_beet_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Beetles")  ,
+  results_bi_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Birds")  ,
+  results_bu_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Bugs_cicadas_aphids") ,
+  results_butt_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Butterflies") ,
+  results_drag_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Dragonflies") ,
+  results_fi_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Fish") ,
+  results_flie_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Flies_mosquitoes") ,
+  results_gra_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Grasshoppers_crickets") ,
+  results_insoth_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Insects_other") ,
+  results_ma_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Mammals") ,
+  results_mol_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Mollusks")  ,
+  results_mos_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Mosses_lichens") ,
+  results_moth_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Moths_micros") ,
+  results_mush_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Mushrooms") ,
+  results_invoth_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Invertebrates_other") ,
+  results_pla_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Plants") ,
+  results_rep_bias %>% filter(alternative == "less")  %>% mutate(Metric = "Reptiles_amphibians"))
+
+## round decimals for SI table
+Wilcoxon_test_joined_results_bias_less_SI <- Wilcoxon_test_joined_results_bias_less %>%
+  mutate(
+    p_value = round(p.value, 3), 
+    )
+
+write.csv(Wilcoxon_test_joined_results_bias_less_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_less.csv")
+
+
+write.xlsx(Wilcoxon_test_joined_results_bias_less_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_less.xlsx")
+
+## twosided
+
+
+Wilcoxon_test_joined_results_bias_twosided <- bind_rows(
+  results_bias_nni %>% filter(alternative == "two.sided") %>% mutate(Metric = "Nearest_Neighbor_Index"),
+  results_bias_nbi %>% filter(alternative == "two.sided") %>% mutate(Metric = "Nearest_Building_Index"),
+  results_bias_nri %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Nearest_Road/path_Index") ,
+  results_bias_landuse %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Land_use")  ,
+  results_bias_observer %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Observer")  ,
+  results_arthoth_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Arthropods_other")  ,
+  results_bwa_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Bees_wasps_ants")  ,
+  results_beet_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Beetles")  ,
+  results_bi_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Birds")  ,
+  results_bu_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Bugs_cicadas_aphids") ,
+  results_butt_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Butterflies") ,
+  results_drag_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Dragonflies") ,
+  results_fi_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Fish") ,
+  results_flie_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Flies_mosquitoes") ,
+  results_gra_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Grasshoppers_crickets") ,
+  results_insoth_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Insects_other") ,
+  results_ma_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mammals") ,
+  results_mol_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mollusks")  ,
+  results_mos_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mosses_lichens") ,
+  results_moth_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Moths_micros") ,
+  results_mush_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Mushrooms") ,
+  results_invoth_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Invertebrates_other") ,
+  results_pla_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Plants") ,
+  results_rep_bias %>% filter(alternative == "two.sided")  %>% mutate(Metric = "Reptiles_amphibians"))
+
+## round decimals for SI table
+Wilcoxon_test_joined_results_bias_twosided_SI <- Wilcoxon_test_joined_results_bias_twosided %>%
+  mutate(
+    p_value = round(p.value, 3), 
+    )
+
+
+write.csv(Wilcoxon_test_joined_results_bias_twosided_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_twosided.csv")
+
+write.xlsx(Wilcoxon_test_joined_results_bias_twosided_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_test_bias_twosided.xlsx")
+
+
+### t tests
+
+## For this paper and these graphs i only focus on "greater"
+
+Wilcoxon_t_test_joined_results_bias <- bind_rows(
+  results_ttest_nni %>% mutate(Metric = "Nearest_Neighbor_Index"),
+  results_ttest_nbi %>%  mutate(Metric = "Nearest_Building_Index"),
+  results_ttest_nri %>% mutate(Metric = "Nearest_Road/path_Index") ,
+  results_ttest_bias_arthoth %>%  mutate(Metric = "Arthropods_other")  ,
+  results_ttest_bias_bwa %>%  mutate(Metric = "Bees_wasps_ants")  ,
+  results_ttest_bias_beet %>%  mutate(Metric = "Beetles")  ,
+  results_ttest_bias_bir %>%  mutate(Metric = "Birds")  ,
+  results_ttest_bias_bca %>%  mutate(Metric = "Bugs_cicadas_aphids") ,
+  results_ttest_bias_but %>%  mutate(Metric = "Butterflies") ,
+  results_ttest_bias_dra %>% mutate(Metric = "Dragonflies") ,
+  results_ttest_bias_fis %>% mutate(Metric = "Fish") ,
+  results_ttest_bias_fli %>%  mutate(Metric = "Flies_mosquitoes") ,
+  results_ttest_bias_gra %>%  mutate(Metric = "Grasshoppers_crickets") ,
+  results_ttest_bias_ins %>%  mutate(Metric = "Insects_other") ,
+  results_ttest_bias_mam %>%  mutate(Metric = "Mammals") ,
+  results_ttest_bias_mol %>%  mutate(Metric = "Mollusks")  ,
+  results_ttest_bias_mos %>%  mutate(Metric = "Mosses_lichens") ,
+  results_ttest_bias_mot %>%  mutate(Metric = "Moths_micros") ,
+  results_ttest_bias_mus %>%  mutate(Metric = "Mushrooms") ,
+  results_ttest_bias_inv %>%  mutate(Metric = "Invertebrates_other") ,
+  results_ttest_bias_pla %>%  mutate(Metric = "Plants") ,
+  results_ttest_bias_rep %>%  mutate(Metric = "Reptiles_amphibians"))
+
+## round decimals for SI table
+Wilcoxon_t_test_joined_results_bias_SI <- Wilcoxon_t_test_joined_results_bias %>%
+  mutate(
+    mean = round(mean, 2),
+    t = round(t, 2),
+    p_value = round(p_value, 5), 
+    conf_low = round(conf_low, 2),
+    conf_high = round(conf_high, 2)
+  )
+
+
+write.csv(Wilcoxon_t_test_joined_results_bias_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_t_testbias.csv")
+
+write.xlsx(Wilcoxon_t_test_joined_results_bias_SI,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/wilcoxon_t_testbias.xlsx")
