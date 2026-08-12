@@ -1,0 +1,183 @@
+
+
+### This method will be used to estimate a) Spatial cluster bias, b) distance to buildings bias and c) distance to roads/paths bias
+
+########### These functions apply for all campuses 
+###### Random points functions
+
+# Function to generate n random points inside an sf polygon
+
+# First we need to define the function which means to explain what it does in general
+
+generate_random_obs_in_campus <- function(campus_sf, n) {
+  # Convert sf polygon to spatstat window
+  win <- as.owin(campus_sf)
+  
+  # Generate n random points inside the window 
+  obs <- runifpoint(n, win = win) #### This is the function that creates the random points. It uses the package "spatstat.random". From there we use "runifpoint" function Read p.153 https://cran.r-project.org/web/packages/spatstat.random/spatstat.random.pdf . For this trial we assume that the observations of a random dataset would be "independent of each other"
+  
+  # Convert spatstat points to sf points because we use spatial points
+  sf_obs <- st_as_sf(data.frame(x = obs$x, y = obs$y), coords = c("x", "y"), crs = st_crs(campus_sf))
+  
+  return(sf_obs)
+}
+
+# Random data: Function - then we need to write the function with the extra details regarding iterations. So because 99 iterations is too much manually we need to iterate over the campus boundary to create the points. We do this directly on the campus boundary file to clip ONLY for the campus
+
+
+
+generate_random_replicates_in_campus <- function(campus_sf, n_obs, iterations = 99) {
+  replicates_list <- vector("list", iterations)
+  
+  for (i in seq_len(iterations)) {
+    message("Generating replicate ", i)
+    replicates_list[[i]] <- generate_random_obs_in_campus(campus_sf, n_obs) #### inside the function we CALL again the function that we defined above with the same name. So is like a function inside another function to help make the code easier to read
+  }
+  
+  return(replicates_list)
+}
+
+####### Apply the functions to generate the random data ---- Please note: the generated data take large computational space --> Best to run separately per campus, write results and then delete and continue with next campus 
+
+
+######## Analysis 1: Opportunistic 2023 + Bioblitz 2024-25
+
+
+## Note: - it doesnt matter which data you use as long as they follow the original data 
+
+##### -------- USP ------- #####
+
+
+## 2023
+n_obs_usp_23 <- nrow(USP23_b)  # number of points to generate
+random_replicates_usp_23 <- generate_random_replicates_in_campus(USP_boundaries, n_obs_usp_23)
+
+### 2024
+n_obs_usp_24 <- nrow(USP24_b)  # number of points to generate
+random_replicates_usp_24 <- generate_random_replicates_in_campus(USP_boundaries, n_obs_usp_24)
+
+### 2025
+n_obs_usp_25 <- nrow(USP25_b)  # number of points to generate
+random_replicates_usp_25 <- generate_random_replicates_in_campus(USP_boundaries, n_obs_usp_25)
+
+## extra: for visualization ONLY
+#random_replicates_usp_23_first_iteration <- random_replicates_usp_23[[1]]
+#random_replicates_usp_24_first_iteration <- random_replicates_usp_24[[1]]
+#random_replicates_usp_25_first_iteration <- random_replicates_usp_25[[1]]
+
+
+######### ------ UvA -------- #########
+
+## 2023
+n_obs_uva_23 <- nrow(UvA23)  
+random_replicates_uva_23 <- generate_random_replicates_in_campus(Amsterdam_Science_Park_boundaries, n_obs_uva_23)
+
+# 2024
+n_obs_uva_24 <- nrow(UvA24)  
+random_replicates_uva_24 <- generate_random_replicates_in_campus(Amsterdam_Science_Park_boundaries, n_obs_uva_24)
+
+# 2025
+n_obs_uva_25 <- nrow(UvA25)  
+random_replicates_uva_25 <- generate_random_replicates_in_campus(Amsterdam_Science_Park_boundaries, n_obs_uva_25)
+
+
+######### ------ Leiden Bioscience Park -------- #########
+
+# 2023
+n_obs_leidenbiosc_23 <- nrow(Leiden_Biosc23) 
+random_replicates_leidenbiosc_23 <- generate_random_replicates_in_campus(Leiden_Bioscience_Park_boundaries, n_obs_leidenbiosc_23)
+
+# 2024
+n_obs_leidenbiosc_24 <- nrow(Leiden_Biosc24) 
+random_replicates_leidenbiosc_24 <- generate_random_replicates_in_campus(Leiden_Bioscience_Park_boundaries, n_obs_leidenbiosc_24)
+
+# 2025
+n_obs_leidenbiosc_25 <- nrow(Leiden_Biosc25)  
+random_replicates_leidenbiosc_25 <- generate_random_replicates_in_campus(Leiden_Bioscience_Park_boundaries, n_obs_leidenbiosc_25)
+
+
+######### ------ Leiden Binnestad -------- #########
+
+# 2023
+n_obs_leidenstad_23 <- nrow(Leiden_Bin23)  
+random_replicates_leidenstad_23 <- generate_random_replicates_in_campus(Leiden_Binnenstad_boundaries, n_obs_leidenstad_23)         
+
+# 2024
+n_obs_leidenstad_24 <- nrow(Leiden_Bin24)  
+random_replicates_leidenstad_24 <- generate_random_replicates_in_campus(Leiden_Binnenstad_boundaries, n_obs_leidenstad_24) 
+
+# 2025
+n_obs_leidenstad_25 <- nrow(Leiden_Bin25)  
+random_replicates_leidenstad_25 <- generate_random_replicates_in_campus(Leiden_Binnenstad_boundaries, n_obs_leidenstad_25)
+
+
+######### ------ Leeuwarden -------- #########
+
+## 2023 
+n_obs_leeu_23 <- nrow(Leeuwarden_Van_Hall_Larenstein23 )  
+random_replicates_leeu_23 <- generate_random_replicates_in_campus(Leeuwarden_Van_Hall_Larenstein_boundaries, n_obs_leeu_23)
+
+# 2024
+n_obs_leeu_24 <- nrow(Leeuwarden_Van_Hall_Larenstein24)  
+random_replicates_leeu_24 <- generate_random_replicates_in_campus(Leeuwarden_Van_Hall_Larenstein_boundaries, n_obs_leeu_24)
+
+# 2025
+n_obs_leeu_25 <- nrow(Leeuwarden_Van_Hall_Larenstein25)  
+random_replicates_leeu_25 <- generate_random_replicates_in_campus(Leeuwarden_Van_Hall_Larenstein_boundaries, n_obs_leeu_25)
+
+######### ------ HAN_Arnhem -------- #########
+
+## 2023 
+n_obs_hanarn_23 <- nrow(HAN_Arnhem23)  
+random_replicates_hanarn_23 <- generate_random_replicates_in_campus(HAN_Arnhem_boundaries, n_obs_hanarn_23)
+
+# 2024
+n_obs_hanarn_24 <- nrow(HAN_Arnhem24)  
+random_replicates_hanarn_24 <- generate_random_replicates_in_campus(HAN_Arnhem_boundaries, n_obs_hanarn_24)
+
+# 2025
+n_obs_hanarn_25 <- nrow(HAN_Arnhem25)  
+random_replicates_hanarn_25 <- generate_random_replicates_in_campus(HAN_Arnhem_boundaries, n_obs_hanarn_25)
+
+
+######## # Analysis 2 only: Bioblitz 23-25 - only for 2024 ! ##########
+
+
+######### ------ WUR -------- #########
+
+# 2024
+n_obs_wur_24 <- nrow(WUR_main_campus24) 
+random_replicates_wur_24 <- generate_random_replicates_in_campus(WUR_main_campus_boundaries, n_obs_wur_24)
+
+######### ------ Nijmegen campus -------- #########
+
+# 2024
+n_obs_ruhan_24 <- nrow(Radboud_University_and_HAN_Nijmegen24) 
+random_replicates_ruhan_24 <- generate_random_replicates_in_campus(Nijmegen_campus_boundaries, n_obs_ruhan_24)
+
+
+######### ------ TUDelft -------- #########
+
+# 2024
+n_obs_delft_24 <- nrow(TUDelft24)  # number of points to generate
+random_replicates_delft_24 <- generate_random_replicates_in_campus(TUDelft_boundaries, n_obs_delft_24)
+
+
+######### ------ Twente -------- #########
+
+# 2024
+n_obs_twente_24 <- nrow(Twente_university_campus24) 
+random_replicates_twente_24 <- generate_random_replicates_in_campus(Twente_university_campus_boundaries, n_obs_twente_24)
+
+######### ------ Velp -------- #########
+
+# 2024
+n_obs_velp_24 <- nrow(Velp_Van_Hall_Larenstein24)  
+random_replicates_velp_24 <- generate_random_replicates_in_campus(Velp_Van_Hall_Larenstein_boundaries, n_obs_velp_24)
+
+######### ------ Groningen Zernike Campus -------- #########
+
+# 2024
+n_obs_gro_24 <- nrow(Groningen_Zernike_campus24)  
+random_replicates_gro_24 <- generate_random_replicates_in_campus(Groningen_Zernike_campus_boundaries, n_obs_gro_24)
+
