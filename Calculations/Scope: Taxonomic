@@ -1,0 +1,96 @@
+
+
+### Total observations
+
+#2023
+
+Observations_2023_clip_filtered_group_a1 <- Observations_2023_clip_filtered_analysis1 %>%
+  group_by(campus,species.group) %>%  
+  summarize(total_observations = n(), .groups = "drop")
+# 
+# Observations_2023_clip_filtered_spec_a1 <- Observations_2023_clip_filtered_analysis1 %>%
+#   group_by(group_category,species.group) %>%  
+#   summarize(total_observations = n(), .groups = "drop")
+
+
+#2024
+Observations_2024_clip_filtered_group_a1 <- Observations_2024_clip_filtered_analysis1 %>%
+  group_by(campus,species.group) %>%  
+  summarize(total_observations = n(), .groups = "drop")
+# 
+# Observations_2024_clip_filtered_spec_a1 <- Observations_2024_clip_filtered_analysis1 %>%
+#   group_by(group_category,species.group) %>%  
+#   summarize(total_observations = n(), .groups = "drop")
+
+
+
+#2025
+
+unique(Observations_2025_clip_filtered_analysis1$species.group)
+
+
+Observations_2025_clip_filtered_group_a1 <- Observations_2025_clip_filtered_analysis1 %>%
+  group_by(campus,species.group) %>%  
+  summarize(total_observations = n(), .groups = "drop")
+
+write.csv(Observations_2025_clip_filtered_group_a1,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Taxonomic_bias_23_24_25_for_boxplot.csv")
+
+
+
+# Observations_2025_clip_filtered_spec_a1 <- Observations_2025_clip_filtered_analysis1 %>%
+#   group_by(group_category,species.group) %>%  
+#   summarize(total_observations = n(), .groups = "drop")
+
+Observations_all_clip_filtered_group_a1 <- bind_rows(
+Observations_2023_clip_filtered_group_a1 %>% mutate(year = "2023"),
+  Observations_2024_clip_filtered_group_a1 %>% mutate(year = "2024"),
+  Observations_2025_clip_filtered_group_a1 %>% mutate(year = "2025")
+)
+
+#### This is what i use for the BOXPLOT
+Observations_all_clip_filtered_group_a1<-st_drop_geometry(Observations_all_clip_filtered_group_a1)
+
+## for statistical analysis
+Observations_all_clip_filtered_group_a1_wide <-
+  Observations_all_clip_filtered_group_a1 %>%
+  tidyr::pivot_wider(
+    names_from = c(species.group, year),
+    values_from = total_observations,
+    names_sep = "_",
+    values_fill = 0
+  )
+
+needed <- c("Algae_weeds_unicellular_2023","Algae_weeds_unicellular_2024", "Invertebrates_other_2023")
+
+for (col in needed) {
+  if (!col %in% names(Observations_all_clip_filtered_group_a1_wide)) {
+    Observations_all_clip_filtered_group_a1_wide[[col]] <- 0
+  }
+}
+
+
+write.csv(Observations_all_clip_filtered_group_a1_wide,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Taxonomic_bias_23_24_25.csv")
+
+write.xlsx(Observations_all_clip_filtered_group_a1_wide,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Taxonomic_bias_23_24_25.xlsx")
+
+Observations_2024_clip_filtered_group_a2 <- Observations_2024_clip_filtered_analysis2 %>%
+  group_by(campus,species.group) %>%  
+  summarize(total_observations = n(), .groups = "drop")
+
+#### This is what i use for the BOXPLOT
+Observations_2024_clip_filtered_group_a2<-st_drop_geometry(Observations_2024_clip_filtered_group_a2)
+
+Observations_2024_clip_filtered_group_a2_wide <-
+  Observations_2024_clip_filtered_group_a2 %>%
+  tidyr::pivot_wider(
+    names_from = c(species.group),
+    values_from = total_observations,
+    names_sep = "_",
+    values_fill = 0
+  )%>% rename_with(~ paste0(.x, "_2024"),-campus)
+
+
+write.csv(Observations_2024_clip_filtered_group_a2_wide,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Taxonomic_scope_23_24_25_for_rq2_a2.csv")
+
+write.xlsx(Observations_2024_clip_filtered_group_a2_wide,"C:/Users/Const007/OneDrive - Universiteit Utrecht/Desktop/PhD_planning/Paper1/Tables/Taxonomic_scope_23_24_25_for_rq2_a2.xlsx")
+
