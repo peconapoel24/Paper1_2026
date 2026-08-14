@@ -1,11 +1,6 @@
----
-title: "June"
-format: html
-editor: visual
----
+
 ```markdown
 ## Libraries
-
 ```{r}
 
 ## common libraries
