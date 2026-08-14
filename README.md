@@ -1,38 +1,25 @@
-# Paper1_2026
+# Project title
+[ Description of the study] 
 
-Files
-----Proprocessing
-------------- CS data and campus boundaries
-       -------------- Input datasets
-                        -
-                        -
-                        - 
-        ------------- Output datasets
-                      -
-                      -
-                      -
- 
-------------- Total observations
-       -------------- Input datasets
-                        -
-                        -
-                        - 
-        ------------- Output datasets
-                      -
-                      -
-                      -
-                      
+## Analysis workflow 
+[The analysis follows the genenral workflow] 
+1. Import and data preparation
+2. Calculations
+   --> Scope
+   --> Bias
+3. Data analysis
+   --> Wilcoxon sign rank test
+   --> One sample t-test
+4. Join and Plots
+   --> Scope , bias, wilcoxon sign rank test
+ 5. Regression analysis
+   --> Data preparation
+   --> Models
+   --> Plots
 
-------------- Buildings
-       -------------- Input datasets
-                        -
-                        -
-                        - 
-        ------------- Output datasets
-                      -
-                      -
-                      -
-                      
+## Repository structure 
+
+
               
 
 -----
